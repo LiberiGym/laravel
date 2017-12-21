@@ -1,0 +1,88 @@
+@charset "utf-8";
+/* CSS Document */
+
+/*Inicio cmxform*/
+/**********************************
+Use: cmxform template
+***********************************/
+form.cmxform fieldset {
+	margin-bottom: 10px;
+}
+
+form.cmxform legend {
+	padding: 0 2px;
+	font-weight: bold;
+	_margin: 0 -7px; /* IE Win */
+}
+
+form.cmxform label {
+	cursor: hand;
+}
+
+form.cmxform fieldset p {
+	list-style: none;
+	padding: 5px;
+	margin: 0;
+}
+
+form.cmxform fieldset fieldset {
+	border: none;
+	margin: 3px 0 0;
+}
+
+form.cmxform fieldset fieldset legend {
+	padding: 0 0 5px;
+	font-weight: normal;
+}
+
+form.cmxform fieldset fieldset label {
+	/*display:none;
+	width: auto;*/
+}
+
+form.cmxform label { /*width: 100px;*/ } /* Width of labels */
+form.cmxform fieldset fieldset label { margin-left: 103px; } /* Width plus 3 (html space) */
+form.cmxform label.error {
+	/*margin-left: 10px;*/
+	width: auto;
+}
+
+form.cmxform input.submit {
+	margin-left: 103px;
+}
+
+/*\*//*/ form.cmxform legend { display: inline-block; } /* IE Mac legend fix */
+/*Fin cmxform*/
+
+/*Inicio de cmxform Styles*/
+/**********************************
+Name: cmxform Styles
+***********************************/
+form.cmxform legend {
+	padding-left: 0;
+}
+
+form.cmxform legend, form.cmxform label {
+	text-align:left;
+	/*width:100px;*/
+}
+
+form.cmxform label.error, label.error {
+	/* remove the next line when you have trouble in IE6 with labels in list */
+	color: red;
+	font-style: italic;
+	font-size: 11px;
+	display:block;
+	position: static;
+}
+div.error { display: none; }
+/*input {	border: 1px solid #0B6CBD; border-radius: 5px;}*/
+input.checkbox { border: none }
+/*input[type="text"] { border: 1px dotted #FF0000; } /*Aparezcan los text obligatorios coloreados de rojo*/
+input:focus { border: 1px dotted #FF0000; }
+/*input.error { border: 1px solid #FF0000; } Poner de borde rojo las cajas de texto*/
+form.cmxform .gray * { color: gray; }
+
+
+/*Fin de cmxform Styles*/
+

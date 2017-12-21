@@ -1,0 +1,67 @@
+.logo-perfil{
+    background: url('../images/prefil_logo_default.png') center no-repeat;
+    height: 100px;
+}
+
+.hr-nav-perfil {
+    border-bottom:solid 1px #e1e1e1;
+}
+ul.nav-perfil{
+    margin:0;
+    padding: 0;
+}
+ul.nav-perfil li{
+    margin:0;
+    padding: 0 0 20px 0;
+}
+ul.nav-perfil li a{
+    font-family: 'AvenirLTStd-Black';
+    font-size: 16px;
+    color: #cbcbcb;
+}
+ul.nav-perfil li a span{
+    padding-left: 15px;
+    font-family: 'AvenirLTStd-Black';
+    font-size: 14px;
+    color: #cbcbcb;
+}
+ul.nav-perfil li a:hover{
+    color: #1d4289;
+}
+ul.nav-perfil li a:hover > span{
+    color: #1d4289;
+}
+ul.nav-perfil li.active > a{
+    color: #1d4289;
+}
+ul.nav-perfil li.active > a span{
+    color: #1d4289;
+}
+.w3agile-about button.cerrar-session {
+    background: url('../images/perfil_button_cerrar_sesion.png');
+    border: none;
+    font-size: 16px;
+    color: #2f4486;
+    text-decoration: none;
+    font-family: 'AvenirLTStd-Black';
+    height: 35px;
+    width: 123px;
+}
+
+/*usuarios*/
+.photo-usuario{
+    background: url('../images/perfil_user_photo_default.png') center no-repeat;
+    height: 100px;
+}
+.w3agile-about button.delete-image {
+    height: 30px;
+    width: 100%;
+    background: #c81327;
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    border-radius: 10px;
+    border: none;
+    font-size: 11px;
+    color: #fff;
+    float: left;
+}

@@ -45,14 +45,14 @@
         <div class="collapse navbar-collapse navbar-right" id="bs-example-navbar-collapse-1">
             <nav class="link-effect-2" id="link-effect-2">
                 <ul class="nav navbar-nav">
-                    <li class="active"><a href="/inicio" class="scroll"><img src="images/logo_liberi_web_letters.png"/></a></li>
+                    <li class="active"><a href="/inicio"><img src="images/logo_liberi_web_letters.png"/></a></li>
                     <li><a href="#aboutUs" class="scroll"><span data-hover="Sobre Nosotros">Sobre Nosotros</span></a></li>
                     <li><a href="#testimonies" class="scroll"><span data-hover="Testimonios" >Testimonios</span></a></li>
                     <li><a href="#howWorks" class="scroll"><span data-hover="Cómo Funciona">Cómo Funciona</span></a></li>
                     <li><a href="#contact" class="scroll"><span data-hover="Contáctanos">Contáctanos</span></a></li>
-                    <li><a href="#contact" class="scroll"><span data-hover="Facebook"><i class="fa fa-facebook" aria-hidden="true"></i></span></a></li>
+                    <li><a href="https://Facebook.com/liberiapp/" target="_blank"><span data-hover="Facebook"><i class="fa fa-facebook" aria-hidden="true"></i></span></a></li>
                     <li><a href="#contact" class="scroll"><span data-hover="Twitter"><i class="fa fa-twitter" aria-hidden="true"></i></span></a></li>
-                    <li><a href="#contact" class="scroll"><span data-hover="Instagram"><i class="fa fa-instagram" aria-hidden="true"></i></span></a></li>
+                    <li><a href="https://www.instagram.com/liberiapp/" target="_blank"><span data-hover="Instagram"><i class="fa fa-instagram" aria-hidden="true"></i></span></a></li>
                     <li>
                         <form class="nav-form" action="javascript:formslayout.loginUser();" method="post" role="form" class="cmxform" id="form-login">
                             <button type="submit" name="button">ENTRAR</button>
@@ -84,7 +84,7 @@
                     <li>
                         <div class="testimony-text">
                             <h5>Carlo Beltrán</h5>
-                            <p>“Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque consectetur elit et pulvinar congue. Fusce in vehicula eros. Praesent non enim eerdc nim. Phasellus auctor, ligula vel tincidunt cursus.”</p>
+                            <p>“Excelente aplicación. Muy Recomendable.”</p>
                             <p>
                                 <i class="fa fa-star" aria-hidden="true"></i>
                                 <i class="fa fa-star" aria-hidden="true"></i>
@@ -94,32 +94,8 @@
                             </p>
                         </div>
                     </li>
-                    <li>
-                        <div class="testimony-text">
-                            <h5>Carlo Beltrán</h5>
-                            <p>“Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque consectetur elit et pulvinar congue. Fusce in vehicula eros. Praesent non enim eerdc nim. Phasellus auctor, ligula vel tincidunt cursus.”</p>
-                            <p>
-                                <i class="fa fa-star" aria-hidden="true"></i>
-                                <i class="fa fa-star" aria-hidden="true"></i>
-                                <i class="fa fa-star" aria-hidden="true"></i>
-                                <i class="fa fa-star-half-o" aria-hidden="true"></i>
-                                <i class="fa fa-star-o" aria-hidden="true"></i>
-                            </p>
-                        </div>
-                    </li>
-                    <li>
-                        <div class="testimony-text">
-                            <h5>Carlo Beltrán</h5>
-                            <p>“Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque consectetur elit et pulvinar congue. Fusce in vehicula eros. Praesent non enim eerdc nim. Phasellus auctor, ligula vel tincidunt cursus.”</p>
-                            <p>
-                                <i class="fa fa-star" aria-hidden="true"></i>
-                                <i class="fa fa-star" aria-hidden="true"></i>
-                                <i class="fa fa-star" aria-hidden="true"></i>
-                                <i class="fa fa-star-half-o" aria-hidden="true"></i>
-                                <i class="fa fa-star-o" aria-hidden="true"></i>
-                            </p>
-                        </div>
-                    </li>
+
+
                 </ul>
             </div>
 
@@ -156,7 +132,7 @@
         </div>
         <h3 class="contact-title text-center">¿Dudas? Contáctanos</h3>
         <div class="contact-info text-center">
-            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. </p>
+            <p>Escríbenos y nos pondremos en contacto a la brevedad</p>
             <div class="clearfix"></div>
         </div>
         <div class="contact-form">
@@ -200,6 +176,24 @@
 
 </div>
 <!-- //footer -->
+
+<!-- modal terminos y condiciones -->
+<div class="modal fade" id="mdlTerminos" tabindex="-1" role="dialog" aria-labelledby="mdlTerminos" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Términos y Condiciones de Liberi</h5>
+            </div>
+            <div class="modal-body">
+                <p>Términos y Condiciones de Liberi</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- //modal terminos y condiciones -->
 
     <!--****************** JS ******************-->
     <script type="application/x-javascript"> addEventListener("load", function() { setTimeout(hideURLbar, 0); }, false);

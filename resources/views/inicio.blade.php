@@ -26,7 +26,7 @@
                             <option value="">Ciudad</option>
                         </select>
                         <input type="password" name="password" placeholder="Crear Contraseña" class="form-registro-element" required="required">
-                        <input type="checkbox" name="terminos_condiciones" required="required"> <span>Acepto los <a href="#">Términos y Condiciones</a> de Liberi</span>
+                        <input type="checkbox" name="terminos_condiciones" required="required"> <span>Acepto los <a href="#" data-toggle="modal" data-target="#mdlTerminos">Términos y Condiciones</a> de Liberi</span>
                         <button type="submit" name="button">Crear Cuenta</button>
                     </form>
                 </div>

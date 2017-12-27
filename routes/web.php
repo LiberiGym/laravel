@@ -44,6 +44,7 @@ Route::post('/registro-finalizar','RegisterController@DatosBancariosRegister');
 /*Perfil Usuario*/
 Route::post('/login','PerfilController@loginUser');
 Route::any('/perfil-inicio','PerfilController@perfilInicio');
+Route::post('/perfil-delete-image','PerfilController@perfilDeleteImage');
 Route::any('/perfil-usuarios','PerfilController@perfilUsuarios');
 
 /*formulario de contacto*/

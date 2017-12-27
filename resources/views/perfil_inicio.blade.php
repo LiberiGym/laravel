@@ -116,6 +116,15 @@
 
                         <div class="clearfix"></div>
 
+
+
+
+
+
+
+                    </fieldset>
+
+                    <fieldset class="col-lg-12" style="margin-top:15px;">
                         <legend class="form-legend-registro">Subir imágenes de la Empresa</legend>
                         <p style="font-style: italic;margin-bottom: 0;">Máximo 10</p>
                         <button type="button" id="divUploadImage"  name="button" class="form-button">Seleccionar imágen</button>
@@ -123,15 +132,11 @@
                         <div class="" id="divImages" style="margin-top:15px;">
                             <?php $totalImage = count($imagesGym); ?>
                             @foreach($imagesGym as $image)
-                            <div style="margin-top:5px; background:url(files/gyms/{{$image->image}}); height: 31px;">
-                                <input type="checkbox" name="txtNameFileImage" value="{{$image->image}}" checked disabled><label class="form-label-servicios" style="background: rgba(29,66,137,0.5);width: 100%; color:#fff;"><i class="fa fa-file-image-o" aria-hidden="true"></i> <span style="font-size:11px;">{{$image->image}}</span></label>
+                            <div class="col-lg-3 images-selected" data-id="{{$image->id}}" style="margin:2px; background:url(files/gyms/{{$image->image}}); background-size:cover; height: 100px;" >
+                                <label class="form-label-servicios" style="background: rgba(29,66,137,0.8);width: 100%; color:#fff; padding:3px;"><i class="fa fa-times" aria-hidden="true"></i> <span style="font-size:11px;">Eliminar</span></label>
                             </div>
                             @endforeach
                         </div>
-
-
-
-
                         <div class="clearfix"></div>
 
                         <button type="guardar" name="button" id="btnGuardar">Guardar</button>
@@ -213,19 +218,83 @@ $(document).ready(function () {
         }
     }, function(data){
         if(data.result == 'ok'){
-            var addImage ='<div style="margin-top:5px; background:url(files/gyms/'+data.file+'); height: 31px;">\
+
+            location.reload();
+            /*var addImage ='<div style="margin-top:5px; background:url(files/gyms/'+data.file+'); height: 31px;">\
                 <input type="checkbox" name="txtNameFileImage" value="'+data.file+'" checked><label class="form-label-servicios" style="background: rgba(29,66,137,0.5);width: 100%; color:#fff;"><i class="fa fa-file-image-o" aria-hidden="true"></i> <span style="font-size:11px;">'+data.file+'</span></label>\
             </div>';
             $('#divImages').append(addImage);
             countImage++;
             if(countImage==10){
                 $('#divUploadImage').fadeOut();
-            }
+            }*/
         }
         if(data.result =='error_type'){
             swal('Cuidado','Solo puede subir imagenes en formato de tiff y jpg','warning');
         }
     });
+
+
+
+
+
+    var _images = {
+        //delete images
+        ImageDelete : function(_idImage){
+
+            swal({
+                type: 'success',
+                title: 'Espere mientras se elimina la imagen',
+                showConfirmButton: false
+            })
+
+            var formData= {
+                image_id:_idImage
+            };
+
+            $.ajax({
+                url: "/perfil-delete-image",
+                data: formData,
+                type: "POST",
+                beforeSend:function(){
+                },
+                success: function (response) {
+                    if(response.result == 'ok'){
+                        location.reload();
+                    }else{
+                        swal('Cuidado','No se pudo eliminar la imagen, vuelva a intentarlo','warning');
+                    }
+                },
+            });
+        },
+    };
+
+    $('.images-selected').each(
+        function() {
+            var listItem = $(this);
+            $(listItem).on('click', function (event){
+                event.preventDefault();
+                var idItem = listItem.data('id');
+
+                swal({
+                    title: 'Eliminar Imagen',
+                    text: "¿Deseas eliminar la imagen?",
+                    type: 'warning',
+                    showCancelButton: true,
+                    confirmButtonText: 'Si',
+                    cancelButtonText: 'No'
+                    }).then((result) => {
+                        console.log(result);
+                        if (result.value) {
+                            _images.ImageDelete(idItem);
+                        }
+                    });
+
+            });
+        }
+    );
+
+
 
     //contador de descripcion
     var _currenText = $("#txtDescripcion").val();

@@ -239,6 +239,23 @@ class PerfilController extends Controller
 
     }
 
+    /*Eliminar imagen de perfil*/
+    public function perfilDeleteImage(Request $request){
+        $response = [
+            'result'=> 'error'
+        ];
+        $delImage = GymImage::find($request->get('image_id'));
+
+        if(!is_null($delImage))
+        {
+            $delImage->delete();
+
+            $response['result']='ok';
+        }
+
+        return $response;
+    }
+
     /*perfil - usuarios*/
     public function perfilUsuarios(Request $request){
         $user = Auth::user();

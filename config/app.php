@@ -180,7 +180,6 @@ return [
         Tejuino\Adminstates\AdminstatesServiceProvider::class,
         Tejuino\Adminlocations\AdminlocationsServiceProvider::class,
         Tejuino\Admingyms\AdmingymsServiceProvider::class
-
     ],
 
     /*

@@ -586,7 +586,9 @@ class RegisterController extends Controller
 
                     /*enviamos el correo*/
                     $orderFinish = $this->order;
+
                     $idEncode = base64_encode($this->order->id);
+
                     $dataMail = [
                         'order' => $orderFinish,
                         'idEncode'=>$idEncode,

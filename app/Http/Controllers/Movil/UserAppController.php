@@ -25,7 +25,7 @@ use App\Models\States\State;
 use App\Models\Categories\Category;
 
 
-class RegisterController extends Controller
+class UserAppController extends Controller
 {
 
     public function __construct()
@@ -33,9 +33,32 @@ class RegisterController extends Controller
 
     }
 
+    public function loadStates(){
+        $response = [
+            'result' => 'error',
+            'msj'=>'',
+            'states'=>[]
+        ];
+
+        try {
+
+            $states = State::orderBy('title', 'asc')->get();
+
+            $response['result'] = 'ok';
+            $response['states'] = $states;
+
+        } catch (\Exception $e) {
+            $response['msj'] = $e;
+        }
+
+
+        return $response;
+
+    }
+
     public function loadLocations(Request $request){
 
-        
+
 
 
         $response = [

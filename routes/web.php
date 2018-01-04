@@ -14,16 +14,15 @@ require('admin/admin.php');
 Auth::routes();
 Route::get('logout', 'Auth\LoginController@logout');
 
+/*ACCESOS APP*/
+Route::get('/load-states', 'UserAppController@loadStates');
+/*!--ACCESOS APP--*/
+
 Route::get('/', function () {
     return redirect('/inicio');
 });
 
-Route::get('/inicio', function () {
-    return view('inicio', [
-        'states' => \App\Models\States\State::getAll()
-    ]);
-
-});
+Route::get('/inicio', 'HomeController@index');
 
 Route::get('/nosotros', function () {
     return view('nosotros');

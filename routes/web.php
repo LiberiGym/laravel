@@ -15,7 +15,13 @@ Auth::routes();
 Route::get('logout', 'Auth\LoginController@logout');
 
 /*ACCESOS APP*/
-Route::get('/load-states', 'UserAppController@loadStates');
+
+Route::prefix('api')->group(function(){
+    Route::get('/load-states', 'Movil\UserAppController@loadStates');
+    Route::get('/load-locations/{Id}', 'Movil\UserAppController@loadLocations');
+    Route::post('/create-user/', 'Movil\UserAppController@createUser');
+    Route::post('/create-user-card/', 'Movil\UserAppController@createUserCard');
+});
 /*!--ACCESOS APP--*/
 
 Route::get('/', function () {

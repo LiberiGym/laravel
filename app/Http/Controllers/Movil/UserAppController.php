@@ -1,5 +1,5 @@
 <?php
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Movil;
 
 use Illuminate\Http\Request;
 use Illuminate\Foundation\Bus\DispatchesJobs;
@@ -16,6 +16,8 @@ use Carbon\Carbon;
 use Hash;
 
 use App\Models\User;
+use App\Models\Users\UserCard;
+
 use App\Models\Gyms\Gym;
 use App\Models\Gyms\GymImage;
 use App\Models\Gyms\GymSchedule;
@@ -25,7 +27,7 @@ use App\Models\States\State;
 use App\Models\Categories\Category;
 
 
-class UserAppController extends Controller
+class UserAppController extends BaseController
 {
 
     public function __construct()
@@ -40,42 +42,147 @@ class UserAppController extends Controller
             'states'=>[]
         ];
 
+        $mdlStates = [];
         try {
 
             $states = State::orderBy('title', 'asc')->get();
 
+            $mdlStates = [];
+
+            foreach($states as $state){
+                $mdlStates[]=[
+                    'Id' => $state->id,
+                    'Title'=>$state->title
+                ];
+            }
+
+
             $response['result'] = 'ok';
-            $response['states'] = $states;
+            $response['states'] = $mdlStates;
 
         } catch (\Exception $e) {
             $response['msj'] = $e;
         }
 
 
-        return $response;
+        return $mdlStates;
 
     }
 
-    public function loadLocations(Request $request){
-
-
-
-
+    public function loadLocations(Request $request, $Id){
         $response = [
             'result' => 'error',
-            'locations' => []
+            'msj'=>''
         ];
-        if($request->has('state_id'))
-        {
-            $locations = Location::where('state_id',$request->get('state_id'))->orderBy('title','asc')->get();
-            $response['result'] = 'ok';
-            if(!is_null($locations)){
-                $response['locations'] = $locations;
+
+        $mdlLocations = [];
+        try {
+
+            $locations = Location::where('state_id',$Id)->orderBy('title', 'asc')->get();
+
+            $mdlLocations = [];
+
+            foreach($locations as $location){
+                $mdlLocations[]=[
+                    'Id' => $location->id,
+                    'Title'=>$location->title
+                ];
             }
 
+
+            $response['result'] = 'ok';
+            $response['states'] = $mdlLocations;
+
+        } catch (\Exception $e) {
+            $response['msj'] = $e;
         }
+
+
+        return $mdlLocations;
+
+    }
+
+    public function createUser(Request $request){
+        $response = [
+            'result'=>'error',
+            'msj'=>'',
+            'idUser'=> 0
+        ];
+        if($request->has('Nombre')){
+
+            try {
+                $userExist = User::getByEmail($request->get('Email'));
+                if(is_null($userExist)){
+                    $data_user = [
+                        'name'      => $request->get('Nombre'),
+                        'middle_name'      => $request->get('ApePat'),
+                        'last_name'      => $request->get('ApeMat'),
+                        'email'      => $request->get('Email'),
+                        'password'  => \Hash::make($request->get('Password')),
+                        'phone'      => $request->get('Cel'),
+                        'birth_date'      => $request->get('FechaNac'),
+                        'location_id'      => $request->get('IdLocation'),
+                        'state_id'      => $request->get('IdEstado'),
+                        'codigo_postal'      => $request->get('Cp'),
+                        'genero'      => $request->get('Genero'),
+                        'image'      => $request->get('Image'),
+                        'registration_mode'      => 'client',
+                        'registration_status'      => 'Completo'
+                    ];
+
+                    $newUser = User::create($data_user);
+                    $userdata = array(
+                        'email' => $request->get('Email'),
+                        'password'=> $request->get('Password')
+                    );
+                    if(Auth::attempt($userdata))
+                    {
+                        $user = Auth::user();
+
+                        $response['idUser']= $user->id;
+                        $response['result']= 'ok';
+                    }
+
+                }
+
+            } catch (\Exception $e) {
+
+            }
+
+
+        }
+
         return $response;
     }
+
+    public function createUserCard(Request $request){
+
+        $idUser = "";
+        if($request->has('IdUser')){
+
+            try {
+                $newCard = UserCard();
+
+                $newCard->user_id = $request->get('IdUser');
+                $newCard->type = $request->get('Tipo');
+                $newCard->owner = $request->get('Titular');
+                $newCard->number = $request->get('Numero');
+                $newCard->mm = $request->get('Mes');
+                $newCard->aa = $request->get('Anho');
+                $newCard->cvv = $request->get('Cvv');
+                $newCard->prefer = '1';
+                $newCard->save();
+
+                $idUser = $request->get('IdUser');
+
+            } catch (\Exception $e) {
+
+            }
+        }
+
+        return $idUser;
+    }
+
 
     public function initRegister(Request $request){
         // se inicia el proceso de registro.

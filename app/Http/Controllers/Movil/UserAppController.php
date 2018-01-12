@@ -35,6 +35,43 @@ class UserAppController extends BaseController
 
     }
 
+    public function userLogin(Request $request){
+        $response = [
+            'result'=>'error',
+            'msj'=>'',
+            'Id'=>0,
+            'Nombre'=>''
+        ];
+        if($request->has('Email')){
+
+            try {
+                $userdata = array(
+                    'email' => $request->get('Email'),
+                    'password'=> $request->get('Password')
+                );
+                if(Auth::attempt($userdata))
+                {
+                    $user = Auth::user();
+
+                    $response['Id']=$user->id;
+                    $response['Nombre']=$user->name;
+                    $response['result']= 'ok';
+                }else{
+                    $response['msj']= 'Datos de Usuario Incorrectos. Vuelva a intentarlo';
+                }
+
+            } catch (\Exception $e) {
+                $response['msj']= $e;
+            }
+
+
+        }else{
+            $response['msj']= 'No hay variabel Email';
+        }
+
+        return $response;
+    }
+
     public function loadStates(){
         $response = [
             'result' => 'error',

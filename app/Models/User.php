@@ -41,5 +41,10 @@ class User extends Authenticatable
         return static::where('email', $email)->where('registration_mode', 'gym')->first();
     }
 
+    public static function getUserByEmail($email)
+    {
+        return static::where('email', $email)->where('registration_mode', 'client')->first();
+    }
+
 
 }

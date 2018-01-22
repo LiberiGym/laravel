@@ -17,11 +17,17 @@ Route::get('logout', 'Auth\LoginController@logout');
 /*ACCESOS APP*/
 Route::group(['prefix' => 'api'], function()
 {
-//Route::prefix('api')->group(function(){
+    //Route::prefix('api')->group(function(){
+    /*Login Page*/
     Route::any('/user-login', 'Movil\UserAppController@userLogin');
+    Route::any('/user-password-reset', 'Movil\UserAppController@userPasswordReset');
 
+    /*RegistroPage*/
     Route::get('/load-states', 'Movil\UserAppController@loadStates');
     Route::get('/load-locations/{Id}', 'Movil\UserAppController@loadLocations');
+    Route::any('/user-upload-image', 'Movil\UserAppController@userUploadImage');
+
+
     Route::post('/create-user', 'Movil\UserAppController@createUser');
     Route::post('/create-user-card', 'Movil\UserAppController@createUserCard');
 

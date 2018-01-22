@@ -35,6 +35,10 @@ class UserAppController extends BaseController
 
     }
 
+    /***************************/
+    /*Login Page*/
+
+    //validacion de ingreso usuario
     public function userLogin(Request $request){
         $response = [
             'result'=>'error',
@@ -72,6 +76,56 @@ class UserAppController extends BaseController
         return $response;
     }
 
+    //recuperar contraseña de usuario
+    public function userPasswordReset(Request $request){
+        $response = [
+            'result'=>'error',
+            'msj'=>''
+        ];
+        if($request->has('Email')){
+            try {
+                $user  = User::where('email',$request->get('Email'))->where('registration_mode','client')->get()->first();
+                if(!is_null($user))
+                {
+                    $s = strtoupper(md5(uniqid(rand(),true)));
+                    $newpass = substr($s, -7, 6);
+                    $user->password = \Hash::make($newpass);
+                    $user->save();
+
+                    $dataMail = [
+                        'nombre' => $user->name,
+                        'newpass'=>$newpass,
+                        'email'=>$request->get('Email')
+                    ];
+
+                    Mail::send('emails.recoverypass', $dataMail, function ($message) use ($dataMail) {
+                        $message->subject('Recuperación de contraseña App Liberi');
+                        $message->from(config('mail.from.address'), config('mail.from.name'));
+                        $message->to($dataMail['email'], $dataMail['nombre']);
+                    });
+
+                    $response['result']= 'ok';
+                }else{
+                    $response['msj']= 'Datos de Usuario Incorrectos. Vuelva a intentarlo';
+                }
+
+            } catch (\Exception $e) {
+                $response['msj']= $e->getMessage();
+            }
+
+
+        }else{
+            $response['msj']= 'No hay variable Email';
+        }
+
+        return $response;
+    }
+
+
+    /***************************/
+    /*RegistroPage*/
+
+    //cargamos los estados
     public function loadStates(){
         $response = [
             'result' => 'error',
@@ -106,6 +160,7 @@ class UserAppController extends BaseController
 
     }
 
+    //cargamos los municipios
     public function loadLocations(Request $request, $Id){
         $response = [
             'result' => 'error',
@@ -139,11 +194,12 @@ class UserAppController extends BaseController
 
     }
 
+    //crear usuario
     public function createUser(Request $request){
         $response = [
             'result'=>'error',
             'msj'=>'',
-            'idUser'=> 0
+            'userId'=> 0
         ];
         if($request->has('Nombre')){
 
@@ -162,9 +218,10 @@ class UserAppController extends BaseController
                         'state_id'      => $request->get('IdEstado'),
                         'codigo_postal'      => $request->get('Cp'),
                         'genero'      => $request->get('Genero'),
-                        'image'      => $request->get('Image'),
+                        'image'      => '',
                         'registration_mode'      => 'client',
-                        'registration_status'      => 'Completo'
+                        'registration_status'      => 'Pendiente',
+                        'terminos_condiciones'  => 0
                     ];
 
                     $newUser = User::create($data_user);
@@ -176,21 +233,65 @@ class UserAppController extends BaseController
                     {
                         $user = Auth::user();
 
-                        $response['idUser']= $user->id;
+                        $response['userId']= $user->id;
                         $response['result']= 'ok';
                     }
 
                 }
 
             } catch (\Exception $e) {
-
+                $response['msj']= $e->getMessage();
             }
-
-
+        }else{
+            $response['msj']= 'No Data Send';
         }
 
         return $response;
     }
+
+    //subir imagen de usuario
+    public function userUploadImage(Request $request)
+    {
+        $response = [
+            'result' => 'error',
+            'msj' => ''
+        ];
+
+        if ($request->hasFile('file') && $request->file('file')->isValid())
+        {
+            $ext = strtolower(pathinfo($request->file('file')->getClientOriginalName(), PATHINFO_EXTENSION));
+            $filename = $request->file('file')->getClientOriginalName();
+
+            if (in_array($ext, ['jpg', 'jpeg', 'png']))
+            {
+                $newFile = Files::save($request->file('file')->getRealPath(), $ext, 'users', 'user_');
+
+                //recuperamos el usuario
+                $user = User::find($request->get('userId'));
+                $user->image = $newFile;
+                $user->save();
+
+                $response['result'] = 'ok';
+            }
+            else
+            {
+                $response['msj'] = 'Only jpg and png images allowed. ';
+            }
+        }else{
+            $response['msj'] = 'Not File Found';
+        }
+        return $response;
+    }
+
+
+
+
+
+
+
+
+
+
 
     public function createUserCard(Request $request){
 

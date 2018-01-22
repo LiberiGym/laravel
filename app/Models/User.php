@@ -14,7 +14,7 @@ class User extends Authenticatable
         'name', 'email', 'password', 'birth_date', 'location_id',
         'last_name', 'middle_name', 'registration_mode', 'phone',
         'registration_status', 'terminos_condiciones', 'state_id',
-        'codigo_postal', 'genero', 'image'
+        'codigo_postal', 'genero', 'image', 'role_id'
     ];
     protected $hidden = [
         'password', 'remember_token', 'role_id', 'reg_mode', 'status',

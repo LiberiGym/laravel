@@ -154,10 +154,7 @@ class UserAppController extends BaseController
         } catch (\Exception $e) {
             $response['msj'] = $e;
         }
-
-
         return $mdlStates;
-
     }
 
     //cargamos los municipios
@@ -180,18 +177,13 @@ class UserAppController extends BaseController
                     'Title'=>$location->title
                 ];
             }
-
-
             $response['result'] = 'ok';
             $response['states'] = $mdlLocations;
 
         } catch (\Exception $e) {
             $response['msj'] = $e;
         }
-
-
         return $mdlLocations;
-
     }
 
     //crear usuario
@@ -199,7 +191,7 @@ class UserAppController extends BaseController
         $response = [
             'result'=>'error',
             'msj'=>'',
-            'userId'=> 0
+            'Id'=> 0
         ];
         if($request->has('Nombre')){
 
@@ -216,9 +208,9 @@ class UserAppController extends BaseController
                         'birth_date'      => $request->get('FechaNac'),
                         'location_id'      => $request->get('IdLocation'),
                         'state_id'      => $request->get('IdEstado'),
-                        'codigo_postal'      => $request->get('Cp'),
+                        'codigo_postal'      => $request->get('CP'),
                         'genero'      => $request->get('Genero'),
-                        'image'      => '',
+                        'image'      => $request->get('ImageName'),
                         'registration_mode'      => 'client',
                         'registration_status'      => 'Pendiente',
                         'terminos_condiciones'  => 0
@@ -233,7 +225,7 @@ class UserAppController extends BaseController
                     {
                         $user = Auth::user();
 
-                        $response['userId']= $user->id;
+                        $response['Id']= $user->id;
                         $response['result']= 'ok';
                     }
 
@@ -250,10 +242,11 @@ class UserAppController extends BaseController
     }
 
     //subir imagen de usuario
-    public function userUploadImage(Request $request)
-    {
+    public function userUploadImage(Request $request){
+
         $response = [
             'result' => 'error',
+            'Nombre' => '',
             'msj' => ''
         ];
 
@@ -265,13 +258,8 @@ class UserAppController extends BaseController
             if (in_array($ext, ['jpg', 'jpeg', 'png']))
             {
                 $newFile = Files::save($request->file('file')->getRealPath(), $ext, 'users', 'user_');
-
-                //recuperamos el usuario
-                $user = User::find($request->get('userId'));
-                $user->image = $newFile;
-                $user->save();
-
                 $response['result'] = 'ok';
+                $response['Nombre'] = $newFile;
             }
             else
             {
@@ -283,23 +271,16 @@ class UserAppController extends BaseController
         return $response;
     }
 
-
-
-
-
-
-
-
-
-
-
+    //crear tarjeta de usuario
     public function createUserCard(Request $request){
-
-        $idUser = "";
+        $response = [
+            'result'=>'error',
+            'msj'=>''
+        ];
         if($request->has('IdUser')){
 
             try {
-                $newCard = UserCard();
+                $newCard = new UserCard();
 
                 $newCard->user_id = $request->get('IdUser');
                 $newCard->type = $request->get('Tipo');
@@ -311,14 +292,14 @@ class UserAppController extends BaseController
                 $newCard->prefer = '1';
                 $newCard->save();
 
-                $idUser = $request->get('IdUser');
+                $response['result']= 'ok';
 
             } catch (\Exception $e) {
-
+                $response['msj']= $e->getMessage();
             }
         }
 
-        return $idUser;
+        return $response;
     }
 
 

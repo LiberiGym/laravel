@@ -25,10 +25,8 @@ Route::group(['prefix' => 'api'], function()
     /*RegistroPage*/
     Route::get('/load-states', 'Movil\UserAppController@loadStates');
     Route::get('/load-locations/{Id}', 'Movil\UserAppController@loadLocations');
-    Route::any('/user-upload-image', 'Movil\UserAppController@userUploadImage');
-
-
     Route::post('/create-user', 'Movil\UserAppController@createUser');
+    Route::any('/user-upload-image', 'Movil\UserAppController@userUploadImage');
     Route::post('/create-user-card', 'Movil\UserAppController@createUserCard');
 
 });

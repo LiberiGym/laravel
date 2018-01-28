@@ -44,7 +44,10 @@ class UserAppController extends BaseController
             'result'=>'error',
             'msj'=>'',
             'Id'=>0,
-            'Nombre'=>''
+            'Nombre'=>'',
+            'Apellido'=>'',
+            'ImagenUrl'=>'',
+            'UserType'=>''
         ];
         if($request->has('Email')){
 
@@ -57,9 +60,28 @@ class UserAppController extends BaseController
                 {
                     $user = Auth::user();
 
-                    $response['Id']=$user->id;
-                    $response['Nombre']=$user->name;
-                    $response['result']= 'ok';
+                    if($user->registration_mode=='client'){
+                        $response['Id']=$user->id;
+                        $response['Nombre']=$user->name;
+                        $response['Apellido']=$user->middle_name;
+                        $response['ImagenUrl']=$user->image;
+                        $response['result']= 'ok';
+                        $response['UserType']=$user->registration_mode;
+                    }else if($user->registration_mode=='gym'){
+                        $gym = Gym::where('user_id', $user->id)->get()->first();
+                        if(!is_null($gym)){
+                            $response['Id']=$user->id;
+                            $response['Nombre']=$gym->tradename;
+                            $response['Apellido']=$user->middle_name;
+                            $response['ImagenUrl']=$user->image;
+                            $response['result']= 'ok';
+                            $response['UserType']=$user->registration_mode;
+                        }else{
+                            $response['msj']= 'Datos de Usuario Incorrectos. Vuelva a intentarlo';
+                        }
+                    }else{
+                        $response['msj']= 'No tiene permiso para acceder a la app.';
+                    }
                 }else{
                     $response['msj']= 'Datos de Usuario Incorrectos. Vuelva a intentarlo';
                 }
@@ -67,12 +89,9 @@ class UserAppController extends BaseController
             } catch (\Exception $e) {
                 $response['msj']= $e;
             }
-
-
         }else{
             $response['msj']= 'No hay variabel Email';
         }
-
         return $response;
     }
 
@@ -302,7 +321,49 @@ class UserAppController extends BaseController
         return $response;
     }
 
+    /***************************/
+    /*DatosPersonalesPage*/
 
+    //recuperamos los datos de usuario
+    public function getUser(Request $request){
+        $response = [
+            'result'=>'error',
+            'msj'=>'',
+            'user'=> ''
+        ];
+
+
+        if($request->has('userId')){
+
+            try {
+                $userExist = User::where('id', $request->get('userId'))->get()->first();
+
+                if(!is_null($userExist)){
+                    $response['user'] = [
+                        'Nombre' => $userExist->name,
+                        'ApePat' => $userExist->middle_name,
+                        'ApeMat' => $userExist->last_name,
+                        'Email' => $userExist->email,
+                        'Cel' => $userExist->phone,
+                        'FechaNac' => $userExist->birth_date,
+                        'IdLocation' => $userExist->location_id,
+                        'IdEstado' => $userExist->state_id,
+                        'CP' => $userExist->codigo_postal,
+                        'Genero' => $userExist->genero,
+                        'ImageName' => $userExist->image
+                    ];
+                    $response['result']= 'ok';
+                }
+            } catch (\Exception $e) {
+                $response['msj']= $e->getMessage();
+            }
+        }else{
+            $response['msj']= 'No Data Send';
+        }
+        return $response;
+    }
+
+    /////////////////////////////////////////////////////////////////////
     public function initRegister(Request $request){
         // se inicia el proceso de registro.
         //1. validamos si el correo ya esta registrado como gimnasio

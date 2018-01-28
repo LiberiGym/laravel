@@ -29,6 +29,9 @@ Route::group(['prefix' => 'api'], function()
     Route::any('/user-upload-image', 'Movil\UserAppController@userUploadImage');
     Route::post('/create-user-card', 'Movil\UserAppController@createUserCard');
 
+    /*DatosPersonalesPage*/
+    Route::post('/get-user', 'Movil\UserAppController@getUser');
+
 });
 /*!--ACCESOS APP--*/
 

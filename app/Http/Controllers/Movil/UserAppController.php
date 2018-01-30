@@ -363,6 +363,81 @@ class UserAppController extends BaseController
         return $response;
     }
 
+    //actualizadmos los datos del usuario
+    public function updateUser(Request $request){
+        $response = [
+            'result'=>'error',
+            'msj'=>''
+        ];
+        if($request->has('IdUser')){
+
+            try {
+                $userExist = User::where('id', $request->get('IdUser'))->get()->first();
+                if(!is_null($userExist)){
+                    $userExist->name = $request->get('Nombre');
+                    $userExist->middle_name = $request->get('ApePat');
+                    $userExist->last_name = $request->get('ApeMat');
+                    $userExist->phone = $request->get('Cel');
+                    $userExist->birth_date = $request->get('FechaNac');
+                    $userExist->location_id = $request->get('IdLocation');
+                    $userExist->state_id = $request->get('IdEstado');
+                    $userExist->codigo_postal = $request->get('CP');
+                    $userExist->genero = $request->get('Genero');
+                    if($request->get('ImageName')!=''){
+                        $userExist->image = $request->get('ImageName');
+                    }
+                    $userExist->save();
+
+                    $response['result']= 'ok';
+
+                }else{
+                    $response['msj']= 'No se pudo guardar la información, vuelva a intentarlo.';
+                }
+
+            } catch (\Exception $e) {
+                $response['msj']= $e->getMessage();
+            }
+        }else{
+            $response['msj']= 'No Data Send';
+        }
+
+        return $response;
+    }
+
+    /***************************/
+    /*DatosTarjeetaPage*/
+
+    //crear tarjeta de usuario registrado
+    public function updateUserAddCard(Request $request){
+        $response = [
+            'result'=>'error',
+            'msj'=>''
+        ];
+        if($request->has('IdUser')){
+
+            try {
+                $newCard = new UserCard();
+
+                $newCard->user_id = $request->get('IdUser');
+                $newCard->type = $request->get('Tipo');
+                $newCard->owner = $request->get('Titular');
+                $newCard->number = $request->get('Numero');
+                $newCard->mm = $request->get('Mes');
+                $newCard->aa = $request->get('Anho');
+                $newCard->cvv = $request->get('Cvv');
+                $newCard->prefer = '0';
+                $newCard->save();
+
+                $response['result']= 'ok';
+
+            } catch (\Exception $e) {
+                $response['msj']= $e->getMessage();
+            }
+        }
+
+        return $response;
+    }
+
     /////////////////////////////////////////////////////////////////////
     public function initRegister(Request $request){
         // se inicia el proceso de registro.

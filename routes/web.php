@@ -31,6 +31,12 @@ Route::group(['prefix' => 'api'], function()
 
     /*DatosPersonalesPage*/
     Route::post('/get-user', 'Movil\UserAppController@getUser');
+    Route::post('/update-user', 'Movil\UserAppController@updateUser');
+
+    /*DatosTarjetaPage*/
+    Route::post('/update-user-addcard', 'Movil\UserAppController@updateUserAddCard');
+
+
 
 });
 /*!--ACCESOS APP--*/

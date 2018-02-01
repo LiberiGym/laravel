@@ -35,7 +35,7 @@ class RegisterController extends Controller
 
     public function loadLocations(Request $request){
 
-        
+
 
 
         $response = [
@@ -74,6 +74,8 @@ class RegisterController extends Controller
                 'name'      => $request->get('name'),
                 'last_name'      => $request->get('last_name'),
                 'email'      => $request->get('email'),
+                'location_id'      => $request->get('location'),
+                'state_id'      => $request->get('state'),
                 'registration_mode'      => 'gym',
                 'registration_status'      => 'Pendiente',
                 'password'  => \Hash::make($request->get('password')),

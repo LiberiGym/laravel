@@ -144,6 +144,8 @@
                         <div class="clearfix"></div>
 
                         <button type="button" name="button" id="btnGuardar">Siguiente</button>
+                        <button type="button" name="button" id="btnCalculadora" data-toggle="modal" data-target="#mdlCalculadora">Calculadora</button>
+
                     </fieldset>
                 </form>
 
@@ -153,6 +155,66 @@
     </div>
 </div>
 <!-- //about -->
+<!-- Modal -->
+<div class="modal fade" id="mdlCalculadora" tabindex="-1" role="dialog" aria-labelledby="mdlCalculadora" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">¡CALCULA TU COSTO POR VISITA!</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-lg-8">
+                        <div class="col-lg-12">
+                            <label for="">Introduce costo de tu mensualidad más completa</label>
+                            <p>(Sin promociones ni descuentos)</p>
+                            <input type="text" id="txtCostoMensualidad"  placeholder="0.00" class="form-registro-element">
+                        </div>
+
+                        <div class="col-lg-12">
+                            <p>Estás a punto de formar parte de la red de Centros de Acondicionaminto Físico más grande del país.</p>
+                            <p>¡Completa tu registro y aumenta tus ganancias!</p>
+                        </div>
+
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="col-lg-12">
+                            <label for="">Costo de visita</label>
+                            <input type="text" id="txtCosto"  placeholder="0.00" class="form-registro-element" disabled="disabled">
+                        </div>
+                        <div class="col-lg-12">
+                            <label for="">Visita + I.V.A.</label>
+                            <input type="text" id="txtCostoIva"  placeholder="0.00" class="form-registro-element" disabled="disabled">
+                        </div>
+                        <div class="col-lg-12">
+                            <label for="">Comisión por transacción</label>
+                            <input type="text" id="txtCostoTransaccion"  placeholder="0.00" class="form-registro-element" disabled="disabled">
+                        </div>
+                        <div class="col-lg-12">
+                            <label for="">Ganancia REAL por visita</label>
+                            <input type="text" id="txtGanancia"  placeholder="0.00" class="form-registro-element" disabled="disabled">
+                        </div>
+                        <div class="col-lg-6">
+                            <label for="">90%</label>
+                            <input type="text" id="txtGanancia"  placeholder="0.00" class="form-registro-element" disabled="disabled">
+                        </div>
+                        <div class="col-lg-6">
+                            <label for="">10%</label>
+                            <input type="text" id="txtGanancia"  placeholder="0.00" class="form-registro-element" disabled="disabled">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary">Save changes</button>
+            </div>
+        </div>
+    </div>
+</div>
 @endsection
 @section('js')
 <script type="text/javascript" src="js/jquery.timepicker.js"></script>

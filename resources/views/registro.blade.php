@@ -157,60 +157,63 @@
 <!-- //about -->
 <!-- Modal -->
 <div class="modal fade" id="mdlCalculadora" tabindex="-1" role="dialog" aria-labelledby="mdlCalculadora" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
+    <div class="modal-dialog" role="document"  style="background:#DFE0E4;">
+        <div class="modal-content" style="background:#DFE0E4;">
+            <!--<div class="modal-header">
                 <h5 class="modal-title" id="exampleModalLabel">¡CALCULA TU COSTO POR VISITA!</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
-            </div>
-            <div class="modal-body">
+            </div>-->
+            <div class="modal-body" style="background:#DFE0E4;">
+                <h1 style="font-family: 'AvenirLTStd-Black'; font-size: 32px; color: #1d4289; text-align:center; margin-bottom:25px;">¡CALCULA TU COSTO POR VISITA!</h1>
+
                 <div class="row">
+                    <form class="form-registro" role="form">
                     <div class="col-lg-8">
-                        <div class="col-lg-12">
-                            <label for="">Introduce costo de tu mensualidad más completa</label>
-                            <p>(Sin promociones ni descuentos)</p>
+                        <div class="col-lg-12" style="margin-bottom:80px;">
+                            <label style="color: #1d4289;font-size: 14px;font-family: 'AvenirLTStd-Black';margin-bottom: 0;">Introduce costo de tu mensualidad más completa</label>
+                            <p style="font-style: italic; margin-bottom: 0;color: #DD2124;">(Sin promociones ni descuentos)</p>
                             <input type="text" id="txtCostoMensualidad"  placeholder="0.00" class="form-registro-element">
                         </div>
 
                         <div class="col-lg-12">
-                            <p>Estás a punto de formar parte de la red de Centros de Acondicionaminto Físico más grande del país.</p>
-                            <p>¡Completa tu registro y aumenta tus ganancias!</p>
+                            <p style="color: #1d4289;font-size: 14px;font-family: 'AvenirLTStd-Black';margin-bottom: 0; text-align:center;">Estás a punto de formar parte de la red de Centros de Acondicionaminto Físico más grande del país.</p>
+                            <p style="font-style: italic; margin-bottom: 0;color: #DD2124;font-family: 'AvenirLTStd-Black'; text-align:center;">¡Completa tu registro y aumenta tus ganancias!</p>
                         </div>
 
                     </div>
                     <div class="col-lg-4">
                         <div class="col-lg-12">
-                            <label for="">Costo de visita</label>
+                            <label style="color: #1d4289;font-size: 14px;font-family: 'AvenirLTStd-Black';margin-bottom: 0;">Costo de visita</label>
                             <input type="text" id="txtCosto"  placeholder="0.00" class="form-registro-element" disabled="disabled">
                         </div>
                         <div class="col-lg-12">
-                            <label for="">Visita + I.V.A.</label>
+                            <label style="color: #1d4289;font-size: 14px;font-family: 'AvenirLTStd-Black';margin-bottom: 0;">Visita + I.V.A.</label>
                             <input type="text" id="txtCostoIva"  placeholder="0.00" class="form-registro-element" disabled="disabled">
                         </div>
                         <div class="col-lg-12">
-                            <label for="">Comisión por transacción</label>
+                            <label style="color: #1d4289;font-size: 14px;font-family: 'AvenirLTStd-Black';margin-bottom: 0;">Comisión por transacción</label>
                             <input type="text" id="txtCostoTransaccion"  placeholder="0.00" class="form-registro-element" disabled="disabled">
                         </div>
                         <div class="col-lg-12">
-                            <label for="">Ganancia REAL por visita</label>
+                            <label style="color: #1d4289;font-size: 14px;font-family: 'AvenirLTStd-Black';margin-bottom: 0;">Ganancia REAL por visita</label>
                             <input type="text" id="txtGanancia"  placeholder="0.00" class="form-registro-element" disabled="disabled">
                         </div>
                         <div class="col-lg-6">
-                            <label for="">90%</label>
-                            <input type="text" id="txtGanancia"  placeholder="0.00" class="form-registro-element" disabled="disabled">
+                            <label style="color: #1d4289;font-size: 14px;font-family: 'AvenirLTStd-Black';margin-bottom: 0;">90%</label>
+                            <input type="text" id="txtGananciaGym"  placeholder="0.00" class="form-registro-element" disabled="disabled">
                         </div>
                         <div class="col-lg-6">
-                            <label for="">10%</label>
-                            <input type="text" id="txtGanancia"  placeholder="0.00" class="form-registro-element" disabled="disabled">
+                            <label style="color: #1d4289;font-size: 14px;font-family: 'AvenirLTStd-Black';margin-bottom: 0;">10%</label>
+                            <input type="text" id="txtGananciaLiberi"  placeholder="0.00" class="form-registro-element" disabled="disabled">
                         </div>
                     </div>
+                    </form>
                 </div>
             </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary">Save changes</button>
+            <div class="modal-footer" style="background:#DFE0E4;">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Continuar Registro</button>
             </div>
         </div>
     </div>
@@ -327,6 +330,83 @@ $(document).ready(function () {
             }
         }
     });
+
+    //funciones calculadora
+
+    $( "#txtCostoMensualidad" ).keyup(function() {
+        var _costoMensualidad = $( "#txtCostoMensualidad" ).val();
+        var _costoVisita = 0;
+        var _costoVisitaIva = 0;
+        var _comisionTransaccion = 0;
+        var _costoTransaccion = 0;
+        var _gananciaBruta = 0;
+        var _gananciaGym = 0;
+        var _gananciaLiberi = 0;
+        /*txtCosto
+        txtCostoIva
+        txtCostoTransaccion
+        txtGanancia
+        txtGananciaGym
+        txtGananciaLiberi*/
+        if(!isNaN(_costoMensualidad)){
+
+            _costoVisita = _costoMensualidad/30*1.8; //•	COSTO POR VISITA = COSTO MENSUALIDAD/(DIAS QUE LABORA AL MES * .8);
+            _costoVisitaIva = (_costoVisita*.16)+_costoVisita;
+            _comisionTransaccion = (_costoVisitaIva*.03)+4;
+            _costoTransaccion = (_comisionTransaccion*.16)+_comisionTransaccion;
+            _gananciaBruta = _costoVisitaIva-_costoTransaccion;
+            _gananciaGym = _gananciaBruta*.9;
+            _gananciaLiberi = _gananciaBruta*.1;
+
+            $( "#txtCosto" ).val(number_format(_costoVisita,2));
+            $( "#txtCostoIva" ).val(number_format(_costoVisitaIva,2));
+            $( "#txtCostoTransaccion" ).val(number_format(_costoTransaccion,2));
+            $( "#txtGanancia" ).val(number_format(_gananciaBruta,2));
+            $( "#txtGananciaGym" ).val(number_format(_gananciaGym,2));
+            $( "#txtGananciaLiberi" ).val(number_format(_gananciaLiberi,2));
+        }else{
+            $( "#txtCostoMensualidad" ).val('');
+            $( "#txtCosto" ).val('');
+            $( "#txtCostoIva" ).val('');
+            $( "#txtCostoTransaccion" ).val('');
+            $( "#txtGanancia" ).val('');
+            $( "#txtGananciaGym" ).val('');
+            $( "#txtGananciaLiberi" ).val('');
+        }
+
+
+        //FUNCION PARA FORMATEAR A MONEDA
+        function number_format(value, decimals, separators) {
+            decimals = decimals >= 0 ? parseInt(decimals, 0) : 2;
+            separators = separators || [',', "'", '.'];
+            var number = (parseFloat(value) || 0).toFixed(decimals);
+            if (number.length <= (4 + decimals))
+                return number.replace('.', separators[separators.length - 1]);
+            var parts = number.split(/[-.]/);
+            value = parts[parts.length > 1 ? parts.length - 2 : 0];
+            var result = value.substr(value.length - 3, 3) + (parts.length > 1 ?
+                separators[separators.length - 1] + parts[parts.length - 1] : '');
+            var start = value.length - 6;
+            var idx = 0;
+            while (start > -3) {
+                result = (start > 0 ? value.substr(start, 3) : value.substr(0, 3 + start))
+                    + separators[idx] + result;
+                idx = (++idx) % 2;
+                start -= 3;
+            }
+            return (parts.length == 3 ? '-' : '') + result;
+        }
+
+
+    });
+
+
+
+
+
+
+
+
 
 
 

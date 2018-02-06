@@ -175,6 +175,20 @@
                             <label style="color: #1d4289;font-size: 14px;font-family: 'AvenirLTStd-Black';margin-bottom: 0;">Introduce costo de tu mensualidad más completa</label>
                             <p style="font-style: italic; margin-bottom: 0;color: #DD2124;">(Sin promociones ni descuentos)</p>
                             <input type="text" id="txtCostoMensualidad"  placeholder="0.00" class="form-registro-element">
+
+
+                            <label style="color: #1d4289;font-size: 14px;font-family: 'AvenirLTStd-Black';margin-bottom: 0;">¿Cuántos días a la semana da servicio?</label>
+
+                            <select id="cboDias" class="form-registro-element">
+                                <option value="1">1</option>
+                                <option value="2">2</option>
+                                <option value="3">3</option>
+                                <option value="4">4</option>
+                                <option value="5">5</option>
+                                <option value="6">6</option>
+                                <option value="7">7</option>
+                            </select>
+
                         </div>
 
                         <div class="col-lg-12">
@@ -213,7 +227,7 @@
                 </div>
             </div>
             <div class="modal-footer" style="background:#DFE0E4;">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Continuar Registro</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal" style="background:#FFD916;">Continuar Registro</button>
             </div>
         </div>
     </div>
@@ -334,6 +348,9 @@ $(document).ready(function () {
     //funciones calculadora
 
     $( "#txtCostoMensualidad" ).keyup(function() {
+        var _diasOperaSemana = $("#cboDias").val();
+        var _semanasAnho = 52;
+        var _diasOperaMes = (_diasOperaSemana*_semanasAnho)/12;
         var _costoMensualidad = $( "#txtCostoMensualidad" ).val();
         var _costoVisita = 0;
         var _costoVisitaIva = 0;
@@ -350,7 +367,10 @@ $(document).ready(function () {
         txtGananciaLiberi*/
         if(!isNaN(_costoMensualidad)){
 
-            _costoVisita = _costoMensualidad/30*1.8; //•	COSTO POR VISITA = COSTO MENSUALIDAD/(DIAS QUE LABORA AL MES * .8);
+            console.log(_diasOperaMes);
+
+
+            _costoVisita = _costoMensualidad/(_diasOperaMes*.7); //•	COSTO POR VISITA = COSTO MENSUALIDAD/(DIAS QUE LABORA AL MES * .8);
             _costoVisitaIva = (_costoVisita*.16)+_costoVisita;
             _comisionTransaccion = (_costoVisitaIva*.03)+4;
             _costoTransaccion = (_comisionTransaccion*.16)+_comisionTransaccion;

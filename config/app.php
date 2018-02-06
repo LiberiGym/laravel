@@ -179,7 +179,8 @@ return [
         Tejuino\Admincategories\AdmincategoriesServiceProvider::class,
         Tejuino\Adminstates\AdminstatesServiceProvider::class,
         Tejuino\Adminlocations\AdminlocationsServiceProvider::class,
-        Tejuino\Admingyms\AdmingymsServiceProvider::class
+        Tejuino\Admingyms\AdmingymsServiceProvider::class,
+        Tejuino\Adminterminoscondiciones\AdminterminoscondicionesServiceProvider::class,
     ],
 
     /*

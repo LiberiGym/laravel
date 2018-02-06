@@ -33,7 +33,8 @@
             "Tejuino\\Admincategories\\": "packages/tejuino/admincategories/src",
             "Tejuino\\Adminstates\\": "packages/tejuino/adminstates/src",
             "Tejuino\\Adminlocations\\": "packages/tejuino/adminlocations/src",
-            "Tejuino\\Admingyms\\": "packages/tejuino/admingyms/src"
+            "Tejuino\\Admingyms\\": "packages/tejuino/admingyms/src",
+            "Tejuino\\Adminterminoscondiciones\\": "packages/tejuino/adminterminoscondiciones/src"
         }
     },
     "extra": {

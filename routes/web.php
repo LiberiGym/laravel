@@ -36,6 +36,13 @@ Route::group(['prefix' => 'api'], function()
     /*DatosTarjetaPage*/
     Route::post('/update-user-addcard', 'Movil\UserAppController@updateUserAddCard');
 
+    /*DatosTarjetaPage*/
+    Route::post('/get-terminoscondiciones', 'Movil\UserAppController@getTerminosCondiciones');
+
+    /*PreferenciasPage*/
+    Route::post('/get-preferencias', 'Movil\UserAppController@getPreferencias');
+    Route::post('/update-user-preferencias', 'Movil\UserAppController@updateUserPreferencias');
+
 
 
 });

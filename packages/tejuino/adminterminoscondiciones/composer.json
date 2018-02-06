@@ -1,0 +1,24 @@
+{
+    "name": "tejuino/adminterminoscondiciones",
+    "description": "Tejuino admin terminoscondiciones module",
+    "type": "library",
+    "authors": [
+        {
+            "name": "Tejuino Developers",
+            "email": "developers@tejuino.mx"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "Tejuino\\Adminterminoscondiciones\\": "src/"
+        }
+    },
+    "minimum-stability": "dev",
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Tejuino\\Adminterminoscondiciones\\AdminterminoscondicionesServiceProvider"
+            ]
+        }
+    }
+}

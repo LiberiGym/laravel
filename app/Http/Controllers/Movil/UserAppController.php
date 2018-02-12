@@ -507,10 +507,6 @@ class UserAppController extends BaseController
                     }
                 }
 
-                $response['CategoriasUser'][]=[
-                    'Id'=>2
-                    ] ;
-
 
                 $PreferenciasUser = UserPreferences::where('user_id',$request->get('IdUser'))->get()->first();
 
@@ -521,14 +517,6 @@ class UserAppController extends BaseController
                         'Price'=>$PreferenciasUser->price
                         ] ;
                 }
-
-                $response['PreferenciasUser']=[
-                    'Id'=>1,
-                    'Distance'=>2,
-                    'Price'=>70
-                    ] ;
-
-
 
                 $response['Result']= 'ok';
                 $response['IdUser']= $request->get('IdUser');
@@ -559,10 +547,10 @@ class UserAppController extends BaseController
                 //registramos las nuevas categorias
                 foreach ($request->get('Categoria') as $category) {
                     $newCategoriasUser = new UserCategories();
-                    $newCategoriasUser->;
+                    //$newCategoriasUser->;
 
-                    user_idint(10) unsigned NOT NULL
-category_id
+                    //user_idint(10) unsigned NOT NULL
+                    //    category_id
                 }
 
                 //actualizamos los datos de distancia y precio
@@ -619,5 +607,83 @@ category_id
         }
 
         return $response;
+    }
+
+    /***************************/
+    /*MapaPage*/
+
+    //recuperamos la ubicación de los Gym
+    public function getLocationGyms(Request $request){
+        //recuperamos las configuraciones de preferencias del usuario
+        //filtramos los gymnasios que coincidan con las preferencias del usuario
+        $response = [
+            'Result'=>'error',
+            'Msj'=>'',
+            'Gyms'=>[]
+        ];
+
+        if($request->has('IdUser')){
+
+            try {
+                $userCategoriesArr = [];
+                $userDistance = 2;
+                $userPrice = 500;
+                $CategoriasUser = UserCategories::where('user_id',$request->get('IdUser'))->get();
+
+                if(!is_null($CategoriasUser)){
+                    foreach ($CategoriasUser as $categoryUser) {
+                        $userCategoriesArr[]=$categoryUser->category_id;
+                    }
+                }
+
+                $PreferenciasUser = UserPreferences::where('user_id',$request->get('IdUser'))->get()->first();
+
+                if(!is_null($PreferenciasUser)){
+                    $userDistance = $PreferenciasUser->distance;
+                    $userPrice = $PreferenciasUser->price;
+                }
+
+                //realizamos la busqueda de los gyms por distancia
+                $categories = implode(",", $userCategoriesArr);
+                $joinStr = "";
+                if(count($userCategoriesArr)>0){
+                    $joinStr = "INNER JOIN gym_service as gs ON g.id=gs.gym_id AND gs.category_id IN(".$categories.")";
+                }
+                $gyms = DB::select("SELECT DISTINCT
+                                    g.id as IdGym, (
+                                      6371 * acos (
+                                      cos ( radians(".$request->get('Lat').") )
+                                      * cos( radians( g.lat ) )
+                                      * cos( radians( g.lng ) - radians(".$request->get('Lng').") )
+                                      + sin ( radians(".$request->get('Lat').") )
+                                      * sin( radians( g.lat ) )
+                                    )
+                                ) AS Distance, g.lat as Lat, g.lng as Lgn, g.tradename as Tradename,
+                                IFNULL((SELECT 'Abierto Ahora' FROM gym_schedule as gh WHERE gh.day=(WEEKDAY(NOW())+1) AND NOW() BETWEEN start_time AND end_time AND gh.gym_id=g.id),'Cerrado') AS EstatusService
+                                FROM gym as g
+                                ".$joinStr."
+                                HAVING Distance < ".$userDistance."
+                                ORDER BY Distance",
+                                []);
+
+                //return $gyms;
+
+                if(count($gyms)==0){
+                    $response['Result']= 'error';
+                    $response['Msj']= 'No se encontraron gimnasios cerca de tu ubicación';
+                    $response['Gyms']= $gyms;
+                }else{
+                    $response['Result']= 'ok';
+                    $response['Gyms']= $gyms;
+                }
+
+
+            } catch (\Exception $e) {
+                $response['Msj']= $e->getMessage();
+            }
+        }
+
+        return $response;
+
     }
 }

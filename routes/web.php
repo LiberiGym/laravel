@@ -43,6 +43,10 @@ Route::group(['prefix' => 'api'], function()
     Route::post('/get-preferencias', 'Movil\UserAppController@getPreferencias');
     Route::post('/update-user-preferencias', 'Movil\UserAppController@updateUserPreferencias');
 
+    /*MapaPage*/
+    Route::post('/get-location-gyms', 'Movil\UserAppController@getLocationGyms');
+
+
 
 
 });

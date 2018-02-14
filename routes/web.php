@@ -46,11 +46,19 @@ Route::group(['prefix' => 'api'], function()
     /*MapaPage*/
     Route::post('/get-location-gyms', 'Movil\UserAppController@getLocationGyms');
 
+    /*AyudaPage*/
+    Route::post('/ayuda', 'Movil\UserAppController@ayudaApp');
+
 
 
 
 });
 /*!--ACCESOS APP--*/
+
+/*AyudaPage - Tutoriales*/
+Route::get('/tutoriales/{id}', function () {
+    return view('tutoriales');
+});
 
 Route::get('/', function () {
     return redirect('/inicio');

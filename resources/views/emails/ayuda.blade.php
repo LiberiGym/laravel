@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>LIBERI:: | CONTACTO</title>
+<title>LIBERI:: | AYUDA</title>
 <!-- Custom Theme files -->
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
@@ -130,7 +130,7 @@
 	                					<table border="0" align="center" cellpadding="0" cellspacing="0" style="border-collapse:collapse; mso-table-lspace:0pt; mso-table-rspace:0pt;" class="logo">
 				                			<tr>
 				                				<td align="center">
-													<a href="http://liberi.com.mx/" style="text-decoration:none"><img src="https://liberi.com.mx/images/logo_liberi_web_letters.png" alt="LIBERI" width="150" border="0"></a>
+													<a href="https://liberi.com.mx/" style="text-decoration:none"><img src="https://liberi.com.mx/images/logo_liberi_web_letters.png" alt="LIBERI" width="150" border="0"></a>
 												</td>
 				                			</tr>
 				                		</table>
@@ -149,11 +149,11 @@
 	    					<table width="560" border="0" align="center" cellpadding="0" cellspacing="0" class="mainContent">
 	    						<tr>
 	    							<td align="center" mc:edit="title1" class="main-header" style="color:#1d4289; font-family:Gill Sans MT, Arial, sans-serif; font-size: 2.5em;">
-	                					Correo de Contacto
+	                					Solicitud de Ayuda
 	                				</td>
 	                			</tr>
 								<tr>
-									<td style="font-size:15px; color:#1d4289; font-family:Gill Sans MT, Arial, sans-serif;" align="center">Mensaje enviado desde la página web.</td>
+									<td style="font-size:15px; color:#1d4289; font-family:Gill Sans MT, Arial, sans-serif;" align="center">Mensaje enviado desde la  sección de ayuda de la app.</td>
 								</tr>
 
 	    					</table>
@@ -174,18 +174,18 @@
 													</tr>
 													<tr>
 														<td style="color:#1d4289; line-height:1.8em; font-size:15px; font-family:Gill Sans MT, Arial, sans-serif;">
-															<p><b>Nombre:</b> {{$contact_name}}</p>
-															<p><b>Teléfono:</b> {{$contact_phone}}</p>
-															<p><b>Correo:</b> {{$contact_email}}</p>
-															<p><b>Mensaje:</b> {{$contact_message}}</p>
+															<p><b>Fecha Envío:</b> {{$fechaEnvio}}</p>
+															<p><b>Sección:</b> {{$type}}</p>
+															<p><b>ID Usuario:</b> {{$idUser}}</p>
+															<p><b>Nombre:</b> {{$nombre}}</p>
+															<p><b>Teléfono:</b> {{$phone}}</p>
+															<p><b>Correo:</b> {{$email}}</p>
+															<p><b>Mensaje:</b> {{$informacion}}</p>
 														</td>
 													</tr>
-
-
 												</tbody>
 											</table>
 										</td>
-
 									</tr>
 								</tbody>
 							</table>

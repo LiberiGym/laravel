@@ -20,4 +20,5 @@ class HomeController extends BaseController
             'states' => \App\Models\States\State::getAll()
         ]);
     }
+
 }

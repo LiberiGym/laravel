@@ -649,6 +649,9 @@ class UserAppController extends BaseController
                 if(count($userCategoriesArr)>0){
                     $joinStr = "INNER JOIN gym_service as gs ON g.id=gs.gym_id AND gs.category_id IN(".$categories.")";
                 }
+
+                $box = $this->getBoundaries($request->get('Lat'), $request->get('Lng'), $userDistance);
+
                 $gyms = DB::select("SELECT DISTINCT
                                     g.id as IdGym, (
                                       6371 * acos (
@@ -659,9 +662,13 @@ class UserAppController extends BaseController
                                       * sin( radians( g.lat ) )
                                     )
                                 ) AS Distance, g.lat as Lat, g.lng as Lgn, g.tradename as Tradename,
-                                IFNULL((SELECT 'Abierto Ahora' FROM gym_schedule as gh WHERE gh.day=(WEEKDAY(NOW())+1) AND NOW() BETWEEN start_time AND end_time AND gh.gym_id=g.id),'Cerrado') AS EstatusService
+                                IFNULL((SELECT 'Abierto Ahora'
+                                FROM gym_schedule as gh
+                                WHERE gh.day=(WEEKDAY(NOW())+1) AND NOW() BETWEEN start_time AND end_time AND gh.gym_id=g.id),'Cerrado') AS EstatusService
                                 FROM gym as g
                                 ".$joinStr."
+                                WHERE (g.lat BETWEEN ".$box['min_lat']." AND ".$box['max_lat'].")
+                                AND (g.lng BETWEEN ".$box['min_lng']." AND ". $box['max_lng'].")
                                 HAVING Distance < ".$userDistance."
                                 ORDER BY Distance",
                                 []);
@@ -685,5 +692,81 @@ class UserAppController extends BaseController
 
         return $response;
 
+    }
+
+    public function getBoundaries($lat, $lng, $distance = 2, $earthRadius = 6371)
+    {
+        $return = array();
+
+        // Los angulos para cada dirección
+        $cardinalCoords = array('north' => '0',
+                                'south' => '180',
+                                'east' => '90',
+                                'west' => '270');
+        $rLat = deg2rad($lat);
+        $rLng = deg2rad($lng);
+        $rAngDist = $distance/$earthRadius;
+        foreach ($cardinalCoords as $name => $angle)
+        {
+            $rAngle = deg2rad($angle);
+            $rLatB = asin(sin($rLat) * cos($rAngDist) + cos($rLat) * sin($rAngDist) * cos($rAngle));
+            $rLonB = $rLng + atan2(sin($rAngle) * sin($rAngDist) * cos($rLat), cos($rAngDist) - sin($rLat) * sin($rLatB));
+             $return[$name] = array('lat' => (float) rad2deg($rLatB),
+                                    'lng' => (float) rad2deg($rLonB));
+        }
+        return array('min_lat'  => $return['south']['lat'],
+                     'max_lat' => $return['north']['lat'],
+                     'min_lng' => $return['west']['lng'],
+                     'max_lng' => $return['east']['lng']);
+    }
+
+    /***************************/
+    /*AyudaPage*/
+
+    //recuperamos el tipo de reporte de ayuda
+    public function  ayudaApp(Request $request){
+        $response = [
+            'Result'=>'error',
+            'Msj'=>''
+        ];
+        if($request->has('IdUser')){
+            try {
+                $user  = User::where('id',$request->get('IdUser'))->get()->first();
+                if(!is_null($user))
+                {
+                    $dataMail = [
+                        'nombre' => $user->name." ".$user->middle_name." ".$user->last_name,
+                        'phone' => $user->phone,
+                        'idUser'=>$request->get('IdUser'),
+                        'email'=>$user->email,
+                        'type'=>$request->get('type'),
+                        'informacion'=>$request->get('informacion'),
+                        'fechaEnvio'=>date("d/m/Y")
+                    ];
+
+                    Mail::send('emails.ayuda', $dataMail, function ($message) use ($dataMail) {
+                        $message->subject('Solicitud de Ayuda desde App');
+                        $message->from($dataMail['email'], $dataMail['nombre']);
+                        //$message->to(config('mail.from.address'), config('mail.from.name'));
+                        $message->to("taquion3x109@gmail.com", config('mail.from.name'));
+
+                    });
+
+                    $response['Result']= 'ok';
+                    $response['Msj']= 'Tu solicitud fue enviada correctamente. Pronto un miembro del equipo de LIBERI dará atención a tu reporte.';
+                }else{
+                    $response['Msj']= 'Datos de Usuario Incorrectos. Vuelva a intentarlo';
+                }
+
+            } catch (\Exception $e) {
+                $response['Msj']= $e->getMessage();
+            }
+
+
+        }else{
+            $response['Msj']= 'No hay variable Usuario';
+        }
+
+        return $response;
     }
 }

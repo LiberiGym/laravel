@@ -15,13 +15,13 @@
     <meta name="description" content="@yield('description')" />
 
     <!--****************** CSS ******************-->
-    <link href="css/bootstrap.css" rel="stylesheet" type="text/css" media="all" />
-    <link rel="stylesheet" href="css/chocolat.css"      type="text/css" media="all">
-    <link href="css/animate.css" rel="stylesheet" type="text/css" media="all">
-    <link href="css/style.css" rel="stylesheet" type="text/css" media="all" />
-    <link href="css/font-awesome.css" type="text/css" rel="stylesheet">
+    <link href="/css/bootstrap.css" rel="stylesheet" type="text/css" media="all" />
+    <link rel="stylesheet" href="/css/chocolat.css"      type="text/css" media="all">
+    <link href="/css/animate.css" rel="stylesheet" type="text/css" media="all">
+    <link href="/css/style.css" rel="stylesheet" type="text/css" media="all" />
+    <link href="/css/font-awesome.css" type="text/css" rel="stylesheet">
     <!--Validate-->
-    <link rel="stylesheet" href="css/validate.css">
+    <link rel="stylesheet" href="/css/validate.css">
     <!--****************** CSS ******************-->
     @yield('css')
 </head>
@@ -38,14 +38,14 @@
                 <span class="icon-bar"></span>
             </button>
             <div class="w3_navigation_pos">
-                <h1><a href="/inicio"><img src="images/logo_liberi_web_eagle.png"/></a></h1>
+                <h1><a href="/inicio"><img src="/images/logo_liberi_web_eagle.png"/></a></h1>
             </div>
         </div>
         <!-- Collect the nav links, forms, and other content for toggling -->
         <div class="collapse navbar-collapse navbar-right" id="bs-example-navbar-collapse-1">
             <nav class="link-effect-2" id="link-effect-2">
                 <ul class="nav navbar-nav">
-                    <li class="active"><a href="/inicio"><img src="images/logo_liberi_web_letters.png"/></a></li>
+                    <li class="active"><a href="/inicio"><img src="/images/logo_liberi_web_letters.png"/></a></li>
                     <li><a href="#aboutUs" class="scroll"><span data-hover="Sobre Nosotros">Sobre Nosotros</span></a></li>
                     <li><a href="#testimonies" class="scroll"><span data-hover="Testimonios" >Testimonios</span></a></li>
                     <li><a href="#howWorks" class="scroll"><span data-hover="Cómo Funciona">Cómo Funciona</span></a></li>
@@ -112,9 +112,9 @@
         <div class="row">
             <div class="col-lg-12  text-center">
                 <h3 class="howWorks-title text-center">¿Como Funciona?</h3>
-                <img src="images/barra_amarilla_banner_top.png" height="6" style="width:79px;"/>
+                <img src="/images/barra_amarilla_banner_top.png" height="6" style="width:79px;"/>
                 <p class="text-center" style="width:50%; margin:auto; line-height: 22px;">Usando la app, Liberi te permite tener acceso a múltiples establecimientos de actividades variadas a costos accesibles y sin plazos forzosos.</p>
-                <img src="images/how_works_img.png" alt="" style="margin-top:15px;">
+                <img src="/images/how_works_img.png" alt="" style="margin-top:15px;">
             </div>
 
         </div>
@@ -128,7 +128,7 @@
 <div id="contact">
     <div class="container">
         <div class="contact-icon">
-            <img src="images/contact_icon.png" alt="">
+            <img src="/images/contact_icon.png" alt="">
         </div>
         <h3 class="contact-title text-center">¿Dudas? Contáctanos</h3>
         <div class="contact-info text-center">
@@ -160,7 +160,7 @@
             </div>
             <div class="modal-body">
                 <div class="agileits-w3layouts-info">
-                    <img src="images/2.jpg" alt="" />
+                    <img src="/images/2.jpg" alt="" />
                     <p>Duis venenatis, turpis eu bibendum porttitor, sapien quam ultricies tellus, ac rhoncus risus odio eget nunc. Pellentesque ac fermentum diam. Integer eu facilisis nunc, a iaculis felis. Pellentesque pellentesque tempor enim, in dapibus turpis porttitor quis. Suspendisse ultrices hendrerit massa. Nam id metus id tellus ultrices ullamcorper.  Cras tempor massa luctus, varius lacus sit amet, blandit lorem. Duis auctor in tortor sed tristique. Proin sed finibus sem.</p>
                 </div>
             </div>
@@ -198,10 +198,10 @@
     <!--****************** JS ******************-->
     <script type="application/x-javascript"> addEventListener("load", function() { setTimeout(hideURLbar, 0); }, false);
             function hideURLbar(){ window.scrollTo(0,1); } </script>
-    <script type="text/javascript" src="js/jquery-1.11.1.min.js"></script>
-    <script type="text/javascript" src="js/popper.min.js"></script>
-    <script type="text/javascript" src="js/bootstrap.js"></script>
-    <script src="js/modernizr.js"></script>
+    <script type="text/javascript" src="/js/jquery-1.11.1.min.js"></script>
+    <script type="text/javascript" src="/js/popper.min.js"></script>
+    <script type="text/javascript" src="/js/bootstrap.js"></script>
+    <script src="/js/modernizr.js"></script>
     <script type="text/javascript">
         jQuery(document).ready(function($) {
             $(".scroll").click(function(event){
@@ -211,7 +211,7 @@
         });
     </script>
 
-    <script src="js/responsiveslides.min.js"></script>
+    <script src="/js/responsiveslides.min.js"></script>
     <script>
         // You can also use "$(window).load(function() {"
         $(function () {
@@ -235,14 +235,14 @@
     <!--banner Slider starts Here-->
 
 
-    <script src="js/classie.js"></script>
-    <script src="js/helper.js"></script>
+    <script src="/js/classie.js"></script>
+    <script src="/js/helper.js"></script>
     <!--<script src="js/grid3d.js"></script>
     <script>
         new grid3D( document.getElementById( 'grid3d' ) );
     </script>-->
-    <script src="js/jarallax.js"></script>
-    <script src="js/SmoothScroll.min.js"></script>
+    <script src="/js/jarallax.js"></script>
+    <script src="/js/SmoothScroll.min.js"></script>
     <script type="text/javascript">
         /* init Jarallax */
         $('.jarallax').jarallax({
@@ -252,16 +252,16 @@
         })
     </script>
 
-    <script type="text/javascript" src="js/move-top.js"></script>
-    <script type="text/javascript" src="js/easing.js"></script>
-    <script src="js/sweetalert2.all.js"> </script>
+    <script type="text/javascript" src="/js/move-top.js"></script>
+    <script type="text/javascript" src="/js/easing.js"></script>
+    <script src="/js/sweetalert2.all.js"> </script>
 
     <!--Validate-->
-    <script src="js/jquery.validate.js"></script>
-    <script src="js/ccvalidate.js"></script>
+    <script src="/js/jquery.validate.js"></script>
+    <script src="/js/ccvalidate.js"></script>
 
 
-    <script src="js/layout.js"></script>
+    <script src="/js/layout.js"></script>
     <!--****************** JS ******************-->
     @yield('js')
 </body>

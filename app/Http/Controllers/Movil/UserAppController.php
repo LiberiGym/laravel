@@ -769,4 +769,41 @@ class UserAppController extends BaseController
 
         return $response;
     }
+
+    /***************************/
+    /*NegocioDetallePage*/
+
+    //recuperamos las imagenes del gym
+    public function getGymGallery(Request $request){
+
+        $response = [
+            'Result'=>'error',
+            'Msj'=>'',
+            'Gallery'=>[]
+        ];
+
+        if($request->has('IdGym')){
+
+            try {
+
+                $imagesGym = GymImage::where('gym_id',  $request->get('IdGym'))->select('image')->get();
+
+                if(!is_null($imagesGym)){
+                    $response['Result']= 'ok';
+                    $response['Gallery']= $imagesGym;
+                }else{
+                    $response['Msj']= "No hay imagenes del gym";
+                }
+
+            } catch (\Exception $e) {
+                $response['Msj']= $e->getMessage();
+            }
+        }
+
+        return $response;
+
+    }
+
+
+
 }

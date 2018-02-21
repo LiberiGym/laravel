@@ -1,4 +1,4 @@
-@extends('layout.layout')
+@extends('front.layout.layout_registro')
 @section('css')
 <link href="css/registro.steps.css" type="text/css" rel="stylesheet">
 <link rel="stylesheet" type="text/css" href="css/jquery.timepicker.css" />
@@ -109,8 +109,15 @@
                         <input type="text" name="gym_number"  placeholder="Número" class="form-registro-element" value="{{$gym->gym_number}}" required="required">
                         <input type="text" name="gym_neighborhood" value="{{$gym->gym_neighborhood}}"  placeholder="Colonia" class="form-registro-element" required="required">
                         <input type="text" name="gym_zipcode" value="{{$gym->gym_zipcode}}" placeholder="C.P." class="form-registro-element" required="required">
-                        <input type="text" name="gym_city" placeholder="Ciudad" class="form-registro-element" readonly="readonly" value="{{$gym->gym_city}}">
-                        <input type="text" name="gym_state"  placeholder="Estado" class="form-registro-element" readonly="readonly"  value="{{$gym->gym_state}}">
+                        <input type="text" name="gym_city" id="gym_city" placeholder="Ciudad" class="form-registro-element" readonly="readonly" value="{{$gym->gym_city}}">
+                        <input type="text" name="gym_state" id="gym_state"  placeholder="Estado" class="form-registro-element" readonly="readonly"  value="{{$gym->gym_state}}">
+
+                        <div id="map" style="height: 266px;"></div>
+
+                        <input type="text" name="lat" id="txtLat" />
+                        <input type="text" name="lng" id="txtLng" />
+
+
 
 
                         <legend class="form-legend-registro">Selecciona los servicios que ofrece:</legend>
@@ -237,6 +244,8 @@
 <script type="text/javascript" src="js/jquery.timepicker.js"></script>
 <script src="/admin_assets/plugins/dropzone/dropzone.js"></script>
 <script src="/admin_assets/plugins/dropzone/uploader.js"></script>
+
+<script src="https://maps.googleapis.com/maps/api/js?key={{ config('services.google_maps.key') }}"></script>
 
 <script>
 $(function() {
@@ -420,17 +429,113 @@ $(document).ready(function () {
 
     });
 
-
-
-
-
-
-
-
-
-
+    cityEdit.init();
 
 });
 
+var cityEdit = {
+    id: 0,
+    form: null,
+    lat: 0,
+    lng: 0,
+    init: function(){
+
+        gmap();
+
+    },
+    updateLocation: function(lat, lng){
+        this.lat = lat;
+        this.lng = lng;
+        $('#txtLat').val(this.lat);
+        $('#txtLng').val(this.lng);
+
+
+
+    }
+};
+
+
+var gmap = function() {
+    "use strict";
+    var mapDefault;
+    var marker;
+
+    function initialize() {
+
+        var geocoder = new google.maps.Geocoder();
+        var address = $('#gym_city').val()+", "+$('#gym_state').val();
+        var latAddres = cityEdit.lat;
+        var lngAddres = cityEdit.lng;
+        var positionGym = 0;
+
+
+
+        var mapOptions = {
+            zoom: 13,
+            center: new google.maps.LatLng(latAddres, lngAddres),
+            mapTypeId: google.maps.MapTypeId.ROADMAP,
+            //disableDefaultUI: true,
+        };
+
+        mapDefault = new google.maps.Map(document.getElementById('map'), mapOptions);
+
+        geocoder.geocode({'address': address}, function(results, status) {
+            if (status === 'OK') {
+                latAddres=results[0].geometry.location.lat;
+                lngAddres=results[0].geometry.location.lng;
+                console.log(results[0].geometry.location.lat);
+                cityEdit.updateLocation(latAddres, lngAddres);
+                positionGym = results[0].geometry.location
+            mapDefault.setCenter(positionGym);
+
+            var icon = new google.maps.MarkerImage("/images/marker.png", null, null, null, new google.maps.Size(24, 50));
+
+
+            marker = new google.maps.Marker({
+                //position: {lat: parseFloat(cityEdit.lat), lng: parseFloat(cityEdit.lng)},
+                position: positionGym,
+                title: 'Ubicación', icon: icon, draggable: true
+            });
+
+            google.maps.event.addListener(marker, 'dragend', function (event) {
+                var markerLat = this.position.lat();
+                var markerLng = this.position.lng();
+                cityEdit.updateLocation(markerLat, markerLng);
+            });
+            marker.setMap(mapDefault);
+
+          } else {
+            console.log('Geocode was not successful for the following reason: ' + status);
+          }
+        });
+
+
+        /*var icon = new google.maps.MarkerImage("/images/marker.png", null, null, null, new google.maps.Size(50, 50));
+
+
+        marker = new google.maps.Marker({
+            position: {lat: parseFloat(cityEdit.lat), lng: parseFloat(cityEdit.lng)},
+            title: 'Ubicación', icon: icon, draggable: true
+        });*/
+        /*google.maps.event.addListener(marker, 'dragend', function (event) {
+            var markerLat = this.position.lat();
+            var markerLng = this.position.lng();
+            cityEdit.updateLocation(markerLat, markerLng);
+        });*/
+
+        //marker.setMap(mapDefault);
+    }
+    google.maps.event.addDomListener(window, 'load', initialize);
+
+    $(window).resize(function() {
+        google.maps.event.trigger(mapDefault, "resize");
+        mapDefault.setCenter(marker.getPosition());
+    });
+
+
+
+};
+
 </script>
+
 @endsection

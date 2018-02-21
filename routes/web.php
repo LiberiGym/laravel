@@ -49,6 +49,9 @@ Route::group(['prefix' => 'api'], function()
     /*AyudaPage*/
     Route::post('/ayuda', 'Movil\UserAppController@ayudaApp');
 
+    /*NegocioDetallePage*/
+    Route::post('/get-gym-gallery', 'Movil\UserAppController@getGymGallery');
+
 
 
 
@@ -60,6 +63,7 @@ Route::get('/tutoriales/{id}', function () {
     return view('tutoriales');
 });
 
+/*WEB APP*/
 Route::get('/', function () {
     return redirect('/inicio');
 });
@@ -67,11 +71,33 @@ Route::get('/', function () {
 Route::get('/inicio', 'HomeController@index');
 
 Route::get('/nosotros', function () {
-    return view('nosotros');
+    return view('front.web.nosotros');
 });
 
-/*proceso registro*/
+/*formulario de contacto*/
+Route::get('/contacto', function () {
+    return view('emails.contacto');
+});
+Route::post('/send-contacto', 'LayoutController@sendContacto');
+
+
+
+
+/*!--WEB APP--*/
+
+
+/*PROCESO DE REGISTRO*/
+
+/*registro inicial*/
 Route::post('/registro-init','RegisterController@initRegister');
+Route::any('/registro-generales','RegisterController@registerGrales');
+
+
+
+/*!--PROCESO DE REGISTRO--*/
+
+
+
 Route::get('/registro-init', function()
 {
     return redirect('/inicio');
@@ -87,11 +113,3 @@ Route::post('/login','PerfilController@loginUser');
 Route::any('/perfil-inicio','PerfilController@perfilInicio');
 Route::post('/perfil-delete-image','PerfilController@perfilDeleteImage');
 Route::any('/perfil-usuarios','PerfilController@perfilUsuarios');
-
-/*formulario de contacto*/
-Route::post('/send-contacto', 'LayoutController@sendContacto');
-
-
-Route::get('/contacto', function () {
-    return view('emails.contacto');
-});

@@ -34,5 +34,14 @@ return [
         'key' => env('STRIPE_KEY'),
         'secret' => env('STRIPE_SECRET'),
     ],
+    'google_maps' => [
+        'key' => env('GMAPS_KEY'),
+        'icons' => [
+            'origin' => 'http://liberi.dev/images/ini32.png',
+            'destination' => 'http://liberi.dev/images/end32.png',
+            'waypoint' => 'http://liberi.dev/images/waypoint32.png'
+        ]
+    ],
+
 
 ];

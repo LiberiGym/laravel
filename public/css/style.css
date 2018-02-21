@@ -745,7 +745,61 @@ h3.agileits-title{
     font-family: 'AvenirLTStd-Black';
     color: #1d4289;
 }
+
+.howWorks-h4{
+    font-size: 22px;
+    font-family: 'AvenirLTStd-Black';
+    color: #1d4289;
+}
+
 .howWorks p{
+    font-size: 16px;
+    color: #1d4289;
+    font-family: 'AvenirLTStd-Light';
+}
+
+.howWorks-img{
+    background: url('../images/how_works_img.png') no-repeat center top;
+	background-size:cover;
+	-webkit-background-size:cover;
+	-moz-background-size:cover;
+	-o-background-size:cover;
+	-ms-background-size:cover;
+    padding-top: 277px;
+    height: 462px;
+    margin-top: 25px;
+    text-align: left;
+}
+.howWorks-img button {
+    position: relative;
+    height: 36px;
+    width: 197px;
+    background: url('../images/btn_form_contact_bg.png');
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    border-radius: 10px;
+    border: none;
+    padding-left: 10px;
+    font-size: 14px;
+    color: #1d4289;
+    margin: 16px 0 45px 0;
+}
+.modal-img{
+    background: url('../images/img_modal_app.png') no-repeat center top;
+	background-size:cover;
+	-webkit-background-size:cover;
+	-moz-background-size:cover;
+	-o-background-size:cover;
+	-ms-background-size:cover;
+    height: 502px;
+    padding-top: 85px;
+}
+.howWorks-title-modal{
+    font-size: 44px;
+    font-family: 'AvenirLTStd-Black';
+    color: #1d4289;
+}
+.modal-img p{
     font-size: 16px;
     color: #1d4289;
     font-family: 'AvenirLTStd-Light';

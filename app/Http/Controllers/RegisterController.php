@@ -34,10 +34,6 @@ class RegisterController extends Controller
     }
 
     public function loadLocations(Request $request){
-
-
-
-
         $response = [
             'result' => 'error',
             'locations' => []
@@ -54,6 +50,9 @@ class RegisterController extends Controller
         return $response;
     }
 
+    /*PROCESO DE REGISTRO*/
+
+    /*registro inicial*/
     public function initRegister(Request $request){
         // se inicia el proceso de registro.
         //1. validamos si el correo ya esta registrado como gimnasio
@@ -61,10 +60,16 @@ class RegisterController extends Controller
         //3. en caso de existir se valida si el registro esta completo o si requiere completarse
         //4. si su registro no esta completo se recuperan sus datos y se manda a la segunda pantalla del registro
         //5. si su registro ya esta completo se devuelve un alerta pidiendole que inicie sesion en el formulario de login
-
         if(is_null($request)){
             return redirect('/');
         }
+
+        $response = [
+            'result' => 'error',
+            'msj' => ''
+        ];
+
+
 
         $recoverUser = User::getByEmail($request->email);
         if(is_null($recoverUser))
@@ -105,11 +110,15 @@ class RegisterController extends Controller
                 $newGym->location_id = $request->get('location');
                 $newGym->gym_city = $location->title;
                 $newGym->gym_description = '';
+                $newGym->lat = '';
+                $newGym->lng = '';
                 $newGym->publish_date = Carbon::now();
                 $newGym->save();
 
+                $request->session()->put('user_id', $user->id);
+
                 //recuperamos el registro
-                $gym = Gym::where('user_id', $user->id)->first();
+                /*$gym = Gym::where('user_id', $user->id)->first();
                 $categories = Category::orderBy('title', 'asc')->get();
                 $imagesGym = GymImage::where('gym_id', $gym->id)->get();
 
@@ -118,15 +127,21 @@ class RegisterController extends Controller
                     'gym' => $gym,
                     'categories' => $categories,
                     'imagesGym' => (is_null($imagesGym))? [] : $imagesGym
-                ]);
+                ]);*/
+
+                $response['result'] = 'ok';
 
             }else{
-                return $this->dispatchError(404, 'No se pudo procesar tu registro, vuelve a intentarlo.');
+                $response['msj'] = 'No se pudo procesar tu registro, vuelve a intentarlo.';
+                //return $this->dispatchError(404, 'No se pudo procesar tu registro, vuelve a intentarlo.');
             }
         }else{
             //existe, validamos si el registro esta completo o falta
             if($recoverUser->registration_status=='Pendiente'){
                 //registro incompleto, recuperamos los datos y los dirigimos a la segunda pantalla de registro
+
+
+
                 $userdata = array(
                     'email' => $request->get('email'),
                     'password'=> $request->get('password')
@@ -135,7 +150,9 @@ class RegisterController extends Controller
                 {
                     $user = Auth::user();
 
-                    //recuperamos el registro
+                    $response['result'] = 'ok';
+
+                    /*//recuperamos el registro
                     $gym = Gym::where('user_id', $user->id)->first();
                     $categories = Category::orderBy('title', 'asc')->get();
                     $imagesGym = GymImage::where('gym_id', $gym->id)->get();
@@ -145,17 +162,46 @@ class RegisterController extends Controller
                         'gym' => $gym,
                         'categories' => $categories,
                         'imagesGym' => (is_null($imagesGym))? [] : $imagesGym
-                    ]);
+                    ]);*/
 
                 }else{
-                    return $this->dispatchError(404, 'No se pudo procesar tu registro, vuelve a intentarlo.');
+                    $response['msj'] = 'Ya iniciaste un registro previamente, usa el formuario de arriba para acceder a tu cuenta.';
+                    //return $this->dispatchError(404, 'No se pudo procesar tu registro, vuelve a intentarlo.');
                 }
 
             }else{
                 //registro completo
-                return $this->dispatchError(404, 'Tu perfil ya se encuentra completo, usa el formuario de arriba para acceder a tu cuenta.');
+                $response['msj'] = 'Tu perfil ya se encuentra completo, usa el formuario de arriba para acceder a tu cuenta.';
+                //return $this->dispatchError(404, 'Tu perfil ya se encuentra completo, usa el formuario de arriba para acceder a tu cuenta.');
             }
         }
+
+        return $response;
+    }
+
+    /*registro generales*/
+    public function registerGrales(Request $request){
+
+        if($request->session()->has('user_id'))
+        {
+            $user=User::find($request->session()->get('user_id'));
+
+            //recuperamos el registro
+            $gym = Gym::where('user_id', $request->session()->get('user_id'))->first();
+            $categories = Category::orderBy('title', 'asc')->get();
+            $imagesGym = GymImage::where('gym_id', $gym->id)->get();
+
+            return view('front.registro.generales', [
+                'user' => $user,
+                'gym' => $gym,
+                'categories' => $categories,
+                'imagesGym' => (is_null($imagesGym))? [] : $imagesGym
+            ]);
+        }else{
+            return redirect('/');
+        }
+
+
     }
 
     public function uploadGymImage(Request $request){

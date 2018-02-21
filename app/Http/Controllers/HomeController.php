@@ -16,7 +16,7 @@ class HomeController extends BaseController
         \Artisan::call('cache:clear');
         \Artisan::call('config:clear');
 
-        return view('inicio', [
+        return view('front.web.inicio', [
             'states' => \App\Models\States\State::getAll()
         ]);
     }

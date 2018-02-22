@@ -275,7 +275,7 @@ class RegisterController extends Controller
         return $response;
     }
 
-    public function DatosGralesRegister(Request $request){
+    public function registerGralesCreate(Request $request){
 
         // se inicia el proceso de registro.
         //1. validamos que exista una sesion activa
@@ -307,6 +307,8 @@ class RegisterController extends Controller
             $gym->gym_number = $request->get('gym_number');
             $gym->gym_neighborhood = $request->get('gym_neighborhood');
             $gym->gym_zipcode = $request->get('gym_zipcode');
+            $gym->lat = $request->get('lat');
+            $gym->lng = $request->get('lng');
             $gym->save();
 
             //eliminamos registros existentes de horarios y servicios
@@ -371,17 +373,40 @@ class RegisterController extends Controller
                 $schedule->save();
             }
 
-            return view('datos_fiscales', [
+            /*return view('datos_fiscales', [
                 'user' => $user,
                 'gym' => $gym
-            ]);
+            ]);*/
+            return redirect('/registro-datos-fiscales');
         }else{
             return redirect('/');
         }
 
     }
 
-    public function DatosFisRegister(Request $request){
+    /*registro datos fiscales*/
+    public function registerDFiscales(Request $request){
+
+        if($request->session()->has('user_id'))
+        {
+            $user=User::find($request->session()->get('user_id'));
+
+            //recuperamos el registro
+            $gym = Gym::where('user_id', $request->session()->get('user_id'))->first();
+
+            return view('front.registro.datos_fiscales', [
+                'user' => $user,
+                'gym' => $gym
+            ]);
+
+        }else{
+            return redirect('/');
+        }
+
+
+    }
+
+    public function registerDFiscalesCreate(Request $request){
         // se inicia el proceso de registro.
         //1. validamos que exista una sesion activa
         //2. recuperamos el gym activo
@@ -416,16 +441,40 @@ class RegisterController extends Controller
             $user->phone = $request->get('phone');
             $user->save();
 
-            return view('datos_bancarios', [
+            /*return view('datos_bancarios', [
                 'user' => $user,
                 'gym' => $gym
-            ]);
+            ]);*/
+
+            return redirect('/registro-datos-bancarios');
         }else{
             return redirect('/');
         }
     }
 
-    public function DatosBancariosRegister(Request $request){
+    /*registro datos bancarios*/
+    public function registerDBancarios(Request $request){
+
+        if($request->session()->has('user_id'))
+        {
+            $user=User::find($request->session()->get('user_id'));
+
+            //recuperamos el registro
+            $gym = Gym::where('user_id', $request->session()->get('user_id'))->first();
+
+            return view('front.registro.datos_bancarios', [
+                'user' => $user,
+                'gym' => $gym
+            ]);
+
+        }else{
+            return redirect('/');
+        }
+
+
+    }
+
+    public function registerDBancariosCreate(Request $request){
         // se inicia el proceso de registro.
         //1. validamos que exista una sesion activa
         //2. recuperamos el gym activo
@@ -442,6 +491,8 @@ class RegisterController extends Controller
             //recuperamos el registro
             $gym = Gym::where('user_id', $user->id)->first();
 
+            
+
             $gym->terminos_condiciones = ( $request->has('terminos_condiciones') ) ? 1 : 0;
             $gym->cta_titular = $request->get('cta_titular');
             $gym->cta_numero = $request->get('cta_numero');
@@ -453,354 +504,37 @@ class RegisterController extends Controller
             $user->registration_status = 'Finalizado';
             $user->save();
 
-            return view('registro_finalizacion', [
+            /*return view('registro_finalizacion', [
+                'user' => $user,
+                'gym' => $gym
+            ]);*/
+
+            return redirect('/registro-finalizar');
+        }else{
+            return redirect('/');
+        }
+    }
+
+    /*registro finalizar*/
+    public function registerFinalizar(Request $request){
+
+        if($request->session()->has('user_id'))
+        {
+            $user=User::find($request->session()->get('user_id'));
+
+            //recuperamos el registro
+            $gym = Gym::where('user_id', $request->session()->get('user_id'))->first();
+
+            return view('front.registro.finalizacion', [
                 'user' => $user,
                 'gym' => $gym
             ]);
+
         }else{
             return redirect('/');
         }
-    }
 
 
-
-
-
-
-
-    public function loadQuotesAjax(Request $request)
-    {
-
-        if($request->type=='sector'){
-
-            $integralservices = DB::table('integralservices_sectors')
-            ->join('integralservice', 'integralservices_sectors.integralservice_id', '=', 'integralservice.id')
-            ->where('integralservices_sectors.subcategoryservices_id', $request->id)
-            ->get();
-
-            $packages = DB::table('packages_sectors')
-            ->join('package', 'packages_sectors.package_id', '=', 'package.id')
-            ->where('packages_sectors.subcategoryservices_id', $request->id)
-            ->get();
-
-            $ciatejservices = Ciatejservice::where('subcategoryservices_id','=',$request->id)->orderBy('title', 'asc')->get();
-        }else{
-
-            $integralservices = DB::table('integralservices_laboratories')
-            ->join('integralservice', 'integralservices_laboratories.integralservice_id', '=', 'integralservice.id')
-            ->where('integralservices_laboratories.thirdcategoryservices_id', $request->id)
-            ->get();
-
-            $packages = DB::table('packages_laboratories')
-            ->join('package', 'packages_laboratories.package_id', '=', 'package.id')
-            ->where('packages_laboratories.thirdcategoryservices_id', $request->id)
-            ->get();
-
-            $ciatejservices = Ciatejservice::where('thirdcategoryservices_id','=',$request->id)->orderBy('title', 'asc')->get();
-        }
-
-
-        return view('front.servicios_industria.cotizador.services', [
-            'integralservices' => $integralservices,
-            'packages' => $packages,
-            'ciatejservices'=>$ciatejservices
-        ]);
-    }
-
-    public function cartOverview(Request $request)
-    {
-        $this->initOrder($request);
-
-        if(!$this->order || $this->order->total == 0)
-        {
-            return redirect('/');
-        }
-
-        return view('pedidos.carrito.carrito', [
-            'order' => $this->order
-        ]);
-    }
-
-    public function updateOrder(Request $request)
-    {
-
-        $this->initOrder($request);
-        if(!$this->order)
-        {
-            $this->order = new Quotation();
-            $this->name = '';
-            $this->phone = '';
-            $this->company_name = '';
-            $this->email = '';
-            $this->message = '';
-            $this->total = 0;
-            $this->voucher = '';
-            $this->authorization = '';
-            $this->order->save();
-            $request->session()->put('order_id', $this->order->id);
-        }
-
-        $this->order->items()->forceDelete();
-
-        $totalOrden = 0;
-        $this->order->updateTotal($totalOrden);
-
-        foreach($request->items as $item)
-        {
-
-            $orderItem = new QuotationItems();
-            $orderItem->quotation_id = $this->order->id;
-            $orderItem->itemid = $item['product_id'];
-            $orderItem->quantity = ($item['quantity'] > 0 ?  $item['quantity'] : 1);
-            $orderItem->amount = $item['price']*($item['quantity'] > 0 ?  $item['quantity'] : 1);
-            $orderItem->price = $item['price'];
-            $orderItem->itemtype = $item['product_type'];
-            $orderItem->save();
-
-            $totalOrden+= ($item['price']*($item['quantity'] > 0 ?  $item['quantity'] : 1));
-        }
-
-        $this->order->updateTotal($totalOrden);
-
-        foreach($this->order->items as $item)
-        {
-            $item->services;
-        }
-
-        return response()->json([
-            'order' => $this->order
-        ]);
-    }
-
-    public function finishOrder(Request $request)
-    {
-        /*para finalizar la orden primero registramos al usuario*/
-        $response = [
-            'result' => 'error',
-            'logued' => 0,
-            'user' => '',
-            'errortype' => ''
-        ];
-
-        $folioOrder =0;
-
-        if ($request->get('name') && $request->get('email'))
-        {
-            $data_user = [
-                'name'      => $request->get('name'),
-                'last_name' => $request->get('company'),
-                'email'     => $request->get('email'),
-                'password'  => bcrypt($request->get('passuser'))
-            ];
-
-            /*******************************************************/
-            $newUser = new User;
-            if ($newUser->isValid($data_user))
-            {
-                $newUser->fill($data_user);
-                $newUser->save();
-
-                $response['result'] = 'ok';
-            }
-            else
-            {
-                $userdata = array(
-                    'email' => $request->get('email'),
-                    'password'=> $request->get('passuser')
-                );
-                if(Auth::attempt($userdata))
-                {
-                    $response['result'] = 'ok';
-                    $response['errortype'] = '';
-                }else
-                {
-                    $response['result'] = 'error';
-                    $response['errortype'] = 'Tu correo ya se encuentra registrado, por favor anota la contraseña correcta';
-                }
-            }
-            /*******************************************************/
-
-            if($response['result'] == 'ok'){
-                /*actualizamos la orden con los datos de usuario*/
-                $this->initOrder($request);
-
-                if($this->order)
-                {
-                    $folioOrder =$this->order->getFolioAttribute();
-
-                    $this->order->name = $request->name;
-                    $this->order->phone = $request->phone;
-                    $this->order->company_name = $request->company;
-                    $this->order->email = $request->email;
-                    $this->order->message = $request->message;
-                    $this->order->folio = $folioOrder;
-                    $this->order->save();
-
-                    /*enviamos el correo*/
-                    $orderFinish = $this->order;
-
-                    $idEncode = base64_encode($this->order->id);
-
-                    $dataMail = [
-                        'order' => $orderFinish,
-                        'idEncode'=>$idEncode,
-                        'urlTicket'=>'',
-                        'username'=>$request->email,
-                        'userpass'=>$request->get('passuser')
-                    ];
-
-                    Mail::send('mail.deposit', $dataMail, function ($message) use ($request) {
-                        $message->subject('Cotizacion Servicios');
-                        //$message->from(config('mail.from.address'), config('mail.from.name'));
-                        $message->from('cxc@ciatej.mx', config('SERVICIOS CIATEJ'));
-
-                        $message->to($request->email, $request->name);
-                    });
-
-                    /*cerramos la session*/
-                    $request->session()->forget('order_id');
-                }
-
-                $response['result'] = 'ok';
-
-                return response()->json([
-                    'folioOrder' => $folioOrder,
-                    'result'=>$response['result'],
-                    'errortype'=>''
-                ]);
-            }else{
-                return response()->json([
-                    'folioOrder' => $folioOrder,
-                    'result'=>$response['result'],
-                    'errortype'=>$response['errortype']
-                ]);
-            }
-
-
-
-
-        }else{
-            $response['result'] = 'error';
-            return response()->json([
-                'folioOrder' => $folioOrder,
-                'result'=>$response['result'],
-                'errortype'=>'no hay datos de usuario'
-            ]);
-        }
-
-
-
-
-    }
-
-    public function loginUserOrder(Request $request){
-        $response = [
-            'logued' => 0,
-        ];
-        $userdata = array(
-            'email' => $request->get('txtUserName'),
-            'password'=> $request->get('txtPassUser')
-        );
-        if(Auth::attempt($userdata))
-        {
-            $response['logued'] = 1;
-        }
-        return $response;
-    }
-
-    public function validTicketOrder(Request $request, $id)
-    {
-        $idDecode =base64_decode($id);
-
-        $quotation = Quotation::where('status','=','Revisión')->where('id','=',$idDecode)->get()->first();
-        if(is_null($quotation))
-        {
-            return redirect('/');
-        }
-
-        return view('front.receipt.ticket', [
-            'quotation'=>$quotation
-        ]);
-    }
-
-    public function upload(Request $request)
-    {
-        $response = [
-            'result' => 'error',
-            'quoatation' => ''
-        ];
-
-        if ($request->hasFile('file') && $request->file('file')->isValid())
-        {
-            $quotation = Quotation::find($request->get('quotation_id'));
-
-            if (!is_null($quotation))
-            {
-                $ext = strtolower(pathinfo($request->file('file')->getClientOriginalName(), PATHINFO_EXTENSION));
-                $filename = $request->file('file')->getClientOriginalName();
-
-                switch ($request->get('type'))
-                {
-                    case 'image':
-                        if (in_array($ext, ['jpg', 'jpeg', 'png']))
-                        {
-                            $newFile = Files::save($request->file('file')->getRealPath(), $ext, 'quotation', 'quotation_');
-                            $quotation->voucher = $newFile;
-                            $quotation->save();
-                            $response['result'] = 'ok';
-                            $response['file'] = $quotation->voucher;
-                        }
-                        else
-                        {
-                            $response['result'] = 'error_type';
-                            $response['message'] = 'Only jpg and png images allowed';
-                        }
-                        break;
-                }
-            }
-            else
-            {
-                $response['result'] = 'error_article';
-            }
-        }
-        return $response;
-    }
-
-    public function finishQuote(Request $request)
-    {
-        $response = [
-            'result' => 'error',
-            'folio' => ''
-        ];
-        $quotation = Quotation::find($request->get('quotation_id'));
-
-
-        $folioOrder =$quotation->getFolioAttribute();
-
-        $response['folio'] = $folioOrder;
-
-        if (!is_null($quotation))
-        {
-
-            if($request->get('folio_ticket')==$folioOrder){
-                $quotation->status = 'Pagado';
-                $quotation->save();
-                $response['result'] = 'ok';
-            }else{
-                $response['result'] = 'error_folio';
-
-            }
-
-
-        }
-        else
-        {
-            $response['result'] = 'error_article';
-
-
-        }
-
-        return $response;
     }
 
 }

@@ -228,7 +228,7 @@ class PerfilController extends Controller
             return redirect('/');
         }
 
-        return view('perfil_inicio', [
+        return view('front.gyms.perfil_inicio', [
             'user' => $user,
             'gym' => $gym,
             'categories' => $categories,
@@ -255,6 +255,83 @@ class PerfilController extends Controller
 
         return $response;
     }
+
+    /*Perfil Datos Fiscales*/
+    public function perfilDFiscales(Request $request){
+
+        $user = Auth::user();
+
+        if(!is_null($user)){
+            if(!$user->registration_mode=='gym'){
+                return redirect('/');
+            }else{
+                $gym = Gym::where('user_id', $user->id)->first();
+
+                //recuperamos la informacion del form y guardamos
+                if($request->has('editInfo')){
+                    $gym->gym_logo_change = ( $request->has('changeLogo') ) ? 1 : 0;
+                    $gym->razon_social = $request->get('razon_social');
+                    $gym->rfc = $request->get('rfc');
+                    $gym->calle = $request->get('calle');
+                    $gym->no_ext = $request->get('no_ext');
+                    $gym->no_int = $request->get('no_int');
+                    $gym->colonia = $request->get('colonia');
+                    $gym->cp = $request->get('cp');
+                    $gym->municipio = $request->get('municipio');
+                    $gym->ciudad = $request->get('ciudad');
+                    $gym->ciudad = $request->get('ciudad');
+                    $gym->estado = $request->get('estado');
+                    $gym->pais = $request->get('pais');
+                    $gym->save();
+
+                    $user->phone = $request->get('phone');
+                    $user->save();
+                }
+            }
+        }else{
+            return redirect('/');
+        }
+
+        return view('front.gyms.datos_fiscales', [
+            'user' => $user,
+            'gym' => $gym
+        ]);
+
+    }
+
+    /*Perfil Datos Bancarios*/
+    public function perfilDBancarios(Request $request){
+
+        $user = Auth::user();
+
+        if(!is_null($user)){
+            if(!$user->registration_mode=='gym'){
+                return redirect('/');
+            }else{
+                $gym = Gym::where('user_id', $user->id)->first();
+
+                //recuperamos la informacion del form y guardamos
+                if($request->has('editInfo')){
+                    $gym->cta_titular = $request->get('cta_titular');
+                    $gym->cta_numero = $request->get('cta_numero');
+                    $gym->cta_clabe = $request->get('cta_clabe');
+                    $gym->cta_banco = $request->get('cta_banco');
+                    $gym->cta_pais = $request->get('cta_pais');
+                    $gym->save();
+
+                }
+            }
+        }else{
+            return redirect('/');
+        }
+
+        return view('front.gyms.datos_bancarios', [
+            'user' => $user,
+            'gym' => $gym
+        ]);
+
+    }
+
 
     /*perfil - usuarios*/
     public function perfilUsuarios(Request $request){
@@ -352,155 +429,9 @@ class PerfilController extends Controller
         return $response;
     }
 
-    public function DatosGralesRegister(Request $request){
-
-        // se inicia el proceso de registro.
-        //1. validamos que exista una sesion activa
-        //2. recuperamos el gym activo
-        //3. actualizamos el registro del gym
-        //4. registramos los servicios
-        //5. registramos los horarios
-        //6. redireccionamos a datos fiscales
-
-        if(is_null($request)){
-            return redirect('/');
-        }
-
-        $user = Auth::user();
-
-        if(!is_null($user)){
-            //recuperamos el registro
-            $gym = Gym::where('user_id', $user->id)->first();
-
-            $gym->manager = $request->get('manager');
-            $gym->manager_cel = $request->get('manager_cel');
-            $gym->gym_monthly_fee = $request->get('gym_monthly_fee');
-            $gym->gym_phone = $request->get('gym_phone');
-            $gym->gym_email = $request->get('gym_email');
-            $gym->gym_web = $request->get('gym_web');
-            $gym->gym_url_video = $request->get('gym_url_video');
-            $gym->gym_description = $request->get('gym_description');
-            $gym->gym_street = $request->get('gym_street');
-            $gym->gym_number = $request->get('gym_number');
-            $gym->gym_neighborhood = $request->get('gym_neighborhood');
-            $gym->gym_zipcode = $request->get('gym_zipcode');
-            $gym->save();
-
-            //eliminamos registros existentes de horarios y servicios
-            $schedules = GymSchedule::where('gym_id',$gym->id)->forceDelete();
-            $services = GymService::where('gym_id',$gym->id)->forceDelete();
-
-            //registramos servicios
-            foreach ($request->get('servicios') as $key => $value) {
-                $service = new GymService();
-                $service->gym_id = $gym->id;
-                $service->category_id = $value;
-                $service->save();
-            }
 
 
-            //registramos horarios
-            foreach ($request->get('daysOpen') as $key => $value) {
-                $schedule = new GymSchedule();
-                $schedule->gym_id = $gym->id;
-                if($value == 'lunes'){
-                    $schedule->day_legend = 'Lunes';
-                    $schedule->day = '1';
-                    $schedule->start_time = $request->get('lunesDe');
-                    $schedule->end_time = $request->get('lunesA');
-                }
-                if($value == 'martes'){
-                    $schedule->day_legend = 'Martes';
-                    $schedule->day = '2';
-                    $schedule->start_time = $request->get('martesDe');
-                    $schedule->end_time = $request->get('martesA');
-                }
-                if($value == 'miercoles'){
-                    $schedule->day_legend = 'Miercoles';
-                    $schedule->day = '3';
-                    $schedule->start_time = $request->get('miercolesDe');
-                    $schedule->end_time = $request->get('miercolesA');
-                }
-                if($value == 'jueves'){
-                    $schedule->day_legend = 'Jueves';
-                    $schedule->day = '4';
-                    $schedule->start_time = $request->get('juevesDe');
-                    $schedule->end_time = $request->get('juevesA');
-                }
-                if($value == 'viernes'){
-                    $schedule->day_legend = 'Viernes';
-                    $schedule->day = '5';
-                    $schedule->start_time = $request->get('viernesDe');
-                    $schedule->end_time = $request->get('viernesA');
-                }
-                if($value == 'sabado'){
-                    $schedule->day_legend = 'Sábado';
-                    $schedule->day = '6';
-                    $schedule->start_time = $request->get('sabadoDe');
-                    $schedule->end_time = $request->get('sabadoA');
-                }
-                if($value == 'domingo'){
-                    $schedule->day_legend = 'Domingo';
-                    $schedule->day = '7';
-                    $schedule->start_time = $request->get('domingoDe');
-                    $schedule->end_time = $request->get('domingoA');
-                }
-                $schedule->save();
-            }
 
-            return view('datos_fiscales', [
-                'user' => $user,
-                'gym' => $gym
-            ]);
-        }else{
-            return redirect('/');
-        }
-
-    }
-
-    public function DatosFisRegister(Request $request){
-        // se inicia el proceso de registro.
-        //1. validamos que exista una sesion activa
-        //2. recuperamos el gym activo
-        //3. actualizamos el registro del gym
-        //4. redireccionamos a datos de banco
-
-        if(is_null($request)){
-            return redirect('/');
-        }
-
-        $user = Auth::user();
-
-        if(!is_null($user)){
-            //recuperamos el registro
-            $gym = Gym::where('user_id', $user->id)->first();
-
-            $gym->gym_logo_change = ( $request->has('changeLogo') ) ? 1 : 0;
-            $gym->razon_social = $request->get('razon_social');
-            $gym->rfc = $request->get('rfc');
-            $gym->calle = $request->get('calle');
-            $gym->no_ext = $request->get('no_ext');
-            $gym->no_int = $request->get('no_int');
-            $gym->colonia = $request->get('colonia');
-            $gym->cp = $request->get('cp');
-            $gym->municipio = $request->get('municipio');
-            $gym->ciudad = $request->get('ciudad');
-            $gym->ciudad = $request->get('ciudad');
-            $gym->estado = $request->get('estado');
-            $gym->pais = $request->get('pais');
-            $gym->save();
-
-            $user->phone = $request->get('phone');
-            $user->save();
-
-            return view('datos_bancarios', [
-                'user' => $user,
-                'gym' => $gym
-            ]);
-        }else{
-            return redirect('/');
-        }
-    }
 
     public function DatosBancariosRegister(Request $request){
         // se inicia el proceso de registro.

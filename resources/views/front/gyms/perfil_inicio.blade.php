@@ -1,12 +1,12 @@
-@extends('layout.layout')
+@extends('front.layout.layout_registro')
 @section('css')
-<link href="css/registro.steps.css" type="text/css" rel="stylesheet">
+<link href="/css/registro.steps.css" type="text/css" rel="stylesheet">
 <link rel="stylesheet" type="text/css" href="css/jquery.timepicker.css" />
 
 <link href="/admin_assets/plugins/dropzone/dropzone.css" rel="stylesheet" />
 <link href="/admin_assets/css/base/theme/custom.css" rel="stylesheet" id="theme" />
 
-<link href="css/perfil.css" rel="stylesheet" id="theme" />
+<link href="/css/perfil.css" rel="stylesheet" id="theme" />
 
 
 @endsection
@@ -21,22 +21,23 @@
             <div class="col-lg-3">
                 <div class="logo-perfil" align="center">
                     @if($gym->gym_logo!='default.png' || $gym->gym_logo!='')
-                    <img src="files/gyms/{{$gym->gym_logo}}" alt="" style="height: 100px; width:auto; text-aling:center;">
+                    <img src="/files/gyms/{{$gym->gym_logo}}" alt="" style="height: 100px; width:auto; text-aling:center;">
                     @endif
                 </div>
                 <hr class="hr-nav-perfil">
                 <ul class="nav-perfil">
-                    <li class="active"><a href="/perfil-inicio">Inicio <span><i class="fa fa-angle-right" aria-hidden="true"></i></span></a></li>
-                    <li><a href="perfil-usuarios">Usuarios <span><i class="fa fa-angle-right" aria-hidden="true"></i></span></a></li>
-                    <li><a href="perfil-datos-cuenta">Datos de Cuenta <span><i class="fa fa-angle-right" aria-hidden="true"></i></span></a></li>
-                    <li><a href="perfil-clientes">Clientes <span><i class="fa fa-angle-right" aria-hidden="true"></i></span></a></li>
-                    <li><a href="perfil-reportes">Reportes <span><i class="fa fa-angle-right" aria-hidden="true"></i></span></a></li>
+                    <li class="active"><a href="/perfil">Inicio <span><i class="fa fa-angle-right" aria-hidden="true"></i></span></a></li>
+                    <li><a href="/perfil/datos-fiscales">Datos Fiscales <span><i class="fa fa-angle-right" aria-hidden="true"></i></span></a></li>
+                    <li><a href="/perfil/datos-bancarios">Datos Bancarios <span><i class="fa fa-angle-right" aria-hidden="true"></i></span></a></li>
+                    <li><a href="/perfil/usuarios">Usuarios <span><i class="fa fa-angle-right" aria-hidden="true"></i></span></a></li>
+                    <li><a href="/perfil/clientes">Clientes <span><i class="fa fa-angle-right" aria-hidden="true"></i></span></a></li>
+                    <li><a href="/perfil/reportes">Reportes <span><i class="fa fa-angle-right" aria-hidden="true"></i></span></a></li>
                 </ul>
                 <button type="button" name="button" id="btnCerrarSesion" class="cerrar-session">Cerrar Sesión</button>
 
             </div>
             <div class="col-lg-9">
-                <h1 style="margin-bottom: 45px;">Mi Perfil <img src="images/barra_amarilla_banner_top.png" height="6" style="width:79px;"/></h1>
+                <h1 style="margin-bottom: 45px;">Mi Perfil <img src="/images/barra_amarilla_banner_top.png" height="6" style="width:79px;"/></h1>
                 <form action="/perfil-inicio" class="form-registro" role="form" class="cmxform" method="post" id="frmDatos">
                     <input type="hidden" name="editInfo" value="1">
                     <fieldset class="col-lg-6">
@@ -132,7 +133,7 @@
                         <div class="" id="divImages" style="margin-top:15px;">
                             <?php $totalImage = count($imagesGym); ?>
                             @foreach($imagesGym as $image)
-                            <div class="col-lg-3 images-selected" data-id="{{$image->id}}" style="margin:2px; background:url(files/gyms/{{$image->image}}); background-size:cover; height: 100px;" >
+                            <div class="col-lg-3 images-selected" data-id="{{$image->id}}" style="margin:2px; background:url(/files/gyms/{{$image->image}}); background-size:cover; height: 100px;" >
                                 <label class="form-label-servicios" style="background: rgba(29,66,137,0.8);width: 100%; color:#fff; padding:3px;"><i class="fa fa-times" aria-hidden="true"></i> <span style="font-size:11px;">Eliminar</span></label>
                             </div>
                             @endforeach

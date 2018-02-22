@@ -1,6 +1,6 @@
-@extends('layout.layout')
+@extends('front.layout.layout_registro')
 @section('css')
-<link href="css/registro.steps.css" type="text/css" rel="stylesheet">
+<link href="/css/registro.steps.css" type="text/css" rel="stylesheet">
 @endsection
 @section('content')
 <!-- about -->
@@ -41,7 +41,7 @@
                 <p>¡Ya eres parte de la mejor red<br>de gimnasios, <span class="brand-text">LIBERI</span>!</p>
                 <img src="images/registro_button_finalizar.png" alt="" style="width:173px; margin-bottom:40px;">
                 <p>Un representante de LIBERI te visitará en un lapso<br>de 15 días hábiles para firmar tu contrato.</p>
-                <a href="/perfil-gym"><button type="button" name="button" class="form-button-finalizar">Ir a mi Perfil</button></a>
+                <a href="/perfil"><button type="button" name="button" class="form-button-finalizar">Ir a mi Perfil</button></a>
 
             </div>
             <div class="clearfix"></div>

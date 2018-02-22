@@ -92,11 +92,38 @@ Route::post('/send-contacto', 'LayoutController@sendContacto');
 
 /*registro inicial*/
 Route::post('/registro-init','RegisterController@initRegister');
+
+/*registro datos generales*/
 Route::any('/registro-generales','RegisterController@registerGrales');
+Route::post('/registro-create-datosgrales','RegisterController@registerGralesCreate');
 
+/*registro datos fiscales*/
+Route::any('/registro-datos-fiscales','RegisterController@registerDFiscales');
+Route::post('/registro-create-datosfiscales','RegisterController@registerDFiscalesCreate');
 
+/*registro datos bancarios*/
+Route::any('/registro-datos-bancarios','RegisterController@registerDBancarios');
+Route::post('/registro-create-datosbancarios','RegisterController@registerDBancariosCreate');
+
+/*registro finalizar*/
+Route::any('/registro-finalizar','RegisterController@registerFinalizar');
 
 /*!--PROCESO DE REGISTRO--*/
+
+/*PERFIL GYM*/
+/*Perfil Usuario*/
+Route::post('/login','PerfilController@loginUser');
+
+Route::post('/perfil-delete-image','PerfilController@perfilDeleteImage');
+
+Route::any('/perfil','PerfilController@perfilInicio');
+Route::any('/perfil/datos-fiscales','PerfilController@perfilDFiscales');
+Route::any('/perfil/datos-bancarios','PerfilController@perfilDBancarios');
+Route::any('/perfil/usuarios','PerfilController@perfilUsuarios');
+Route::any('/perfil/clientes','PerfilController@perfilClientes');
+Route::any('/perfil/reportes','PerfilController@perfilReportes');
+
+/*!--PERFIL GYM--*/
 
 
 
@@ -106,12 +133,3 @@ Route::get('/registro-init', function()
 });
 Route::post('/register-load-locations','RegisterController@loadLocations');
 Route::post('/register-upload-image','RegisterController@uploadGymImage');
-Route::post('/registro-datos-fiscales','RegisterController@DatosGralesRegister');
-Route::post('/registro-datos-bancarios','RegisterController@DatosFisRegister');
-Route::post('/registro-finalizar','RegisterController@DatosBancariosRegister');
-
-/*Perfil Usuario*/
-Route::post('/login','PerfilController@loginUser');
-Route::any('/perfil-inicio','PerfilController@perfilInicio');
-Route::post('/perfil-delete-image','PerfilController@perfilDeleteImage');
-Route::any('/perfil-usuarios','PerfilController@perfilUsuarios');

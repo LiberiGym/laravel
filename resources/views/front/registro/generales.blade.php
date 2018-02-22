@@ -50,7 +50,7 @@
             <div class="col-lg-9">
                 <h1>Formulario de Regístro (Anexo 2) <img src="images/barra_amarilla_banner_top.png" height="6" style="width:79px;"/></h1>
                 <p>Ingresa tus datos en el siguiente formulário para continuar con el regístro.</p>
-                <form action="/registro-datos-fiscales" class="form-registro" role="form" class="cmxform" method="post" id="frmDatos">
+                <form action="/registro-create-datosgrales" class="form-registro" role="form" class="cmxform" method="post" id="frmDatos">
                     <fieldset class="col-lg-6">
                         <legend class="form-legend-registro">Datos de Encargado o Dueño</legend>
                         <input type="text" name="manager"  placeholder="Nombre de Encargado o Gerente" class="form-registro-element" required="required">
@@ -114,11 +114,10 @@
 
                         <div id="map" style="height: 266px;"></div>
 
-                        <input type="text" name="lat" id="txtLat" />
-                        <input type="text" name="lng" id="txtLng" />
+                        <input type="hidden" name="lat" id="txtLat" />
+                        <input type="hidden" name="lng" id="txtLng" />
 
-
-
+                        <div class="clearfix"></div>
 
                         <legend class="form-legend-registro">Selecciona los servicios que ofrece:</legend>
                         <div class="col-lg-12">
@@ -145,15 +144,16 @@
                             @endforeach
                         </div>
 
+                        <div class="clearfix"></div>
 
-
+                        <input id="calculadoraCond" class="require" name="calculadora" type="checkbox" required="required"> <label for="calculadoraCond" class="form-label-servicios">Acepto el cálculo de costo por visita</label>
+                        <button type="button" name="button" id="btnCalculadora" data-toggle="modal" data-target="#mdlCalculadora">Calculadora</button>
 
                         <div class="clearfix"></div>
 
                         <button type="button" name="button" id="btnGuardar">Siguiente</button>
-                        <button type="button" name="button" id="btnCalculadora" data-toggle="modal" data-target="#mdlCalculadora">Calculadora</button>
-
                     </fieldset>
+
                 </form>
 
             </div>
@@ -346,8 +346,14 @@ $(document).ready(function () {
             );
 
             if(_diasSelected && _serviceSelected){
-                form.submit();
-                console.log('form.submit()');
+                if($("#calculadoraCond").is(':checked')){
+                    form.submit();
+                    console.log('form.submit()');
+                }else{
+                    swal('Cuidado','Debe aceptar el cálculo de costo por visita','warning');
+                }
+
+
             }else{
                 swal('Cuidado','Debe seleccionar los días en los que opera y almenos un tipo de servicio','warning');
             }

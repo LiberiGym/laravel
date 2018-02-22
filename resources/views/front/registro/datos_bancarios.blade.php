@@ -1,6 +1,6 @@
-@extends('layout.layout')
+@extends('front.layout.layout_registro')
 @section('css')
-<link href="css/registro.steps.css" type="text/css" rel="stylesheet">
+<link href="/css/registro.steps.css" type="text/css" rel="stylesheet">
 <link href="/admin_assets/css/base/theme/custom.css" rel="stylesheet" id="theme" />
 @endsection
 @section('content')
@@ -38,12 +38,12 @@
         <div class="w3agile-about w3agile-about-detail">
 
             <div class="col-lg-3">
-                <img src="images/registro_01_image.png" alt="">
+                <img src="/images/registro_01_image.png" alt="">
 
             </div>
             <div class="col-lg-9">
-                <h1>Datos Bancarios <img src="images/barra_amarilla_banner_top.png" height="6" style="width:79px;"/></h1>
-                <form action="/registro-finalizar" class="form-registro" role="form" class="cmxform" method="post" id="frmDatos">
+                <h1>Datos Bancarios <img src="/images/barra_amarilla_banner_top.png" height="6" style="width:79px;"/></h1>
+                <form action="/registro-create-datosbancarios" class="form-registro" role="form" class="cmxform" method="post" id="frmDatos">
                     <fieldset class="col-lg-6">
 
                         <input type="text" name="cta_titular" value="{{$gym->cta_titular}}" placeholder="Nombre Titular de la Cuenta" class="form-registro-element" required="required">

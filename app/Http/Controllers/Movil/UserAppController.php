@@ -790,9 +790,55 @@ class UserAppController extends BaseController
 
                 if(!is_null($imagesGym)){
                     $response['Result']= 'ok';
-                    $response['Gallery']= $imagesGym;
+                    if(count($imagesGym)>0){
+                        $response['Gallery']= $imagesGym;
+                    }else{
+                        $response['Gallery'][]= ['image'=>'default.png'];
+                    }
+
                 }else{
                     $response['Msj']= "No hay imagenes del gym";
+                }
+
+            } catch (\Exception $e) {
+                $response['Msj']= $e->getMessage();
+            }
+        }
+
+        return $response;
+
+    }
+
+    //recuperamos el video del gym
+    public function getGymVideo(Request $request){
+
+        $response = [
+            'Result'=>'error',
+            'Msj'=>'',
+            'UrlVideo'=>''
+        ];
+
+        if($request->has('IdGym')){
+
+            try {
+
+                $gym = Gym::find($request->get('IdGym'));
+
+                if(!is_null($gym)){
+                    if($gym->gym_url_video==""){
+                        $response['Result']= 'error';
+                        $response['UrlVideo']= '';
+                    }else{
+                        $urlVideoParams = explode('?v=',$gym->gym_url_video);
+                        $urlVideoClean = explode('&',$urlVideoParams[1]);
+
+                        $response['Result']= 'ok';
+                        $response['UrlVideo']= "https://www.youtube.com/embed/".$urlVideoClean[0];
+                    }
+
+
+                }else{
+                    $response['Msj']= "No hay video del gym";
                 }
 
             } catch (\Exception $e) {

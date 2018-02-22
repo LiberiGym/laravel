@@ -51,6 +51,8 @@ Route::group(['prefix' => 'api'], function()
 
     /*NegocioDetallePage*/
     Route::post('/get-gym-gallery', 'Movil\UserAppController@getGymGallery');
+    Route::post('/get-gym-video', 'Movil\UserAppController@getGymVideo');
+
 
 
 

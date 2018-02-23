@@ -411,6 +411,40 @@ class UserAppController extends BaseController
     /***************************/
     /*DatosTarjeetaPage*/
 
+    //recuperar las tarjetas del usuario
+    public function userGetCards(Request $request){
+        $response = [
+            'Result'=>'error',
+            'Msj'=>'',
+            'IdUser'=>'',
+            'Cards'=>[],
+        ];
+        if($request->has('IdUser')){
+
+            try {
+
+                $Cards = UserCard::where('user_id',$request->get('IdUser'))->get();
+                foreach ($Cards as $card) {
+                    $number = substr($card->number, -4);
+                    $response['Cards'][]=[
+                        'Id'=>$card->id,
+                        'Title'=>$card->type.' **** **** **** '.$number,
+                        'IsPrefer'=>($card->prefer==1)?true:false,
+                        'IsNoPrefer'=>($card->prefer==1)?false:true
+                        ] ;
+                }
+
+                $response['Result']= 'ok';
+                $response['IdUser']= $request->get('IdUser');
+
+            } catch (\Exception $e) {
+                $response['Msj']= $e->getMessage();
+            }
+        }
+
+        return $response;
+    }
+
     //crear tarjeta de usuario registrado
     public function updateUserAddCard(Request $request){
         $response = [

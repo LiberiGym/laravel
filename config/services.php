@@ -42,6 +42,11 @@ return [
             'waypoint' => 'http://liberi.dev/images/waypoint32.png'
         ]
     ],
-
+    'payment' => [
+        'id' => env('PUSHER_APP_ID'),
+        'key_public' => env('PUSHER_APP_KEY_PUBLIC'),
+        'key_private' => env('PUSHER_APP_KEY_PRIVATE'),
+        'url' => env('PUSHER_APP_URL'),
+    ],
 
 ];

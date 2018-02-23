@@ -34,6 +34,7 @@ Route::group(['prefix' => 'api'], function()
     Route::post('/update-user', 'Movil\UserAppController@updateUser');
 
     /*DatosTarjetaPage*/
+    Route::post('/user-get-cards', 'Movil\UserAppController@userGetCards');
     Route::post('/update-user-addcard', 'Movil\UserAppController@updateUserAddCard');
 
     /*DatosTarjetaPage*/

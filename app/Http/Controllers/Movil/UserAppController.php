@@ -14,11 +14,16 @@ use Illuminate\View;
 use Mail;
 use Carbon\Carbon;
 use Hash;
+use DNS2D;
+use Image;
 
 use App\Models\User;
 use App\Models\Users\UserCard;
 use App\Models\Users\UserCategories;
 use App\Models\Users\UserPreferences;
+use App\Models\Users\UserNotifications;
+use App\Models\Users\UserPurchases;
+use App\Models\Users\UserQualification;
 
 use App\Models\Gyms\Gym;
 use App\Models\Gyms\GymImage;
@@ -539,6 +544,12 @@ class UserAppController extends BaseController
                             'Id'=>$categoryUser->category_id
                             ] ;
                     }
+                }else{
+                    foreach ($Categorias as $category) {
+                        $response['CategoriasUser'][]=[
+                            'Id'=>$category->id
+                            ] ;
+                    }
                 }
 
 
@@ -549,6 +560,12 @@ class UserAppController extends BaseController
                         'Id'=>$PreferenciasUser->id,
                         'Distance'=>$PreferenciasUser->distance,
                         'Price'=>$PreferenciasUser->price
+                        ] ;
+                }else{
+                    $response['PreferenciasUser']=[
+                        'Id'=>0,
+                        'Distance'=>2,
+                        'Price'=>500
                         ] ;
                 }
 
@@ -882,6 +899,469 @@ class UserAppController extends BaseController
 
         return $response;
 
+    }
+
+    //recuperamos la infor del gym
+    public function getGymInfo(Request $request){
+
+        $response = [
+            'Result'=>'error',
+            'Msj'=>'',
+            'GymInfo'=>[],
+            'Comentarios'=>[]
+        ];
+
+        if($request->has('IdGym')){
+
+            try {
+
+                $gym = Gym::find($request->get('IdGym'));
+
+                if(!is_null($gym)){
+
+                    //recuperamos comentarios
+                    $comentarios = DB::select("SELECT CONCAT(u.`name`, ' ', u.`middle_name`,' ',u.`last_name`) AS nombre, u.`image`, uq.`comment`, up.`fecha` FROM users_qualification AS uq
+                    INNER JOIN users_purchases AS up ON uq.`users_purchases_id`=up.`id` AND up.`gym_id`=".$gym->id."
+                    INNER JOIN users AS u ON up.`user_id`=u.`id`
+                    ORDER BY uq.`fecha` DESC",
+                                    []);
+
+
+                    //recuperamos la Calificacion
+                    $qualification = DB::select("SELECT AVG(uq.`calificacion`) as califica FROM users_qualification AS uq
+                    INNER JOIN users_purchases AS up ON uq.`users_purchases_id`=up.`id` AND up.`gym_id`=".$gym->id."
+                    ORDER BY uq.`fecha` DESC",
+                                    []);
+
+                    $calificacion = 0;
+                    if(!is_null($qualification)){
+                        $calificacion = number_format($qualification[0]->califica,1);
+                    }
+
+                    $Horario = DB::select("SELECT 'Abierto Ahora'
+                                    FROM gym_schedule as gh
+                                    WHERE gh.day=(WEEKDAY(NOW())+1) AND NOW() BETWEEN start_time AND end_time AND gh.gym_id=".$gym->id,
+                                    []);
+
+                    $gymOperation = "Cerrado";
+                    if(!is_null($Horario)){
+                        $gymOperation = "Abierto";
+                    }
+
+                    //domicilio gym
+                    $domicilio = $gym->gym_street." ".$gym->gym_number." ".$gym->gym_neighborhood." ".$gym->gym_zipcode.". ".$gym->gym_city.", ".$gym->gym_state;
+
+                    //costo visita
+                    $diasOperaSemana = $gym->diasopera;
+                    $semanasAnho = 52;
+                    $diasOperaMes = ($diasOperaSemana*$semanasAnho)/12;
+
+                    $costoVisita = $gym->gym_monthly_fee/($diasOperaMes*.7); //•	COSTO POR VISITA = COSTO MENSUALIDAD/(DIAS QUE LABORA AL MES * .8);
+                    $costoVisitaIva = ($costoVisita*.16)+$costoVisita;
+
+                    $response['Result']= 'ok';
+                    $response['GymInfo']= [
+                        'Tradename'=>$gym->tradename,
+                        'Monto'=>number_format($costoVisitaIva,2),
+                        'Logo'=>'http://192.168.100.12:8000/files/gyms/'.$gym->gym_logo,
+                        'Domicilio'=>$domicilio,
+                        'Horario'=>$gym->gym_schedule,
+                        'Operation'=>$gymOperation,
+                        'Calificacion'=>$calificacion
+                    ];
+
+                    $mesesDate = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
+
+                    foreach ($comentarios as $comentario) {
+
+                        $fechaTime = explode(" ", $comentario->fecha);
+                        $fecha = explode("-", $fechaTime[0]);
+
+                        $fechaComment = $mesesDate[intval($fecha[1])-1]." ".$fecha[2].", ".$fecha[0];
+
+                        $response['Comentarios'][] =[
+                            'Nombre'=>$comentario->nombre,
+                            'Imagen'=>'http://192.168.100.12:8000/files/users/'.$comentario->image,
+                            'Comment'=>$comentario->comment,
+                            'Fecha'=>$fechaComment
+
+                        ];
+                    }
+
+
+
+
+
+                }else{
+                    $response['Msj']= "No hay video del gym";
+                }
+
+            } catch (\Exception $e) {
+                $response['Msj']= $e->getMessage();
+            }
+        }
+
+        return $response;
+
+    }
+
+    //recuperamos la info mapa del gym
+    public function getGymInfoMapa(Request $request){
+
+        $response = [
+            'Result'=>'error',
+            'Msj'=>'',
+            'GymInfoMapa'=>[],
+        ];
+
+        if($request->has('IdGym')){
+
+            try {
+
+                $gym = Gym::find($request->get('IdGym'));
+
+                if(!is_null($gym)){
+
+                    $Horario = DB::select("SELECT 'Abierto Ahora'
+                                    FROM gym_schedule as gh
+                                    WHERE gh.day=(WEEKDAY(NOW())+1) AND NOW() BETWEEN start_time AND end_time AND gh.gym_id=".$gym->id,
+                                    []);
+
+                    $gymOperation = "Cerrado Ahora";
+                    if(!is_null($Horario)){
+                        $gymOperation = "Abierto Ahora";
+                    }
+
+                    //domicilio gym
+                    $domicilio = $gym->gym_street." ".$gym->gym_number." ".$gym->gym_neighborhood." ".$gym->gym_zipcode.". ".$gym->gym_city.", ".$gym->gym_state;
+
+                    $response['Result']= 'ok';
+                    $response['GymInfoMapa']= [
+                        'Tradename'=>$gym->tradename,
+                        'Telefono'=>"Teléfono: ".$gym->gym_phone,
+                        'Url'=>$gym->gym_web,
+                        'Lat'=>$gym->lat,
+                        'Lng'=>$gym->lng,
+                        'Domicilio'=>"Dirección: ".$domicilio,
+                        'Horario'=>"Horario: ".$gymOperation.". ".$gym->gym_schedule,
+                    ];
+
+                }else{
+                    $response['Msj']= "No hay video del gym";
+                }
+
+            } catch (\Exception $e) {
+                $response['Msj']= $e->getMessage();
+            }
+        }
+
+        return $response;
+
+    }
+
+    /***************************/
+    /*ComprarSesionPage*/
+
+    //recuperamos la info de compra del gym
+    public function getGymComprar(Request $request){
+
+        $response = [
+            'Result'=>'error',
+            'Msj'=>'',
+            'GymInfoCompra'=>[],
+            'Tarjetas'=>[]
+        ];
+
+        if($request->has('IdGym')){
+
+            try {
+
+                $gym = Gym::find($request->get('IdGym'));
+
+                if(!is_null($gym)){
+
+
+                    //costo visita
+                    $diasOperaSemana = $gym->diasopera;
+                    $semanasAnho = 52;
+                    $diasOperaMes = ($diasOperaSemana*$semanasAnho)/12;
+
+                    $costoVisita = $gym->gym_monthly_fee/($diasOperaMes*.7); //•	COSTO POR VISITA = COSTO MENSUALIDAD/(DIAS QUE LABORA AL MES * .8);
+                    $costoVisitaIva = ($costoVisita*.16)+$costoVisita;
+
+                    $response['Result']= 'ok';
+                    $response['GymInfoCompra']= [
+                        'Tradename'=>$gym->tradename,
+                        'Monto'=>number_format($costoVisitaIva,2),
+                        'Logo'=>'http://192.168.100.12:8000/files/gyms/'.$gym->gym_logo
+                    ];
+
+                    $Cards = UserCard::where('user_id',$request->get('IdUser'))->orderBy('prefer','Desc')->get();
+                    foreach ($Cards as $card) {
+                        $number = substr($card->number, -4);
+                        $response['Tarjetas'][]=[
+                            'Id'=>$card->id,
+                            'Title'=>$card->type.' **** **** **** '.$number,
+                            'Type'=>$card->type,
+                            'Number'=>$card->number,
+                            'Mm'=>$card->mm,
+                            'Aa'=>$card->aa,
+                            'Cvv'=>$card->cvv
+                            ] ;
+                    }
+
+                }else{
+                    $response['Msj']= "No hay video del gym";
+                }
+
+            } catch (\Exception $e) {
+                $response['Msj']= $e->getMessage();
+            }
+        }
+
+        return $response;
+
+    }
+
+    //registramos la compra en el gym
+    public function getGymRegistrarCompra(Request $request){
+
+        $response = [
+            'Result'=>'error',
+            'Msj'=>''
+        ];
+
+        if($request->has('IdGym')){
+
+            try {
+
+                $idCompra = time();
+
+                $qrImgB64 = base64_decode(DNS2D::getBarcodePNG($idCompra, "QRCODE"));
+
+                $png_url = "user_purchase_".$idCompra.".png";
+                $path = public_path().'/files/users_purchases/' . $png_url;
+
+                //Image::make($qrImgB64)->save($path);
+
+
+            /*define('UPLOAD_DIR', 'images/');
+                $image_parts = explode(";base64,", $_POST['image']);
+                $image_type_aux = explode("image/", $image_parts[0]);
+                $image_type = $image_type_aux[1];
+                $image_base64 = base64_decode($image_parts[1]);
+                $file = UPLOAD_DIR . uniqid() . '.png';*/
+
+                file_put_contents($path, $qrImgB64);
+
+
+                $newCompra = new UserPurchases();
+                $newCompra->user_id = $request->get('IdUser');
+                $newCompra->gym_id = $request->get('IdGym');
+                $newCompra->users_cards_id = $request->get('IdTarjeta');
+                $newCompra->fecha =  \DB::raw('NOW()');
+                $newCompra->amount = $request->get('precioCompra');
+                $newCompra->qr_image = $png_url;
+                $newCompra->qr_code = $idCompra;
+                $newCompra->save();
+
+                $response['Result']= 'ok';
+
+            } catch (\Exception $e) {
+                $response['Msj']= $e->getMessage();
+            }
+        }
+
+        return $response;
+
+    }
+
+    /***************************/
+    /*NotificacionesPage*/
+
+    //recuperamos notificaciones de usuario
+    public function getUserNotifications(Request $request){
+        $response = [
+            'Result'=>'error',
+            'Msj'=>'',
+            'Notificaciones'=>[]
+        ];
+
+        if($request->has('IdUser')){
+
+            try {
+
+                $notifications = UserNotifications::where('user_id',$request->get('IdUser'))->orderBy('notification_date','desc')->get();
+
+                foreach ($notifications as $notification) {
+                    $notification->viewed = 1;
+                    $notification->save();
+
+                    $response['Notificaciones'][]=[
+                        'Id'=>$notification->id,
+                        'Title'=>$notification->title,
+                        'Message'=>$notification->message,
+                        'IsVisible'=>true
+                        ] ;
+
+                }
+                if(!is_null($notifications)){
+                    $response['Result']= 'ok';
+
+                }else{
+                    $response['Msj']= "No hay notificaciones";
+                }
+
+            } catch (\Exception $e) {
+                $response['Msj']= $e->getMessage();
+            }
+        }
+
+        return $response;
+    }
+
+    /***************************/
+    /*HistorialComprasPage*/
+
+    //recuperamos el historial de compras de usuario
+    public function getUserPurchases(Request $request){
+        $response = [
+            'Result'=>'error',
+            'Msj'=>'',
+            'Purchases'=>[]
+        ];
+
+        if($request->has('IdUser')){
+
+            try {
+
+                setlocale(LC_ALL,"es_ES");
+
+                $mesesDate = ['enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', 'julio', 'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre'];
+
+                $diasDate = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo'];
+
+                $purchases = UserPurchases::where('user_id',$request->get('IdUser'))->orderBy('fecha','desc')->get();
+
+                foreach ($purchases as $purchase) {
+
+                    $gym = Gym::find($purchase->gym_id);
+
+                    $fechaTime = explode(" ", $purchase->fecha);
+                    $fecha = explode("-", $fechaTime[0]);
+                    $time = explode(":", $fechaTime[1]);
+
+                    $timestamp = mktime($time[0], $time[1], $time[2], $fecha[1], $fecha[2], $fecha[0]);
+
+                    $fechaCompra = $diasDate[intval(date("w", $timestamp))-1]." ".$fecha[2]." de ".$mesesDate[intval($fecha[1])-1]." ".$fecha[0]." ".$fechaTime[1]."Hras.";
+
+                    $response['Purchases'][]=[
+                        'Id'=>$purchase->id,
+                        'Logo'=>'http://192.168.100.12:8000/files/gyms/'.$gym->gym_logo,
+                        //'Logo'=>config('app.url').'files/gyms/'.$gym->gym_logo,
+                        'Tradename'=>$gym->tradename,
+                        'Fecha'=>$fechaCompra,
+                        'Monto'=>'$ '.number_format($purchase->amount,2).' MXN'
+                        ] ;
+
+                }
+                if(!is_null($purchases)){
+                    $response['Result']= 'ok';
+
+                }else{
+                    $response['Msj']= "No hay notificaciones";
+                }
+
+            } catch (\Exception $e) {
+                $response['Msj']= $e->getMessage();
+            }
+        }
+
+        return $response;
+    }
+
+    /***************************/
+    /*HistorialComprasDetallePage*/
+
+    //recuperamos el detalle del historial de compras de usuario
+    public function getUserPurchaseDetail(Request $request){
+        $response = [
+            'Result'=>'error',
+            'Msj'=>'',
+            'Purchase'=>[]
+        ];
+
+        if($request->has('IdPurchase')){
+
+            try {
+
+                setlocale(LC_ALL,"es_ES");
+
+                $mesesDate = ['enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', 'julio', 'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre'];
+
+                $diasDate = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo'];
+
+                $purchase = UserPurchases::find($request->get('IdPurchase'));
+
+                if(!is_null($purchase)){
+                    $response['Result']= 'ok';
+                    $gym = Gym::find($purchase->gym_id);
+
+                    $fechaTime = explode(" ", $purchase->fecha);
+                    $fecha = explode("-", $fechaTime[0]);
+                    $time = explode(":", $fechaTime[1]);
+
+                    $timestamp = mktime($time[0], $time[1], $time[2], $fecha[1], $fecha[2], $fecha[0]);
+
+                    $fechaCompra = $diasDate[intval(date("w", $timestamp))-1]." ".$fecha[2]." de ".$mesesDate[intval($fecha[1])-1]." ".$fecha[0]." ".$fechaTime[1]."Hras.";
+
+                    $domicilio = $gym->gym_street." ".$gym->gym_number." ".$gym->gym_neighborhood." ".$gym->gym_zipcode.". ".$gym->gym_city.", ".$gym->gym_state;
+
+                    $Horario = DB::select("SELECT 'Abierto Ahora'
+                                    FROM gym_schedule as gh
+                                    WHERE gh.day=(WEEKDAY(NOW())+1) AND NOW() BETWEEN start_time AND end_time AND gh.gym_id=".$gym->id,
+                                    []);
+
+                    $gymOperation = "Cerrado";
+                    if(!is_null($Horario)){
+                        $gymOperation = "Abierto";
+                    }
+
+                    //recuperamos comentario de usuario
+                    $calificacion = 0;
+                    $comentario = "";
+                    $qualification = UserQualification::where('users_purchases_id',$purchase->id)->get()->first();
+                    if(!is_null($qualification)){
+                        $calificacion = $qualification->calificacion;
+                        $comentario = $qualification->comment;
+                    }
+
+                    $response['Purchase']=[
+                        'Id'=>$purchase->id,
+                        'Logo'=>'http://192.168.100.12:8000/files/gyms/'.$gym->gym_logo,
+                        //'Logo'=>config('app.url').'files/gyms/'.$gym->gym_logo,
+                        'Tradename'=>$gym->tradename,
+                        'Fecha'=>$fechaCompra,
+                        'Monto'=>'$ '.number_format($purchase->amount,2).' MXN',
+                        'Vigencia'=>$purchase->status,
+                        'Domicilio'=>$domicilio,
+                        'Horario'=>$gym->gym_schedule,
+                        'GymOperation'=>$gymOperation,
+                        'CodigoQr'=>'http://192.168.100.12:8000/files/users_purchases/'.$purchase->qr_image,
+                        'Calificacion'=>$calificacion,
+                        'Comentario'=>$comentario
+                        ] ;
+
+                }else{
+                    $response['Msj']= "No hay notificaciones";
+                }
+
+            } catch (\Exception $e) {
+                $response['Msj']= $e->getMessage();
+            }
+        }
+
+        return $response;
     }
 
 

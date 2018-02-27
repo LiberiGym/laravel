@@ -35,7 +35,7 @@ var formslayout = {
                 if(response.result === "ok"){
                     $('#form-login')[0].reset();
 
-                    window.location.href="/perfil-inicio";
+                    window.location.href="/perfil";
 
                 }
                 else{

@@ -53,6 +53,21 @@ Route::group(['prefix' => 'api'], function()
     /*NegocioDetallePage*/
     Route::post('/get-gym-gallery', 'Movil\UserAppController@getGymGallery');
     Route::post('/get-gym-video', 'Movil\UserAppController@getGymVideo');
+    Route::post('/get-gym-info', 'Movil\UserAppController@getGymInfo');
+    Route::post('/get-gym-info-mapa', 'Movil\UserAppController@getGymInfoMapa');
+
+    /*ComprarSesionPage*/
+    Route::post('/get-gym-comprar', 'Movil\UserAppController@getGymComprar');
+    Route::post('/get-gym-registrar-compra', 'Movil\UserAppController@getGymRegistrarCompra');
+
+    /*NotificacionesPage*/
+    Route::post('/get-user-notifications', 'Movil\UserAppController@getUserNotifications');
+
+    /*HistorialComprasPage*/
+    Route::post('/get-user-purchases', 'Movil\UserAppController@getUserPurchases');
+
+    /*HistorialComprasDetallePage*/
+    Route::post('/get-user-purchase-detail', 'Movil\UserAppController@getUserPurchaseDetail');
 
 
 
@@ -134,3 +149,7 @@ Route::get('/registro-init', function()
 });
 Route::post('/register-load-locations','RegisterController@loadLocations');
 Route::post('/register-upload-image','RegisterController@uploadGymImage');
+
+/*PAGINA WEB*/
+Route::get('/aviso-privacidad', function (){ return "Aviso de Privacidad";});
+Route::get('/terminos-condiciones', function (){ return "Aviso de Privacidad";});

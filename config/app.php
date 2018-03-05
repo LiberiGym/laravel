@@ -182,6 +182,8 @@ return [
         Tejuino\Adminlocations\AdminlocationsServiceProvider::class,
         Tejuino\Admingyms\AdmingymsServiceProvider::class,
         Tejuino\Adminterminoscondiciones\AdminterminoscondicionesServiceProvider::class,
+        Tejuino\Adminpromociones\AdminpromocionesServiceProvider::class,
+        Tejuino\Adminbitacoras\AdminbitacorasServiceProvider::class,
     ],
 
     /*

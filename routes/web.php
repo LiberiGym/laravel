@@ -145,21 +145,29 @@ Route::any('/perfil/reportes/ventas','PerfilController@perfilReportesVentas');
 Route::any('/perfil/reportes/servicio','PerfilController@perfilReportesServicio');
 Route::post('/perfil/reportes/servicio/reportar','PerfilController@perfilReportesServicioReportar');
 
-
-
-
-
-
-
-
-
-
-
-
 Route::any('/perfil/clientes','PerfilController@perfilClientes');
 Route::any('/perfil/reportes','PerfilController@perfilReportes');
 
 /*!--PERFIL GYM--*/
+
+/*PERFIL ADMINISTRACION*/
+Route::any('/administracion','PerfilController@adminInicio');
+Route::any('/administracion/usuarios','PerfilController@adminUsuarios');
+Route::post('/administracion/usuario/delete','PerfilController@adminUsuariosDelete');
+Route::post('/administracion/usuario/select','PerfilController@adminUsuariosSelect');
+Route::post('/administracion/usuario/create','PerfilController@adminUsuariosCreate');
+Route::any('/administracion/ventas','PerfilController@adminReportesVentas');
+Route::any('/administracion/notificaciones','PerfilController@adminReportesNotificaciones');
+Route::post('/administracion/notificaciones/aceptar','PerfilController@adminReportesNotificacionesAceptar');
+Route::post('/administracion/notificaciones/cancelar','PerfilController@adminReportesNotificacionesCancelar');
+Route::any('/administracion/promociones','PerfilController@adminPromociones');
+Route::post('/administracion/promociones/delete','PerfilController@adminPromocionesDelete');
+Route::post('/administracion/promociones/select','PerfilController@adminPromocionesSelect');
+Route::post('/administracion/promociones/create','PerfilController@adminPromocionesCreate');
+
+
+
+/*!--PERFIL ADMINISTRACION--*/
 
 
 

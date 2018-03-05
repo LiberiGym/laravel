@@ -14,6 +14,7 @@ use Illuminate\View;
 use Mail;
 use Carbon\Carbon;
 use Hash;
+use App\Models\Bitacoras\Bitacora;
 
 use App\Models\User;
 use App\Models\Gyms\Gym;
@@ -224,6 +225,17 @@ class RegisterController extends Controller
                         $newImageGym->gym_id = $gym->id;
                         $newImageGym->image = $newFile;
                         $newImageGym->save();
+
+                        $dataBitacora=[
+                            'sol_user_id'=>$gym->user_id,
+                            'table'=>'gym_image',
+                            'table_column'=>'image',
+                            'table_id'=>$newImageGym->id,
+                            'old_info'=>'',
+                            'new_info'=>$newFile,
+                            'description'=>'Se grego nueva imagen'
+                        ];
+                        $this->newBitacora($dataBitacora);
 
                         $response['result'] = 'ok';
                         $response['file'] = $newFile;
@@ -501,6 +513,20 @@ class RegisterController extends Controller
             $user->registration_status = 'Finalizado';
             $user->save();
 
+
+            /*REGISTRAMOS LA BITACORA DE NUEVO GYM*/
+            $newBitacora = new Bitacora();
+            $newBitacora->fecha_solicitud = \DB::raw('NOW()');
+            $newBitacora->sol_user_id = $user->id;
+            $newBitacora->user_type = "Gym";
+            $newBitacora->table = 'gym';
+            $newBitacora->table_column = 'publish_status';
+            $newBitacora->table_id = $gym->id;
+            $newBitacora->old_info = 'Pendiente';
+            $newBitacora->new_info = 'Autorizado';
+            $newBitacora->description = 'Nuevo Registro Gym: '.$gym->tradename;
+            $newBitacora->save();
+
             /*return view('registro_finalizacion', [
                 'user' => $user,
                 'gym' => $gym
@@ -532,6 +558,22 @@ class RegisterController extends Controller
         }
 
 
+    }
+
+    /*FUNCIÒN PARA REGISTRO DEBITACORA*/
+    public function newBitacora($dataBitacora){
+
+        $newBitacora = new Bitacora();
+        $newBitacora->fecha_solicitud = \DB::raw('NOW()');
+        $newBitacora->sol_user_id =$dataBitacora['sol_user_id'];
+        $newBitacora->user_type = "Gym";
+        $newBitacora->table = $dataBitacora['table'];
+        $newBitacora->table_column = $dataBitacora['table_column'];
+        $newBitacora->table_id = $dataBitacora['table_id'];
+        $newBitacora->old_info = $dataBitacora['old_info'];
+        $newBitacora->new_info = $dataBitacora['new_info'];
+        $newBitacora->description = $dataBitacora['description'];
+        $newBitacora->save();
     }
 
 }

@@ -227,7 +227,8 @@ $(document).ready(function () {
     }, function(data){
         if(data.result == 'ok'){
 
-            location.reload();
+            //location.reload();
+            window.location.href="/perfil";
             /*var addImage ='<div style="margin-top:5px; background:url(files/gyms/'+data.file+'); height: 31px;">\
                 <input type="checkbox" name="txtNameFileImage" value="'+data.file+'" checked><label class="form-label-servicios" style="background: rgba(29,66,137,0.5);width: 100%; color:#fff;"><i class="fa fa-file-image-o" aria-hidden="true"></i> <span style="font-size:11px;">'+data.file+'</span></label>\
             </div>';

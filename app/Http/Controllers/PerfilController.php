@@ -14,6 +14,8 @@ use Illuminate\View;
 use Mail;
 use Carbon\Carbon;
 use Hash;
+use App\Models\Bitacoras\Bitacora;
+use App\Models\Promociones\Promocion;
 
 use App\Models\User;
 use App\Models\Users\UserQualification;
@@ -82,7 +84,7 @@ class PerfilController extends Controller
                     $gymUser = GymUsers::where('user_id',$user->id)->get()->first();
                     $request->session()->put('gym_id', $gymUser->gym_id);
 
-                }else{
+                }else if($user->role_id==2){
                     $gym = Gym::where('user_id',$user->id)->get()->first();
                     $request->session()->put('gym_id', $gym->id);
 
@@ -100,6 +102,8 @@ class PerfilController extends Controller
         return $response;
     }
 
+    /*PERFIL GYM*/
+
     /*Perfil Inicio*/
     public function perfilInicio(Request $request){
 
@@ -113,18 +117,150 @@ class PerfilController extends Controller
 
                 //recuperamos la informacion del form y guardamos
                 if($request->has('editInfo')){
+                    /*Se modifica*/
+                    if($gym->gym_url_video != $request->get('gym_url_video')){
+                        $dataBitacora=[
+                            'sol_user_id'=>$user->id,
+                            'table'=>'gym',
+                            'table_column'=>'gym_url_video',
+                            'table_id'=>$gym->id,
+                            'old_info'=>$gym->gym_url_video,
+                            'new_info'=>$request->get('gym_url_video'),
+                            'description'=>'Modificación de datos'
+                        ];
+                        $this->newBitacora($dataBitacora);
+                        $gym->gym_url_video = $request->get('gym_url_video');
+                    }
+
+                    if($gym->gym_description != $request->get('gym_description')){
+                        $dataBitacora=[
+                            'sol_user_id'=>$user->id,
+                            'table'=>'gym',
+                            'table_column'=>'gym_description',
+                            'table_id'=>$gym->id,
+                            'old_info'=>$gym->gym_description,
+                            'new_info'=>$request->get('gym_description'),
+                            'description'=>'Modificación de datos'
+                        ];
+                        $this->newBitacora($dataBitacora);
+                        $gym->gym_description = $request->get('gym_description');
+                    }
+
+                    if($gym->gym_monthly_fee != $request->get('gym_monthly_fee')){
+                        $dataBitacora=[
+                            'sol_user_id'=>$user->id,
+                            'table'=>'gym',
+                            'table_column'=>'gym_monthly_fee',
+                            'table_id'=>$gym->id,
+                            'old_info'=>$gym->gym_monthly_fee,
+                            'new_info'=>$request->get('gym_monthly_fee'),
+                            'description'=>'Modificación de datos'
+                        ];
+                        $this->newBitacora($dataBitacora);
+                        $gym->gym_monthly_fee = $request->get('gym_monthly_fee');
+                    }
+
+                    if($gym->gym_phone != $request->get('gym_phone')){
+                        $dataBitacora=[
+                            'sol_user_id'=>$user->id,
+                            'table'=>'gym',
+                            'table_column'=>'gym_phone',
+                            'table_id'=>$gym->id,
+                            'old_info'=>$gym->gym_phone,
+                            'new_info'=>$request->get('gym_phone'),
+                            'description'=>'Modificación de datos'
+                        ];
+                        $this->newBitacora($dataBitacora);
+                        $gym->gym_phone = $request->get('gym_phone');
+                    }
+
+                    if($gym->gym_email != $request->get('gym_email')){
+                        $dataBitacora=[
+                            'sol_user_id'=>$user->id,
+                            'table'=>'gym',
+                            'table_column'=>'gym_email',
+                            'table_id'=>$gym->id,
+                            'old_info'=>$gym->gym_email,
+                            'new_info'=>$request->get('gym_email'),
+                            'description'=>'Modificación de datos'
+                        ];
+                        $this->newBitacora($dataBitacora);
+                        $gym->gym_email = $request->get('gym_email');
+                    }
+
+                    if($gym->gym_web != $request->get('gym_web')){
+                        $dataBitacora=[
+                            'sol_user_id'=>$user->id,
+                            'table'=>'gym',
+                            'table_column'=>'gym_web',
+                            'table_id'=>$gym->id,
+                            'old_info'=>$gym->gym_web,
+                            'new_info'=>$request->get('gym_web'),
+                            'description'=>'Modificación de datos'
+                        ];
+                        $this->newBitacora($dataBitacora);
+                        $gym->gym_web = $request->get('gym_web');
+                    }
+
+                    if($gym->gym_street != $request->get('gym_street')){
+                        $dataBitacora=[
+                            'sol_user_id'=>$user->id,
+                            'table'=>'gym',
+                            'table_column'=>'gym_street',
+                            'table_id'=>$gym->id,
+                            'old_info'=>$gym->gym_street,
+                            'new_info'=>$request->get('gym_street'),
+                            'description'=>'Modificación de datos'
+                        ];
+                        $this->newBitacora($dataBitacora);
+                        $gym->gym_street = $request->get('gym_street');
+                    }
+
+                    if($gym->gym_number != $request->get('gym_number')){
+                        $dataBitacora=[
+                            'sol_user_id'=>$user->id,
+                            'table'=>'gym',
+                            'table_column'=>'gym_number',
+                            'table_id'=>$gym->id,
+                            'old_info'=>$gym->gym_number,
+                            'new_info'=>$request->get('gym_number'),
+                            'description'=>'Modificación de datos'
+                        ];
+                        $this->newBitacora($dataBitacora);
+                        $gym->gym_number = $request->get('gym_number');
+                    }
+
+                    if($gym->gym_neighborhood != $request->get('gym_neighborhood')){
+                        $dataBitacora=[
+                            'sol_user_id'=>$user->id,
+                            'table'=>'gym',
+                            'table_column'=>'gym_neighborhood',
+                            'table_id'=>$gym->id,
+                            'old_info'=>$gym->gym_neighborhood,
+                            'new_info'=>$request->get('gym_neighborhood'),
+                            'description'=>'Modificación de datos'
+                        ];
+                        $this->newBitacora($dataBitacora);
+                        $gym->gym_neighborhood = $request->get('gym_neighborhood');
+                    }
+
+                    if($gym->gym_zipcode != $request->get('gym_zipcode')){
+                        $dataBitacora=[
+                            'sol_user_id'=>$user->id,
+                            'table'=>'gym',
+                            'table_column'=>'gym_zipcode',
+                            'table_id'=>$gym->id,
+                            'old_info'=>$gym->gym_zipcode,
+                            'new_info'=>$request->get('gym_zipcode'),
+                            'description'=>'Modificación de datos'
+                        ];
+                        $this->newBitacora($dataBitacora);
+                        $gym->gym_zipcode = $request->get('gym_zipcode');
+                    }
+
                     $gym->manager = $request->get('manager');
                     $gym->manager_cel = $request->get('manager_cel');
-                    $gym->gym_monthly_fee = $request->get('gym_monthly_fee');
-                    $gym->gym_phone = $request->get('gym_phone');
-                    $gym->gym_email = $request->get('gym_email');
-                    $gym->gym_web = $request->get('gym_web');
-                    $gym->gym_url_video = $request->get('gym_url_video');
-                    $gym->gym_description = $request->get('gym_description');
-                    $gym->gym_street = $request->get('gym_street');
-                    $gym->gym_number = $request->get('gym_number');
-                    $gym->gym_neighborhood = $request->get('gym_neighborhood');
-                    $gym->gym_zipcode = $request->get('gym_zipcode');
+
                     $gym->save();
 
                     //eliminamos registros existentes de horarios y servicios
@@ -456,25 +592,30 @@ class PerfilController extends Controller
         if($request->has('editInfo'))
         {
             if($request->get('editInfo')==0){
-                //agregamos
-                $data_user = [
-                    'name'      => $request->get('user_name'),
-                    'email'      => $request->get('user_nick'),
-                    'image'      => $request->get('image'),
-                    'registration_mode'      => 'gym',
-                    'role_id'      => 5,
-                    'registration_status'      => 'Activo',
-                    'password'  => \Hash::make($request->get('password'))
-                ];
+                $userExist = User::where('email',$request->get('user_nick'))->get()->first();
+                if(is_null($userExist)){
+                    //agregamos
+                    $data_user = [
+                        'name'      => $request->get('user_name'),
+                        'email'      => $request->get('user_nick'),
+                        'image'      => $request->get('image'),
+                        'registration_mode'      => 'gym',
+                        'role_id'      => 5,
+                        'registration_status'      => 'Activo',
+                        'password'  => \Hash::make($request->get('password'))
+                    ];
 
-                $newUser = User::create($data_user);
+                    $newUser = User::create($data_user);
 
-                $newGymUsers = new GymUsers();
-                $newGymUsers->gym_id = $request->session()->get('gym_id');
-                $newGymUsers->user_id = $newUser->id;
-                $newGymUsers->save();
+                    $newGymUsers = new GymUsers();
+                    $newGymUsers->gym_id = $request->session()->get('gym_id');
+                    $newGymUsers->user_id = $newUser->id;
+                    $newGymUsers->save();
 
-                $response['result'] = 'ok';
+                    $response['result'] = 'ok';
+                }else{
+                    $response['msj'] = 'El correo ya se encuentra registrado en el sistema y no se puede repetir';
+                }
             }else{
                 //editamos
 
@@ -487,6 +628,7 @@ class PerfilController extends Controller
                 $user->save();
 
                 $response['result'] = 'ok';
+
             }
 
 
@@ -660,11 +802,6 @@ class PerfilController extends Controller
 
     }
 
-
-
-
-
-
     public function uploadGymImage(Request $request){
         $response = [
             'result' => 'error',
@@ -689,6 +826,17 @@ class PerfilController extends Controller
                         $newImageGym->gym_id = $gym->id;
                         $newImageGym->image = $newFile;
                         $newImageGym->save();
+
+                        $dataBitacora=[
+                            'sol_user_id'=>$gym->user_id,
+                            'table'=>'gym_image',
+                            'table_column'=>'image',
+                            'table_id'=>$newImageGym->id,
+                            'old_info'=>'',
+                            'new_info'=>$newFile,
+                            'description'=>'Se grego nueva imagen'
+                        ];
+                        $this->newBitacora($dataBitacora);
 
                         $response['result'] = 'ok';
                         $response['file'] = $newFile;
@@ -736,7 +884,408 @@ class PerfilController extends Controller
         return $response;
     }
 
+    /*!--PERFIL GYM--*/
 
+    /*PERFIL ADMINISTRACION*/
+
+    /*Admin Inicio*/
+    public function adminInicio(Request $request){
+
+        $user = Auth::user();
+
+        if(!is_null($user)){
+            if(!$user->role_id==3){
+                return redirect('/');
+            }else{
+                $gyms = Gym::orderBy('tradename', 'ASC')->get();
+                foreach ($gyms as $gym) {
+                    $gym->usuario=User::find($gym->user_id);
+                }
+            }
+        }else{
+            return redirect('/');
+        }
+
+        return view('front.admin.perfil_inicio', [
+            'user' => $user,
+            'gyms' => $gyms
+        ]);
+
+    }
+
+    /*Admin - usuarios*/
+    public function adminUsuarios(Request $request){
+        $user = Auth::user();
+
+        if(!is_null($user)){
+            if($user->role_id!=3){
+                return redirect('/logout');
+            }else{
+
+                $gym = Gym::find($request->session()->get('gym_id'));
+
+                $users = User::where('role_id',3)->get();
+
+            }
+        }else{
+            return redirect('/');
+        }
+
+        return view('front.admin.perfil_usuarios', [
+            'user' => $user,
+            'gym' => $gym,
+            'users' => $users
+        ]);
+    }
+
+    /*Admin - usuarios - delete*/
+    public function adminUsuariosDelete(Request $request){
+        $response = [
+            'result' => 'error',
+            'msj' => ''
+        ];
+        if($request->has('user_id'))
+        {
+            $user = User::find($request->get('user_id'));
+            if(!is_null($user))
+            {
+                $user->delete();
+                $response['result'] = 'ok';
+            }else{
+                $response['msj'] = 'No se pudo eliminar, vuelve a intentarlo';
+            }
+
+        }else{
+            $response['msj'] = 'No se pudo eliminar, vuelve a intentarlo';
+        }
+
+        return $response;
+    }
+
+    /*Admin - usuarios - select*/
+    public function adminUsuariosSelect(Request $request){
+        $response = [
+            'result' => 'error',
+            'usuario' => [],
+            'msj' => ''
+        ];
+        if($request->has('user_id'))
+        {
+            $user = User::find($request->get('user_id'));
+            if(!is_null($user))
+            {
+                $response['usuario'] = $user;
+                $response['result'] = 'ok';
+            }else{
+                $response['msj'] = 'No se pudo cargar la información del usuario, vuelve a intentarlo';
+            }
+
+        }else{
+            $response['msj'] = 'No se pudo cargar la información del usuario, vuelve a intentarlo';
+        }
+
+        return $response;
+    }
+
+    /*Admin - usuarios - create*/
+    public function adminUsuariosCreate(Request $request){
+        $response = [
+            'result' => 'error',
+            'msj' => ''
+        ];
+        if($request->has('editInfo'))
+        {
+            if($request->get('editInfo')==0){
+                //validamos que el correo no exista
+                $userExist = User::where('email',$request->get('user_nick'))->get()->first();
+                if(is_null($userExist)){
+                    //agregamos
+                    $data_user = [
+                        'name'      => $request->get('user_name'),
+                        'email'      => $request->get('user_nick'),
+                        'image'      => $request->get('image'),
+                        'registration_mode'      => 'email',
+                        'role_id'      => 3,
+                        'registration_status'      => 'Activo',
+                        'password'  => \Hash::make($request->get('password'))
+                    ];
+
+                    $newUser = User::create($data_user);
+
+                    $response['result'] = 'ok';
+                }else{
+                    $response['msj'] = 'El correo ya se encuentra registrado en el sistema y no se puede repetir';
+                }
+
+            }else{
+                //editamos
+                $user = User::where('id',$request->get('user_id'))->get()->first();
+                $user->name = $request->get('user_name');
+                $user->image = $request->get('image');
+                if($request->get('password')!='required'){
+                    $user->password = \Hash::make($request->get('password'));
+                }
+                $user->save();
+
+                $response['result'] = 'ok';
+            }
+
+        }else{
+            $response['msj'] = 'No se pudo cargar la información del usuario, vuelve a intentarlo';
+        }
+
+        return $response;
+    }
+
+    /*Admin - reportes - ventas*/
+    public function adminReportesVentas(Request $request){
+        $user = Auth::user();
+
+        if(!is_null($user)){
+            if($user->role_id!=3){
+                return redirect('/logout');
+            }else{
+                $gymPurcharses = UserPurchases::orderBy('fecha', 'DESC')->get();
+
+                foreach ($gymPurcharses as $gymPurcharse) {
+                    $gymPurcharse->usuario = User::find($gymPurcharse->user_id);
+                    $gymPurcharse->gym = Gym::find($gymPurcharse->gym_id);
+                }
+
+            }
+        }else{
+            return redirect('/');
+        }
+
+        return view('front.admin.perfil_reporte_ventas', [
+            'user' => $user,
+            'gymPurcharses' => $gymPurcharses
+        ]);
+    }
+
+    /*Admin - reportes - notificaciones*/
+    public function adminReportesNotificaciones(Request $request){
+        $user = Auth::user();
+
+        if(!is_null($user)){
+            if($user->role_id!=3){
+                return redirect('/logout');
+            }else{
+                $bitacoras = Bitacora::where('user_type','Gym')->where('status','Activo')->orderBy('fecha_solicitud', 'DESC')->get();
+
+                foreach ($bitacoras as $bitacora) {
+                    $bitacora->gym = Gym::where('user_id',$bitacora->sol_user_id)->get()->first();
+                }
+
+            }
+        }else{
+            return redirect('/');
+        }
+
+        return view('front.admin.perfil_reporte_notificaciones', [
+            'user' => $user,
+            'bitacoras' => $bitacoras
+        ]);
+    }
+
+    /*Admin - reportes - notificaciones - aceptar*/
+    public function adminReportesNotificacionesAceptar(Request $request){
+        $response = [
+            'result' => 'error',
+            'msj' => ''
+        ];
+        if($request->has('bitacora_id'))
+        {
+            $bitacora = Bitacora::find($request->get('bitacora_id'));
+            if(!is_null($bitacora))
+            {
+                //aceptamos la información
+                $aceptarInfo = DB::statement("UPDATE ".$bitacora->table." SET ".$bitacora->table_column."='".$bitacora->new_info."' WHERE id=".$bitacora->table_id);
+
+                $bitacora->status_auth='Autorizado';
+                $bitacora->status='Procesado';
+                $bitacora->fecha_autorizacion = \DB::raw('NOW()');
+                $bitacora->aut_user_id=Auth::user()->id;
+                $bitacora->save();
+
+                $response['result'] = 'ok';
+            }else{
+                $response['msj'] = 'No se pudo aceptar, vuelve a intentarlo';
+            }
+
+        }else{
+            $response['msj'] = 'No se pudo aceptar, vuelve a intentarlo';
+        }
+
+        return $response;
+    }
+
+    /*Admin - reportes - notificaciones - cancelar*/
+    public function adminReportesNotificacionesCancelar(Request $request){
+        $response = [
+            'result' => 'error',
+            'msj' => ''
+        ];
+        if($request->has('bitacora_id'))
+        {
+            $bitacora = Bitacora::find($request->get('bitacora_id'));
+            if(!is_null($bitacora))
+            {
+                //hacemos rollback a la información
+                $rollBack = DB::statement("UPDATE ".$bitacora->table." SET ".$bitacora->table_column."='".$bitacora->old_info."' WHERE id=".$bitacora->table_id);
+
+
+                $bitacora->status_auth='Cancelado';
+                $bitacora->status='Procesado';
+                $bitacora->fecha_autorizacion = \DB::raw('NOW()');
+                $bitacora->aut_user_id=Auth::user()->id;
+                $bitacora->save();
+
+                $response['result'] = 'ok';
+            }else{
+                $response['msj'] = 'No se pudo rechazar el cambio, vuelve a intentarlo';
+            }
+
+        }else{
+            $response['msj'] = 'No se pudo rechazar el cambio, vuelve a intentarlo';
+        }
+
+        return $response;
+    }
+
+    /*Admin - promociones*/
+    public function adminPromociones(Request $request){
+        $user = Auth::user();
+
+        if(!is_null($user)){
+            if($user->role_id!=3){
+                return redirect('/logout');
+            }else{
+                $promociones = Promocion::orderBy('vigencia','Desc')->get();
+            }
+        }else{
+            return redirect('/');
+        }
+
+        return view('front.admin.perfil_promociones', [
+            'user' => $user,
+            'promociones' => $promociones
+        ]);
+    }
+
+    /*Admin - promociones - delete*/
+    public function adminPromocionesDelete(Request $request){
+        $response = [
+            'result' => 'error',
+            'msj' => ''
+        ];
+        if($request->has('promo_id'))
+        {
+            $promo = Promocion::find($request->get('promo_id'));
+            if(!is_null($promo))
+            {
+                $promo->delete();
+                $response['result'] = 'ok';
+            }else{
+                $response['msj'] = 'No se pudo eliminar, vuelve a intentarlo';
+            }
+
+        }else{
+            $response['msj'] = 'No se pudo eliminar, vuelve a intentarlo';
+        }
+
+        return $response;
+    }
+
+    /*Admin - promociones - select*/
+    public function adminPromocionesSelect(Request $request){
+        $response = [
+            'result' => 'error',
+            'promo' => [],
+            'msj' => ''
+        ];
+        if($request->has('promo_id'))
+        {
+            $promo = Promocion::find($request->get('promo_id'));
+            if(!is_null($promo))
+            {
+                $response['promo'] = $promo;
+                $response['result'] = 'ok';
+            }else{
+                $response['msj'] = 'No se pudo cargar la información de la promoción, vuelve a intentarlo';
+            }
+
+        }else{
+            $response['msj'] = 'No se pudo cargar la información de la promoción, vuelve a intentarlo';
+        }
+
+        return $response;
+    }
+
+    /*Admin - promociones - create*/
+    public function adminPromocionesCreate(Request $request){
+        $response = [
+            'result' => 'error',
+            'msj' => ''
+        ];
+        if($request->has('editInfo'))
+        {
+            if($request->get('editInfo')==0){
+
+                $newPromo = new Promocion();
+
+                $newPromo->nombre_promocion = $request->get('nombre_promocion');
+                $newPromo->vigencia = $request->get('vigencia');
+                $newPromo->tipo = $request->get('tipo');
+                $newPromo->monto = $request->get('monto');
+                $newPromo->limite = $request->get('limite');
+                $newPromo->cantidad = $request->get('cantidad');
+                $newPromo->por_usuario = $request->get('por_usuario');
+                $newPromo->save();
+
+                $response['result'] = 'ok';
+            }else{
+                //editamos
+                $promo = Promocion::find($request->get('promo_id'));
+                $promo->nombre_promocion = $request->get('nombre_promocion');
+                $promo->vigencia = $request->get('vigencia');
+                $promo->tipo = $request->get('tipo');
+                $promo->monto = $request->get('monto');
+                $promo->limite = $request->get('limite');
+                $promo->cantidad = $request->get('cantidad');
+                $promo->por_usuario = $request->get('por_usuario');
+                $promo->save();
+
+                $response['result'] = 'ok';
+            }
+
+        }else{
+            $response['msj'] = 'No se pudo cargar la información de la información, vuelve a intentarlo';
+        }
+
+        return $response;
+    }
+
+
+
+
+    /*!--PERFIL ADMINISTRACION--*/
+
+    /*FUNCIÒN PARA REGISTRO DEBITACORA*/
+    public function newBitacora($dataBitacora){
+
+        $newBitacora = new Bitacora();
+        $newBitacora->fecha_solicitud = \DB::raw('NOW()');
+        $newBitacora->sol_user_id =$dataBitacora['sol_user_id'];
+        $newBitacora->user_type = "Gym";
+        $newBitacora->table = $dataBitacora['table'];
+        $newBitacora->table_column = $dataBitacora['table_column'];
+        $newBitacora->table_id = $dataBitacora['table_id'];
+        $newBitacora->old_info = $dataBitacora['old_info'];
+        $newBitacora->new_info = $dataBitacora['new_info'];
+        $newBitacora->description = $dataBitacora['description'];
+        $newBitacora->save();
+    }
 
 
 

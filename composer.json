@@ -37,7 +37,9 @@
             "Tejuino\\Adminstates\\": "packages/tejuino/adminstates/src",
             "Tejuino\\Adminlocations\\": "packages/tejuino/adminlocations/src",
             "Tejuino\\Admingyms\\": "packages/tejuino/admingyms/src",
-            "Tejuino\\Adminterminoscondiciones\\": "packages/tejuino/adminterminoscondiciones/src"
+            "Tejuino\\Adminterminoscondiciones\\": "packages/tejuino/adminterminoscondiciones/src",
+            "Tejuino\\Adminpromociones\\": "packages/tejuino/adminpromociones/src",
+            "Tejuino\\Adminbitacoras\\": "packages/tejuino/adminbitacoras/src"
         }
     },
     "extra": {

@@ -1,0 +1,24 @@
+{
+    "name": "tejuino/adminpromociones",
+    "description": "Tejuino admin promociones module",
+    "type": "library",
+    "authors": [
+        {
+            "name": "Tejuino Developers",
+            "email": "developers@tejuino.mx"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "Tejuino\\Adminpromociones\\": "src/"
+        }
+    },
+    "minimum-stability": "dev",
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Tejuino\\Adminpromociones\\AdminpromocionesServiceProvider"
+            ]
+        }
+    }
+}

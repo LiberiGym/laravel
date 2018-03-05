@@ -22,14 +22,14 @@
                 <ul class="nav-perfil">
                     <li><a href="/perfil">Inicio <span><i class="fa fa-angle-right" aria-hidden="true"></i></span></a></li>
                     <li><a href="/perfil/datos-fiscales">Datos Fiscales <span><i class="fa fa-angle-right" aria-hidden="true"></i></span></a></li>
-                    <li class="active"><a href="/perfil/datos-bancarios">Datos Bancarios <span><i class="fa fa-angle-right" aria-hidden="true"></i></span></a></li>
+                    <li><a href="/perfil/datos-bancarios">Datos Bancarios <span><i class="fa fa-angle-right" aria-hidden="true"></i></span></a></li>
                     <li><a href="/perfil/usuarios">Usuarios <span><i class="fa fa-angle-right" aria-hidden="true"></i></span></a></li>
                     <li><a href="/perfil/clientes">Clientes <span><i class="fa fa-angle-right" aria-hidden="true"></i></span></a></li>
                     <li><a href="#">Reportes <span><i class="fa fa-angle-right" aria-hidden="true"></i></span></a>
                         <ul style="margin-left: 30px;margin-top: 25px;">
                             <li><a href="/perfil/reportes/comentarios">Comentarios <span><i class="fa fa-angle-right" aria-hidden="true"></i></span></a></li>
                             <li><a href="/perfil/reportes/ventas">Ventas <span><i class="fa fa-angle-right" aria-hidden="true"></i></span></a></li>
-                            <li><a href="/perfil/reportes/servicio">Mal Uso de Servicio <span><i class="fa fa-angle-right" aria-hidden="true"></i></span></a></li>
+                            <li class="active"><a href="/perfil/reportes/servicio">Mal Uso de Servicio <span><i class="fa fa-angle-right" aria-hidden="true"></i></span></a></li>
                         </ul>
                     </li>
                 </ul>
@@ -37,18 +37,16 @@
 
             </div>
             <div class="col-lg-9">
-                <h1 style="margin-bottom: 45px;">Datos Bancarios <img src="/images/barra_amarilla_banner_top.png" height="6" style="width:79px;"/></h1>
-                <form action="/perfil/datos-bancarios" class="form-registro" role="form" class="cmxform" method="post" id="frmDatos">
-                    <input type="hidden" name="editInfo" value="1">
+                <h1 style="margin-bottom: 45px;">Reporte de Mal Uso del Servicio <img src="/images/barra_amarilla_banner_top.png" height="6" style="width:79px;"/></h1>
+                <form class="form-registro" role="form" class="cmxform" method="post" id="frmDatos">
                     <fieldset class="col-lg-6">
+                        <input type="text" name="nombre" id="nombre" placeholder="Nombre" class="form-registro-element" required="required">
+                        <input type="email" name="correo" id="correo" placeholder="Correo Electrónico" class="form-registro-element" required="required">
+                        <input type="text" name="idusuario" id="idusuario" placeholder="ID Usuario" class="form-registro-element" required="required">
+                        <textarea name="comentario" id="comentario" placeholder="Comentario" class="form-registro-element" required="required" style="height:200px;"></textarea>
 
-                        <input type="text" name="cta_titular" value="{{$gym->cta_titular}}" placeholder="Nombre Titular de la Cuenta" class="form-registro-element" required="required">
-                        <input type="text" name="cta_numero" value="{{$gym->cta_numero}}" placeholder="Número de Cuenta" class="form-registro-element" required="required">
-                        <input type="text" name="cta_clabe" value="{{$gym->cta_clabe}}" placeholder="Clabe Interbancaria" class="form-registro-element" required="required">
-                        <input type="text" name="cta_banco" value="{{$gym->cta_banco}}" placeholder="Banco" class="form-registro-element" required="required">
-                        <input type="text" name="cta_pais" value="{{$gym->cta_pais}}" placeholder="País" class="form-registro-element" required="required">
 
-                        <button type="button" name="button"  id="btnGuardar">Guardar</button>
+                        <button type="button" name="button"  id="btnGuardar" style="width: 132px;background: #1d4289;color: #fff;">Enviar Reporte</button>
                     </fieldset>
                 </form>
 
@@ -77,17 +75,51 @@ $(document).ready(function () {
         if( form.valid() ){
             event.preventDefault();//Eliminar el evento del submit del botón
 
-            var _registroSelected = false;
+            swal({
+                title: "Enviando",
+                text: "Espere mientras se envia su reporte",
+                type: "info",
+                showCancelButton: false,
+                cancelButtonText: "",
+                showConfirmButton: false,
+                confirmButtonText: "",
+                closeOnConfirm: false
+            },
+                function(){
+            });
 
-            form.submit();
-            console.log('form.submit()');
 
-            /*if($("#terminosCond").is(':checked')){
-                form.submit();
-                console.log('form.submit()');
-            }else{
-                swal('Cuidado','Debe seleccionar la casilla de verificación','warning');
-            }*/
+            var formData= {
+                nombre:$('#nombre').val(),
+                correo:$('#correo').val(),
+                idusuario:$('#idusuario').val(),
+                comentario:$('#comentario').val()
+            };
+
+            $.ajax({
+                url: "/perfil/reportes/servicio/reportar",
+                data: formData,
+                type: "POST",
+                beforeSend:function(){
+                    //cart.loading.fadeIn();
+                },
+                success: function (response) {
+                    if(response.result=="ok"){
+                        $('#nombre').val('');
+                        $('#correo').val('');
+                        $('#idusuario').val('');
+                        $('#comentario').val('');
+
+                        swal("Enviado","Su Reporte se envio correctamente, a la brevedad le daremos el seguimiento correspondiente ", "success");
+
+                    }else{
+                        swal("Atención", response.msj, "warning");
+                    }
+
+                },
+
+
+            });
         }
     });
 

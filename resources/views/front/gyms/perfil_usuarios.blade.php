@@ -1,12 +1,16 @@
-@extends('layout.layout')
+@extends('front.layout.layout_registro')
 @section('css')
-<link href="css/registro.steps.css" type="text/css" rel="stylesheet">
+<link href="/css/registro.steps.css" type="text/css" rel="stylesheet">
 <link rel="stylesheet" type="text/css" href="css/jquery.timepicker.css" />
 
 <link href="/admin_assets/plugins/dropzone/dropzone.css" rel="stylesheet" />
 <link href="/admin_assets/css/base/theme/custom.css" rel="stylesheet" id="theme" />
 
-<link href="css/perfil.css" rel="stylesheet" id="theme" />
+<link href="/css/perfil.css" rel="stylesheet" id="theme" />
+
+<link href="//cdn.datatables.net/1.10.16/css/jquery.dataTables.min.css" rel="stylesheet" id="theme" />
+
+
 
 
 @endsection
@@ -21,70 +25,89 @@
             <div class="col-lg-3">
                 <div class="logo-perfil" align="center">
                     @if($gym->gym_logo!='default.png' || $gym->gym_logo!='')
-                    <img src="files/gyms/{{$gym->gym_logo}}" alt="" style="height: 100px; width:auto; text-aling:center;">
+                    <img src="/files/gyms/{{$gym->gym_logo}}" alt="" style="height: 100px; width:auto; text-aling:center;">
                     @endif
                 </div>
                 <hr class="hr-nav-perfil">
                 <ul class="nav-perfil">
-                    <li><a href="/perfil-inicio">Inicio <span><i class="fa fa-angle-right" aria-hidden="true"></i></span></a></li>
-                    <li class="active"><a href="perfil-usuarios">Usuarios <span><i class="fa fa-angle-right" aria-hidden="true"></i></span></a></li>
-                    <li><a href="perfil-datos-cuenta">Datos de Cuenta <span><i class="fa fa-angle-right" aria-hidden="true"></i></span></a></li>
-                    <li><a href="perfil-clientes">Clientes <span><i class="fa fa-angle-right" aria-hidden="true"></i></span></a></li>
-                    <li><a href="perfil-reportes">Reportes <span><i class="fa fa-angle-right" aria-hidden="true"></i></span></a></li>
+                    <li><a href="/perfil">Inicio <span><i class="fa fa-angle-right" aria-hidden="true"></i></span></a></li>
+                    <li><a href="/perfil/datos-fiscales">Datos Fiscales <span><i class="fa fa-angle-right" aria-hidden="true"></i></span></a></li>
+                    <li><a href="/perfil/datos-bancarios">Datos Bancarios <span><i class="fa fa-angle-right" aria-hidden="true"></i></span></a></li>
+                    <li class="active"><a href="/perfil/usuarios">Usuarios <span><i class="fa fa-angle-right" aria-hidden="true"></i></span></a></li>
+                    <li><a href="/perfil/clientes">Clientes <span><i class="fa fa-angle-right" aria-hidden="true"></i></span></a></li>
+                    <li><a href="#">Reportes <span><i class="fa fa-angle-right" aria-hidden="true"></i></span></a>
+                        <ul style="margin-left: 30px;margin-top: 25px;">
+                            <li><a href="/perfil/reportes/comentarios">Comentarios <span><i class="fa fa-angle-right" aria-hidden="true"></i></span></a></li>
+                            <li><a href="/perfil/reportes/ventas">Ventas <span><i class="fa fa-angle-right" aria-hidden="true"></i></span></a></li>
+                            <li><a href="/perfil/reportes/servicio">Mal Uso de Servicio <span><i class="fa fa-angle-right" aria-hidden="true"></i></span></a></li>
+                        </ul>
+                    </li>
                 </ul>
                 <button type="button" name="button" id="btnCerrarSesion" class="cerrar-session">Cerrar Sesión</button>
 
             </div>
             <div class="col-lg-9">
-                <h1>Registro de usuario <img src="images/barra_amarilla_banner_top.png" height="6" style="width:79px;"/></h1>
+                <h1>Registro de usuario <img src="/images/barra_amarilla_banner_top.png" height="6" style="width:79px;"/></h1>
                 <p>Alta de usuarios para control interno de aplicación.</p>
-                <form action="/perfil-inicio" class="form-registro" role="form" class="cmxform" method="post" id="frmDatos">
-                    <input type="hidden" name="editInfo" value="1">
+                <form class="form-registro" role="form" class="cmxform" method="post" id="frmDatos">
+                    <input type="hidden" name="editInfo" id="editInfo" value="0">
+                    <input type="hidden" name="gymuser_id" id="gymuser_id" value="">
+                    <input type="hidden" name="user_id" id="user_id" value="">
+                    <input type="hidden" name="image" id="image" value="">
                     <fieldset class="col-lg-6">
-                        <input type="text" name="user_name"  placeholder="Nombre Completo" class="form-registro-element" required="required" value="">
-                        <input type="text" name="user_nick"  placeholder="Usuario" class="form-registro-element" required="required" number="true" value="">
-                        <input type="text" name="user_password"  placeholder="Contraseña" class="form-registro-element" required="required" number="true" value="">
-                        <input type="text" name="user_passwordrepeate"  placeholder="Repertir contrasseña" class="form-registro-element" required="required" number="true" value="">
+                        <input type="text" name="user_name" id="user_name"  placeholder="Nombre Completo" class="form-registro-element" required="required" value="">
+                        <input type="email" name="user_nick" id="user_nick"  placeholder="Usuario" class="form-registro-element" required="required" value="">
+                        <input type="text" name="user_password" id="user_password"  placeholder="Contraseña" class="form-registro-element" required="required">
+                        <input type="text" name="user_passwordrepeate" id="user_passwordrepeate"  placeholder="Repertir contrasseña" class="form-registro-element" required="required">
                         <div class="clearfix"></div>
 
                         <div class="col-lg-5">
-                            <div class="photo-usuario" align="center">
-                                {{-- @if($gym->gym_logo!='default.png' || $gym->gym_logo!='')
-                                <img src="files/gyms/{{$gym->gym_logo}}" alt="" style="height: 100px; width:auto; text-aling:center;">
-                                @endif --}}
+                            <div class="photo-usuario" align="center" id="divImgUser">
+
                             </div>
-                            <button type="button" id="btnDeleteImage"  name="button" class="delete-image" style="width: 100%;">Eliminar imágen</button>
+                            <button type="button" id="btnDeleteImage"  name="button" class="delete-image" style="width: 100%;" disabled="true">Eliminar imágen</button>
                         </div>
                         <div class="col-lg-7">
                             <button type="button" id="divUploadImage"  name="button" class="form-button" style="width: 100%;">Seleccionar imágen</button>
                         </div>
 
+                        <div class="clearfix"></div>
 
+                        <button type="guardar" name="button" id="btnGuardar">Guardar</button>
 
-
-
+                        <button type="guardar" name="button" id="btnCancelar" style="background: #c81327; color:#fff; margin-right:10px;">Cancelar</button>
 
                     </fieldset>
 
                     <fieldset class="col-lg-6">
 
+                        <table id="table_usuarios" class="table table-striped table-bordered">
+                            <thead>
+                                <tr>
+                                    <th width="200">Usuario</th>
+                                    <th width="80">Status</th>
+                                    <th width="60">Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach($gymUsers as $gymUser)
+                                <tr>
 
-                        <div class="clearfix"></div>
+                                    <td class="f-w-600 f-s-14">
+                                        {{  $gymUser->usuario->name }}
+                                    </td>
+                                    <td>
+                                        {{ $gymUser->usuario->status }}
+                                    </td>
+                                    <td>
+                                        <button type="button" class="btn btn-danger btn-icon btn-sm btnDelete btn-delete" data-id="{{  $gymUser->id }}" style="width: 33px;background: #c81327; color:#fff;"><i class="fa fa-times"></i></button>
+                                        <button type="button" class="btn btn-success btn-icon btn-sm btn-editar" data-id="{{  $gymUser->id }}" style="width: 33px;background: #fdb429; margin-right:10px;"><i class="fa fa-edit"></i></button>
+                                    </td>
+                                </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
 
-                        <legend class="form-legend-registro">Subir imágenes de la Empresa</legend>
-                        <p style="font-style: italic;margin-bottom: 0;">Máximo 10</p>
-
-                        <div class="clearfix"></div>
-                        <div class="" id="divImages" style="margin-top:15px;">
-
-                        </div>
-
-
-
-
-                        <div class="clearfix"></div>
-
-                        <button type="guardar" name="button" id="btnGuardar">Guardar</button>
                     </fieldset>
                 </form>
 
@@ -96,39 +119,79 @@
 <!-- //about -->
 @endsection
 @section('js')
-<script type="text/javascript" src="js/jquery.timepicker.js"></script>
+<script type="text/javascript" src="//cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
 <script src="/admin_assets/plugins/dropzone/dropzone.js"></script>
 <script src="/admin_assets/plugins/dropzone/uploader.js"></script>
+<script src="/assets/js/perfil_gym.js"></script>
 
 <script>
 $(document).ready(function () {
-    var arrImages = [];
 
+    formReset();
 
+    $('#table_usuarios').DataTable({
+            "bLengthChange": false,
+            "iDisplayLength": 10,
+            "aaSorting": [
+                [0,'ASC']
+            ],
+        });
 
-
-
-    //subir image
-
+    //subir imagen usuario
     uploader.add('divUploadImage', {
-        url: '/register-upload-image',
+        url: '/perfil/usuario/upload/image',
         formData: {
             type: 'images'
         }
     }, function(data){
         if(data.result == 'ok'){
-            var addImage ='<div style="margin-top:5px; background:url(files/gyms/'+data.file+'); height: 31px;">\
-                <input type="checkbox" name="txtNameFileImage" value="'+data.file+'" checked><label class="form-label-servicios" style="background: rgba(29,66,137,0.5);width: 100%; color:#fff;"><i class="fa fa-file-image-o" aria-hidden="true"></i> <span style="font-size:11px;">'+data.file+'</span></label>\
-            </div>';
-            $('#divImages').append(addImage);
-            countImage++;
-            if(countImage==10){
-                $('#divUploadImage').fadeOut();
-            }
+            var addImage ='<div style="margin-top:5px; background:url(/files/users/'+data.file+'); width: 129px; height:100px; background-size:cover;"><div>';
+            $('#divImgUser').html(addImage);
+            $('#image').val(data.file);
+
+            $("#btnDeleteImage").prop('disabled',false);
+
         }
         if(data.result =='error_type'){
             swal('Cuidado','Solo puede subir imagenes en formato de tiff y jpg','warning');
         }
+    });
+
+    $("#btnDeleteImage").on('click', function (){
+        swal({
+            title: 'Eliminar Imagen',
+            text: "¿Deseas eliminar la imagen?",
+            type: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Si',
+            cancelButtonText: 'No'
+            }).then((result) => {
+                if (result.value) {
+
+                    var addImage ='<div style="margin-top:5px; background:url(/images/perfil_user_photo_default.png); width: 129px; height:100px; background-size:cover;"><div>';
+                    $('#divImgUser').html(addImage);
+
+                    $('#image').val('');
+
+                    $("#btnDeleteImage").prop('disabled',true);
+                }
+            });
+    });
+
+    $("#btnCancelar").on('click', function (){
+        swal({
+            title: 'Cancelar Edición',
+            text: "¿Deseas cancelar la edición?",
+            type: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Si',
+            cancelButtonText: 'No'
+            }).then((result) => {
+                if (result.value) {
+
+                    formReset();
+                }
+            });
     });
 
     //form registro
@@ -144,57 +207,166 @@ $(document).ready(function () {
         if( form.valid() ){
             event.preventDefault();//Eliminar el evento del submit del botón
 
-            var _diasSelected = false;
-            var _serviceSelected = false;
-
-            $('.diasSemana').each(
-                function() {
-                    if($(this).is(':checked')){
-                        _diasSelected = true;
-                        console.log('Dias seleccionados: '+_diasSelected);
-                    }
-                }
-            );
-
-            $('.servicioGym').each(
-                function() {
-                    if($(this).is(':checked')){
-                        _serviceSelected = true;
-                        console.log('Servicios seleccionados: '+_serviceSelected);
-                    }
-                }
-            );
-
-            if(_diasSelected && _serviceSelected){
-                swal({
-                    type: 'success',
-                    title: 'Guardando sus cambios',
-                    showConfirmButton: false
-                })
-                form.submit();
-                console.log('form.submit()');
+            if($("#user_password").val()!=$("#user_passwordrepeate").val()){
+                swal("Atención", "Las constraseñas no coinciden, vuelva a escribirlas", "warning");
             }else{
-                swal('Cuidado','Debe seleccionar los días en los que opera y almenos un tipo de servicio','warning');
+                var formData= {
+                    editInfo:$('#editInfo').val(),
+                    gymuser_id:$('#gymuser_id').val(),
+                    user_name:$('#user_name').val(),
+                    user_nick:$('#user_nick').val(),
+                    image:$('#image').val(),
+                    password:$('#user_password').val()
+                };
+
+                $.ajax({
+                    url: "/perfil/usuario/create",
+                    data: formData,
+                    type: "POST",
+                    beforeSend:function(){
+                        //cart.loading.fadeIn();
+                    },
+                    success: function (response) {
+                        if(response.result=="ok"){
+                            formReset();
+                            location.reload();
+                        }else{
+                            swal("Atención", response.msj, "warning");
+                        }
+
+                    },
+                });
             }
+
         }
     });
 
-    $("#btnCerrarSesion").on('click', function(){
+    //
+    $(".btn-editar").on('click', function (){
+        var liItem = $(this);
+
+        var idItem = liItem.data('id');
+        usuarioEditar(idItem);
+    });
+    $(".btn-delete").on('click', function (){
+        var liItem = $(this);
+
+        var idItem = liItem.data('id');
+        usuarioEliminar(idItem);
+    });
+
+
+//
+    function usuarioEditar(gymuser_id){
+        console.log('Editar: '+gymuser_id);
+
         swal({
-            title: 'Cerrar Sesión',
-            text: "¿Deseas cerrar tu sesión?",
+            title: "Cargando Información",
+            text: "Espera mientras se carga la información del usuario",
+            type: "info",
+            showCancelButton: false,
+            cancelButtonText: "",
+            showConfirmButton: false,
+            confirmButtonText: "",
+        },
+            function(){
+        });
+
+        var formData= {
+            gymuser_id:gymuser_id
+        };
+
+        $.ajax({
+            url: "/perfil/usuario/select",
+            data: formData,
+            type: "POST",
+            beforeSend:function(){
+                //cart.loading.fadeIn();
+            },
+            success: function (response) {
+                if(response.result=="ok"){
+
+                    swal.close();
+
+                    $("#editInfo").val(1);
+                    $("#gymuser_id").val(response.usuario.usuario.id);
+                    $("#gym_id").val(response.usuario.gym_id);
+                    $("#user_name").val(response.usuario.usuario.name);
+                    $("#user_nick").val(response.usuario.usuario.email);
+
+                    $('#user_password').prop('required',false);
+                    $("#user_passwordrepeate").prop('required',false);
+                    $("#user_nick").prop('disabled',true);
+
+                    if(response.usuario.usuario.image!=''){
+                        $("#image").val(response.usuario.usuario.image);
+                        var addImage ='<div style="margin-top:5px; background:url('+response.usuario.usuario.image+'); width: 129px; height:100px; background-size:cover;"><div>';
+                        $('#divImgUser').html(addImage);
+                        $("#btnDeleteImage").prop('disabled',false);
+                    }
+
+
+                }else{
+                    swal("Atención", response.msj, "warning");
+                }
+            },
+
+
+        });
+    }
+
+    function usuarioEliminar(gymuser_id){
+        swal({
+            title: 'Eliminar Usuario',
+            text: "¿Deseas eliminar el usuario?",
             type: 'warning',
             showCancelButton: true,
             confirmButtonText: 'Si',
             cancelButtonText: 'No'
             }).then((result) => {
                 if (result.value) {
-                    window.location.href="/logout";
+                    var formData= {
+                        gymuser_id:gymuser_id
+                    };
+
+                    $.ajax({
+                        url: "/perfil/usuario/delete",
+                        data: formData,
+                        type: "POST",
+                        beforeSend:function(){
+                            //cart.loading.fadeIn();
+                        },
+                        success: function (response) {
+                            if(response.result=="ok"){
+                                formReset();
+                                location.reload();
+                            }else{
+                                swal("Atención", response.msj, "warning");
+                            }
+                        },
+
+
+                    });
                 }
             });
-    });
+    }
 
+    function formReset(){
+        $('#editInfo').val(0);
+        $('#gymuser_id').val('');
+        $('#user_name').val('');
+        $('#user_nick').val('');
+        $('#image').val('');
+        $('#user_password').val('');
+        $("#user_passwordrepeate").val('');
 
+        $('#user_password').prop('required',true);
+        $("#user_passwordrepeate").prop('required',true);
+        $("#user_nick").prop('disabled',false);
+
+        var addImage ='<div style="margin-top:5px; background:url(/images/perfil_user_photo_default.png); width: 129px; height:100px; background-size:cover;"><div>';
+        $('#divImgUser').html(addImage);
+    }
 
 });
 

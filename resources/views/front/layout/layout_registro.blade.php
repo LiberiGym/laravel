@@ -51,8 +51,10 @@
                     <li><a href="/inicio#howWorks" class=""><span data-hover="Cómo Funciona">Cómo Funciona</span></a></li>
                     <li><a href="/inicio#contact" class=""><span data-hover="Contáctanos">Contáctanos</span></a></li>
                     <li><a href="https://Facebook.com/liberiapp/" target="_blank"><span data-hover="Facebook"><i class="fa fa-facebook" aria-hidden="true"></i></span></a></li>
-                    <li><a href="/inicio#contact" class=""><span data-hover="Twitter"><i class="fa fa-twitter" aria-hidden="true"></i></span></a></li>
+
                     <li><a href="https://www.instagram.com/liberiapp/" target="_blank"><span data-hover="Instagram"><i class="fa fa-instagram" aria-hidden="true"></i></span></a></li>
+
+                    <li><a>{{$user->name." ".$user->middle_name." ".$user->last_name}}</a></li>
 
 
 

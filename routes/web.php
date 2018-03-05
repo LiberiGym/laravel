@@ -12,7 +12,7 @@
 */
 require('admin/admin.php');
 Auth::routes();
-Route::get('logout', 'Auth\LoginController@logout');
+Route::get('/logout', 'Auth\LoginController@logout');
 
 /*ACCESOS APP*/
 Route::group(['prefix' => 'api'], function()
@@ -136,6 +136,26 @@ Route::any('/perfil','PerfilController@perfilInicio');
 Route::any('/perfil/datos-fiscales','PerfilController@perfilDFiscales');
 Route::any('/perfil/datos-bancarios','PerfilController@perfilDBancarios');
 Route::any('/perfil/usuarios','PerfilController@perfilUsuarios');
+Route::post('/perfil/usuario/delete','PerfilController@perfilUsuariosDelete');
+Route::post('/perfil/usuario/select','PerfilController@perfilUsuariosSelect');
+Route::post('/perfil/usuario/create','PerfilController@perfilUsuariosCreate');
+Route::post('/perfil/usuario/upload/image','PerfilController@perfilUsuariosUploadImage');
+Route::any('/perfil/reportes/comentarios','PerfilController@perfilReportesComentarios');
+Route::any('/perfil/reportes/ventas','PerfilController@perfilReportesVentas');
+Route::any('/perfil/reportes/servicio','PerfilController@perfilReportesServicio');
+Route::post('/perfil/reportes/servicio/reportar','PerfilController@perfilReportesServicioReportar');
+
+
+
+
+
+
+
+
+
+
+
+
 Route::any('/perfil/clientes','PerfilController@perfilClientes');
 Route::any('/perfil/reportes','PerfilController@perfilReportes');
 

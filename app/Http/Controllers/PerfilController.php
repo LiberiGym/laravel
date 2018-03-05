@@ -16,10 +16,15 @@ use Carbon\Carbon;
 use Hash;
 
 use App\Models\User;
+use App\Models\Users\UserQualification;
+use App\Models\Users\UserPurchases;
+
+
 use App\Models\Gyms\Gym;
 use App\Models\Gyms\GymImage;
 use App\Models\Gyms\GymSchedule;
 use App\Models\Gyms\GymService;
+use App\Models\Gyms\GymUsers;
 use App\Models\Locations\Location;
 use App\Models\States\State;
 use App\Models\Categories\Category;
@@ -56,18 +61,38 @@ class PerfilController extends Controller
         $response = [
             'result' => 'error',
             'message' => 'ha ocurrido un error',
+            'type' => 0,
         ];
 
         $userdata = array(
             'email' => $request->get('login_name'),
-            'password'=> $request->get('login_pass'),
-            'registration_mode'=> 'gym'
+            'password'=> $request->get('login_pass')
         );
+        /*,
+        'registration_mode'=> 'gym'*/
 
         if(Auth::attempt($userdata))
         {
-            $response['result'] ='ok';
-            $response['message'] = 'Se inicio sesión correctamente.';
+            $user = Auth::user();
+            if($user->role_id==2 || $user->role_id==3  || $user->role_id==5){//2=gym | 3=admin |5=Monitor(usuario de gym)
+                $response['result'] ='ok';
+                $response['type'] =$user->role_id;
+
+                if($user->role_id==5){
+                    $gymUser = GymUsers::where('user_id',$user->id)->get()->first();
+                    $request->session()->put('gym_id', $gymUser->gym_id);
+
+                }else{
+                    $gym = Gym::where('user_id',$user->id)->get()->first();
+                    $request->session()->put('gym_id', $gym->id);
+
+                }
+                $response['message'] = 'Se inicio sesión correctamente.';
+            }else{
+                $response['type'] =1;
+                $response['message'] = 'No tienes privilegios para ingresar por este medio.';
+            }
+
 
         }else{
             $response['message'] = 'Sus credenciales no son validas. Por favor verifíquelas.';
@@ -308,7 +333,7 @@ class PerfilController extends Controller
             if(!$user->registration_mode=='gym'){
                 return redirect('/');
             }else{
-                $gym = Gym::where('user_id', $user->id)->first();
+                $gym = Gym::where('user_id', $user->id)->get()->first();
 
                 //recuperamos la informacion del form y guardamos
                 if($request->has('editInfo')){
@@ -332,7 +357,6 @@ class PerfilController extends Controller
 
     }
 
-
     /*perfil - usuarios*/
     public function perfilUsuarios(Request $request){
         $user = Auth::user();
@@ -341,22 +365,305 @@ class PerfilController extends Controller
             if(!$user->registration_mode=='gym'){
                 return redirect('/logout');
             }else{
-                $gym = Gym::where('user_id', $user->id)->first();
 
-                //recuperamos la informacion del form y guardamos
-                if($request->has('editInfo')){
+                $gym = Gym::find($request->session()->get('gym_id'));
 
+                $gymUsers = GymUsers::where('gym_id', $gym->id)->get();
+                foreach ($gymUsers as $gymuser) {
+
+                    $gymuser->usuario = User::find($gymuser->user_id);
                 }
+
             }
         }else{
             return redirect('/');
         }
 
-        return view('perfil_usuarios', [
+        return view('front.gyms.perfil_usuarios', [
+            'user' => $user,
+            'gym' => $gym,
+            'gymUsers' => $gymUsers
+        ]);
+    }
+
+    /*perfil - usuarios - delete*/
+    public function perfilUsuariosDelete(Request $request){
+        $response = [
+            'result' => 'error',
+            'msj' => ''
+        ];
+        if($request->has('gymuser_id'))
+        {
+            $gymUser = GymUsers::find($request->get('gymuser_id'));
+            if(!is_null($gymUser))
+            {
+                $userId = $gymUser->user_id;
+                $gymUser->forceDelete();
+
+                $user = User::find($userId);
+                //$user->status='Eliminado';
+
+                $user->delete();
+
+
+
+                $response['result'] = 'ok';
+            }else{
+                $response['msj'] = 'No se pudo eliminar, vuelve a intentarlo';
+            }
+
+        }else{
+            $response['msj'] = 'No se pudo eliminar, vuelve a intentarlo';
+        }
+
+        return $response;
+    }
+
+    /*perfil - usuarios - select*/
+    public function perfilUsuariosSelect(Request $request){
+        $response = [
+            'result' => 'error',
+            'usuario' => [],
+            'msj' => ''
+        ];
+        if($request->has('gymuser_id'))
+        {
+            $gymUser = GymUsers::where('id',$request->get('gymuser_id'))->get()->first();
+            if(!is_null($gymUser))
+            {
+
+                $gymUser->usuario = User::find($gymUser->user_id);
+
+                $response['usuario'] = $gymUser;
+                $response['result'] = 'ok';
+            }else{
+                $response['msj'] = 'No se pudo cargar la información del usuario, vuelve a intentarlo';
+            }
+
+        }else{
+            $response['msj'] = 'No se pudo cargar la información del usuario, vuelve a intentarlo';
+        }
+
+        return $response;
+    }
+
+    /*perfil - usuarios - create*/
+    public function perfilUsuariosCreate(Request $request){
+        $response = [
+            'result' => 'error',
+            'msj' => ''
+        ];
+        if($request->has('editInfo'))
+        {
+            if($request->get('editInfo')==0){
+                //agregamos
+                $data_user = [
+                    'name'      => $request->get('user_name'),
+                    'email'      => $request->get('user_nick'),
+                    'image'      => $request->get('image'),
+                    'registration_mode'      => 'gym',
+                    'role_id'      => 5,
+                    'registration_status'      => 'Activo',
+                    'password'  => \Hash::make($request->get('password'))
+                ];
+
+                $newUser = User::create($data_user);
+
+                $newGymUsers = new GymUsers();
+                $newGymUsers->gym_id = $request->session()->get('gym_id');
+                $newGymUsers->user_id = $newUser->id;
+                $newGymUsers->save();
+
+                $response['result'] = 'ok';
+            }else{
+                //editamos
+
+                $user = User::where('id',$request->get('gymuser_id'))->get()->first();
+                $user->name = $request->get('user_name');
+                $user->image = $request->get('image');
+                if($request->get('password')!='required'){
+                    $user->password = \Hash::make($request->get('password'));
+                }
+                $user->save();
+
+                $response['result'] = 'ok';
+            }
+
+
+        }else{
+            $response['msj'] = 'No se pudo cargar la información del usuario, vuelve a intentarlo';
+        }
+
+        return $response;
+    }
+
+    /*perfil - usuarios - upload - imagearc*/
+    public function perfilUsuariosUploadImage(Request $request){
+        $response = [
+            'result' => 'error',
+            'file' => ''
+        ];
+
+        if ($request->hasFile('file') && $request->file('file')->isValid())
+        {
+            $ext = strtolower(pathinfo($request->file('file')->getClientOriginalName(), PATHINFO_EXTENSION));
+            $filename = $request->file('file')->getClientOriginalName();
+
+            switch ($request->get('type'))
+            {
+
+                case 'images':
+                    if (in_array($ext, ['tiff', 'jpg', 'jpeg', 'png']))
+                    {
+                        $newFile = Files::save($request->file('file')->getRealPath(), $ext, 'users', 'user_');
+
+                        $response['result'] = 'ok';
+                        $response['file'] = $newFile;
+                    }
+                    else
+                    {
+                        $response['result'] = 'error_type';
+                        $response['message'] = 'Solo formatos de TIFF, JPG y PNG';
+                    }
+                    break;
+
+            }
+        }
+        return $response;
+    }
+
+    /*perfil - reportes - comentarios*/
+    public function perfilReportesComentarios(Request $request){
+        $user = Auth::user();
+
+        if(!is_null($user)){
+            if(!$user->registration_mode=='gym'){
+                return redirect('/logout');
+            }else{
+
+                $gym = Gym::find($request->session()->get('gym_id'));
+
+                $gymPurcharses = UserPurchases::where('gym_id', $gym->id)->with('qualification')->get();
+
+                foreach ($gymPurcharses as $gymPurcharse) {
+
+                    $gymPurcharse->usuario = User::find($gymPurcharse->user_id);
+                }
+
+            }
+        }else{
+            return redirect('/');
+        }
+
+        return view('front.gyms.perfil_reporte_comentario', [
+            'user' => $user,
+            'gym' => $gym,
+            'gymPurcharses' => $gymPurcharses
+        ]);
+    }
+
+    /*perfil - reportes - ventas*/
+    public function perfilReportesVentas(Request $request){
+        $user = Auth::user();
+
+        if(!is_null($user)){
+            if(!$user->registration_mode=='gym'){
+                return redirect('/logout');
+            }else{
+
+                $gym = Gym::find($request->session()->get('gym_id'));
+
+                $gymPurcharses = UserPurchases::where('gym_id', $gym->id)->get();
+
+                foreach ($gymPurcharses as $gymPurcharse) {
+
+                    $gymPurcharse->usuario = User::find($gymPurcharse->user_id);
+                }
+
+            }
+        }else{
+            return redirect('/');
+        }
+
+        return view('front.gyms.perfil_reporte_ventas', [
+            'user' => $user,
+            'gym' => $gym,
+            'gymPurcharses' => $gymPurcharses
+        ]);
+    }
+
+    /*perfil - reportes - servicio*/
+    public function perfilReportesServicio(Request $request){
+        $user = Auth::user();
+
+        if(!is_null($user)){
+            if(!$user->registration_mode=='gym'){
+                return redirect('/logout');
+            }else{
+
+                $gym = Gym::find($request->session()->get('gym_id'));
+            }
+        }else{
+            return redirect('/');
+        }
+
+        return view('front.gyms.perfil_reporte_servicio', [
             'user' => $user,
             'gym' => $gym
         ]);
     }
+
+    /*perfil - reportes - servicio - reportar*/
+    public function perfilReportesServicioReportar(Request $request){
+        $response = [
+            'result' => "error",
+            'msj' => ''
+        ];
+
+        $user = Auth::user();
+
+        if(!is_null($user)){
+            if(!$user->registration_mode=='gym'){
+                return redirect('/logout');
+            }else{
+
+                $gym = Gym::find($request->session()->get('gym_id'));
+
+                $parms = [
+                    'GymId' => $gym->id,
+                    'GymName' => $gym->tradename,
+                    'Nombre' => $request->get('nombre'),
+                    'Correo' => $request->get('correo'),
+                    'IDUsuario' => $request->get('idusuario'),
+                    'Comentario' => $request->get('comentario'),
+                ];
+
+                // Send email
+                Mail::send('emails.reporte_servicio', $parms, function($message)use($request){
+                    $message->subject('Reporte de Mal Uso de Servicio - Liberi.com.mx');
+                    $message->from(config('mail.from.address'), config('mail.from.name'));
+
+                    /*foreach(config('mail.to.addresses') as $email)
+                    {*/
+                    $message->to('taquion3x109@gmail.com', 'LIBERI WEB');
+                        //$message->to($email, config('mail.to.name'));
+                    //}
+                });
+
+                $response['result']='ok';
+            }
+        }else{
+            $response['msj']='No se pudo enviar su reporte, vuelva a intentarlo';
+        }
+
+        return $response;
+
+    }
+
+
+
+
+
 
     public function uploadGymImage(Request $request){
         $response = [
@@ -432,381 +739,5 @@ class PerfilController extends Controller
 
 
 
-
-    public function DatosBancariosRegister(Request $request){
-        // se inicia el proceso de registro.
-        //1. validamos que exista una sesion activa
-        //2. recuperamos el gym activo
-        //3. actualizamos el registro del gym
-        //4. redireccionamos a finalizar proceso
-
-        if(is_null($request)){
-            return redirect('/');
-        }
-
-        $user = Auth::user();
-
-        if(!is_null($user)){
-            //recuperamos el registro
-            $gym = Gym::where('user_id', $user->id)->first();
-
-            $gym->terminos_condiciones = ( $request->has('terminos_condiciones') ) ? 1 : 0;
-            $gym->cta_titular = $request->get('cta_titular');
-            $gym->cta_numero = $request->get('cta_numero');
-            $gym->cta_clabe = $request->get('cta_clabe');
-            $gym->cta_banco = $request->get('cta_banco');
-            $gym->cta_pais = $request->get('cta_pais');
-            $gym->save();
-
-            $user->registration_status = 'Finalizado';
-            $user->save();
-
-            return view('registro_finalizacion', [
-                'user' => $user,
-                'gym' => $gym
-            ]);
-        }else{
-            return redirect('/');
-        }
-    }
-
-
-
-
-
-
-
-    public function loadQuotesAjax(Request $request)
-    {
-
-        if($request->type=='sector'){
-
-            $integralservices = DB::table('integralservices_sectors')
-            ->join('integralservice', 'integralservices_sectors.integralservice_id', '=', 'integralservice.id')
-            ->where('integralservices_sectors.subcategoryservices_id', $request->id)
-            ->get();
-
-            $packages = DB::table('packages_sectors')
-            ->join('package', 'packages_sectors.package_id', '=', 'package.id')
-            ->where('packages_sectors.subcategoryservices_id', $request->id)
-            ->get();
-
-            $ciatejservices = Ciatejservice::where('subcategoryservices_id','=',$request->id)->orderBy('title', 'asc')->get();
-        }else{
-
-            $integralservices = DB::table('integralservices_laboratories')
-            ->join('integralservice', 'integralservices_laboratories.integralservice_id', '=', 'integralservice.id')
-            ->where('integralservices_laboratories.thirdcategoryservices_id', $request->id)
-            ->get();
-
-            $packages = DB::table('packages_laboratories')
-            ->join('package', 'packages_laboratories.package_id', '=', 'package.id')
-            ->where('packages_laboratories.thirdcategoryservices_id', $request->id)
-            ->get();
-
-            $ciatejservices = Ciatejservice::where('thirdcategoryservices_id','=',$request->id)->orderBy('title', 'asc')->get();
-        }
-
-
-        return view('front.servicios_industria.cotizador.services', [
-            'integralservices' => $integralservices,
-            'packages' => $packages,
-            'ciatejservices'=>$ciatejservices
-        ]);
-    }
-
-    public function cartOverview(Request $request)
-    {
-        $this->initOrder($request);
-
-        if(!$this->order || $this->order->total == 0)
-        {
-            return redirect('/');
-        }
-
-        return view('pedidos.carrito.carrito', [
-            'order' => $this->order
-        ]);
-    }
-
-    public function updateOrder(Request $request)
-    {
-
-        $this->initOrder($request);
-        if(!$this->order)
-        {
-            $this->order = new Quotation();
-            $this->name = '';
-            $this->phone = '';
-            $this->company_name = '';
-            $this->email = '';
-            $this->message = '';
-            $this->total = 0;
-            $this->voucher = '';
-            $this->authorization = '';
-            $this->order->save();
-            $request->session()->put('order_id', $this->order->id);
-        }
-
-        $this->order->items()->forceDelete();
-
-        $totalOrden = 0;
-        $this->order->updateTotal($totalOrden);
-
-        foreach($request->items as $item)
-        {
-
-            $orderItem = new QuotationItems();
-            $orderItem->quotation_id = $this->order->id;
-            $orderItem->itemid = $item['product_id'];
-            $orderItem->quantity = ($item['quantity'] > 0 ?  $item['quantity'] : 1);
-            $orderItem->amount = $item['price']*($item['quantity'] > 0 ?  $item['quantity'] : 1);
-            $orderItem->price = $item['price'];
-            $orderItem->itemtype = $item['product_type'];
-            $orderItem->save();
-
-            $totalOrden+= ($item['price']*($item['quantity'] > 0 ?  $item['quantity'] : 1));
-        }
-
-        $this->order->updateTotal($totalOrden);
-
-        foreach($this->order->items as $item)
-        {
-            $item->services;
-        }
-
-        return response()->json([
-            'order' => $this->order
-        ]);
-    }
-
-    public function finishOrder(Request $request)
-    {
-        /*para finalizar la orden primero registramos al usuario*/
-        $response = [
-            'result' => 'error',
-            'logued' => 0,
-            'user' => '',
-            'errortype' => ''
-        ];
-
-        $folioOrder =0;
-
-        if ($request->get('name') && $request->get('email'))
-        {
-            $data_user = [
-                'name'      => $request->get('name'),
-                'last_name' => $request->get('company'),
-                'email'     => $request->get('email'),
-                'password'  => bcrypt($request->get('passuser'))
-            ];
-
-            /*******************************************************/
-            $newUser = new User;
-            if ($newUser->isValid($data_user))
-            {
-                $newUser->fill($data_user);
-                $newUser->save();
-
-                $response['result'] = 'ok';
-            }
-            else
-            {
-                $userdata = array(
-                    'email' => $request->get('email'),
-                    'password'=> $request->get('passuser')
-                );
-                if(Auth::attempt($userdata))
-                {
-                    $response['result'] = 'ok';
-                    $response['errortype'] = '';
-                }else
-                {
-                    $response['result'] = 'error';
-                    $response['errortype'] = 'Tu correo ya se encuentra registrado, por favor anota la contraseña correcta';
-                }
-            }
-            /*******************************************************/
-
-            if($response['result'] == 'ok'){
-                /*actualizamos la orden con los datos de usuario*/
-                $this->initOrder($request);
-
-                if($this->order)
-                {
-                    $folioOrder =$this->order->getFolioAttribute();
-
-                    $this->order->name = $request->name;
-                    $this->order->phone = $request->phone;
-                    $this->order->company_name = $request->company;
-                    $this->order->email = $request->email;
-                    $this->order->message = $request->message;
-                    $this->order->folio = $folioOrder;
-                    $this->order->save();
-
-                    /*enviamos el correo*/
-                    $orderFinish = $this->order;
-                    $idEncode = base64_encode($this->order->id);
-                    $dataMail = [
-                        'order' => $orderFinish,
-                        'idEncode'=>$idEncode,
-                        'urlTicket'=>'',
-                        'username'=>$request->email,
-                        'userpass'=>$request->get('passuser')
-                    ];
-
-                    Mail::send('mail.deposit', $dataMail, function ($message) use ($request) {
-                        $message->subject('Cotizacion Servicios');
-                        //$message->from(config('mail.from.address'), config('mail.from.name'));
-                        $message->from('cxc@ciatej.mx', config('SERVICIOS CIATEJ'));
-
-                        $message->to($request->email, $request->name);
-                    });
-
-                    /*cerramos la session*/
-                    $request->session()->forget('order_id');
-                }
-
-                $response['result'] = 'ok';
-
-                return response()->json([
-                    'folioOrder' => $folioOrder,
-                    'result'=>$response['result'],
-                    'errortype'=>''
-                ]);
-            }else{
-                return response()->json([
-                    'folioOrder' => $folioOrder,
-                    'result'=>$response['result'],
-                    'errortype'=>$response['errortype']
-                ]);
-            }
-
-
-
-
-        }else{
-            $response['result'] = 'error';
-            return response()->json([
-                'folioOrder' => $folioOrder,
-                'result'=>$response['result'],
-                'errortype'=>'no hay datos de usuario'
-            ]);
-        }
-
-
-
-
-    }
-
-    public function loginUserOrder(Request $request){
-        $response = [
-            'logued' => 0,
-        ];
-        $userdata = array(
-            'email' => $request->get('txtUserName'),
-            'password'=> $request->get('txtPassUser')
-        );
-        if(Auth::attempt($userdata))
-        {
-            $response['logued'] = 1;
-        }
-        return $response;
-    }
-
-    public function validTicketOrder(Request $request, $id)
-    {
-        $idDecode =base64_decode($id);
-
-        $quotation = Quotation::where('status','=','Revisión')->where('id','=',$idDecode)->get()->first();
-        if(is_null($quotation))
-        {
-            return redirect('/');
-        }
-
-        return view('front.receipt.ticket', [
-            'quotation'=>$quotation
-        ]);
-    }
-
-    public function upload(Request $request)
-    {
-        $response = [
-            'result' => 'error',
-            'quoatation' => ''
-        ];
-
-        if ($request->hasFile('file') && $request->file('file')->isValid())
-        {
-            $quotation = Quotation::find($request->get('quotation_id'));
-
-            if (!is_null($quotation))
-            {
-                $ext = strtolower(pathinfo($request->file('file')->getClientOriginalName(), PATHINFO_EXTENSION));
-                $filename = $request->file('file')->getClientOriginalName();
-
-                switch ($request->get('type'))
-                {
-                    case 'image':
-                        if (in_array($ext, ['jpg', 'jpeg', 'png']))
-                        {
-                            $newFile = Files::save($request->file('file')->getRealPath(), $ext, 'quotation', 'quotation_');
-                            $quotation->voucher = $newFile;
-                            $quotation->save();
-                            $response['result'] = 'ok';
-                            $response['file'] = $quotation->voucher;
-                        }
-                        else
-                        {
-                            $response['result'] = 'error_type';
-                            $response['message'] = 'Only jpg and png images allowed';
-                        }
-                        break;
-                }
-            }
-            else
-            {
-                $response['result'] = 'error_article';
-            }
-        }
-        return $response;
-    }
-
-    public function finishQuote(Request $request)
-    {
-        $response = [
-            'result' => 'error',
-            'folio' => ''
-        ];
-        $quotation = Quotation::find($request->get('quotation_id'));
-
-
-        $folioOrder =$quotation->getFolioAttribute();
-
-        $response['folio'] = $folioOrder;
-
-        if (!is_null($quotation))
-        {
-
-            if($request->get('folio_ticket')==$folioOrder){
-                $quotation->status = 'Pagado';
-                $quotation->save();
-                $response['result'] = 'ok';
-            }else{
-                $response['result'] = 'error_folio';
-
-            }
-
-
-        }
-        else
-        {
-            $response['result'] = 'error_article';
-
-
-        }
-
-        return $response;
-    }
 
 }

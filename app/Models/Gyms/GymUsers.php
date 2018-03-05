@@ -1,17 +1,17 @@
 <?php
 
-namespace App\Models\Users;
+namespace App\Models\Gyms;
 
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Model;
 use Tejuino\Adminbase\Files;
 
-class UserPurchases extends Model
+class GymUsers extends Model
 {
 
     use SoftDeletes;
 
-    protected $table = 'users_purchases';
+    protected $table = 'gym_users';
 
     /************************ ATTRIBUTES ************************/
 
@@ -36,9 +36,7 @@ class UserPurchases extends Model
         return static::where('id', $id)->where('publish_status', 'Publicado')->where('status', 'active')->first();
     }
 
-    public function qualification()
-    {
-        return $this->hasOne('App\Models\Users\UserQualification', 'users_purchases_id', 'id');
+    public function usuario(){
+        $this->hasOne('\App\Models\User', 'id', 'user_id');
     }
-
 }

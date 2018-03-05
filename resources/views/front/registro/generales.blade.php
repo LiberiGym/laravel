@@ -51,15 +51,17 @@
                 <h1>Formulario de Regístro (Anexo 2) <img src="images/barra_amarilla_banner_top.png" height="6" style="width:79px;"/></h1>
                 <p>Ingresa tus datos en el siguiente formulário para continuar con el regístro.</p>
                 <form action="/registro-create-datosgrales" class="form-registro" role="form" class="cmxform" method="post" id="frmDatos">
+                    <input type="hidden" name="diasoperasemana" id="diasoperasemana">
+
                     <fieldset class="col-lg-6">
                         <legend class="form-legend-registro">Datos de Encargado o Dueño</legend>
                         <input type="text" name="manager"  placeholder="Nombre de Encargado o Gerente" class="form-registro-element" required="required">
                         <input type="text" name="manager_cel"  placeholder="Teléfono Celular de Encargado o Gerente" class="form-registro-element" required="required" number="true">
-                        <input type="text" name="gym_monthly_fee"  placeholder="Costo de Mensualidad" class="form-registro-element" required="required" number="true">
+                        <input type="text" name="gym_monthly_fee" id="gym_monthly_fee"  placeholder="Costo de Mensualidad" class="form-registro-element" required="required" number="true">
                         <input type="text" name="gym_phone"  placeholder="Teléfono de Recepción" class="form-registro-element" required="required" number="true">
                         <input type="email" name="gym_email"  placeholder="Correo de Gimnasio" class="form-registro-element" required="required">
-                        <input type="text" name="gym_web"  placeholder="Página Web" class="form-registro-element" required="required">
-                        <input type="text" name="gym_url_video"  placeholder="URL de video" class="form-registro-element" required="required">
+                        <input type="text" name="gym_web"  placeholder="Página Web" class="form-registro-element">
+                        <input type="text" name="gym_url_video"  placeholder="URL de video" class="form-registro-element">
                         <p style="margin-bottom: 0;">Ingresa una breve descripción de tu negocio</p>
                         <textarea id="txtDescripcion" name="gym_description" placeholder="Descripción Máximo 500 caractéres"  class="form-registro-element" style="height: 111px;" required="required"></textarea>
                         <p><span id="lblCharCounter" style="font-size: 16px; color: #1d4289;">500</span> caractéres restantes</p>
@@ -146,8 +148,8 @@
 
                         <div class="clearfix"></div>
 
-                        <input id="calculadoraCond" class="require" name="calculadora" type="checkbox" required="required"> <label for="calculadoraCond" class="form-label-servicios">Acepto el cálculo de costo por visita</label>
-                        <button type="button" name="button" id="btnCalculadora" data-toggle="modal" data-target="#mdlCalculadora">Calculadora</button>
+
+                        <!--<button type="button" name="button" id="btnCalculadora" data-toggle="modal" data-target="#mdlCalculadora">Calculadora</button>-->
 
                         <div class="clearfix"></div>
 
@@ -174,9 +176,9 @@
             </div>-->
             <div class="modal-body" style="background:#DFE0E4;">
                 <h1 style="font-family: 'AvenirLTStd-Black'; font-size: 32px; color: #1d4289; text-align:center; margin-bottom:25px;">¡CALCULA TU COSTO POR VISITA!</h1>
-
+                <form class="form-registro" role="form" style="padding-bottom: 0em;">
                 <div class="row">
-                    <form class="form-registro" role="form">
+
                     <div class="col-lg-8">
                         <div class="col-lg-12" style="margin-bottom:80px;">
                             <label style="color: #1d4289;font-size: 14px;font-family: 'AvenirLTStd-Black';margin-bottom: 0;">Introduce costo de tu mensualidad más completa</label>
@@ -193,7 +195,7 @@
                                 <option value="4">4</option>
                                 <option value="5">5</option>
                                 <option value="6">6</option>
-                                <option value="7">7</option>
+                                <option value="7" selected>7</option>
                             </select>
 
                         </div>
@@ -230,11 +232,20 @@
                             <input type="text" id="txtGananciaLiberi"  placeholder="0.00" class="form-registro-element" disabled="disabled">
                         </div>
                     </div>
-                    </form>
+
+
+
                 </div>
+                <div class="row">
+                    <div class="col-lg-12" style="background: #fff;">
+                        <input id="calculadoraCond" class="require" name="calculadora" type="checkbox" required="required"> <label for="calculadoraCond" class="form-label-servicios">Acepto el cálculo de costo por visita</label>
+                    </div>
+                </div>
+                </form>
             </div>
             <div class="modal-footer" style="background:#DFE0E4;">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal" style="background:#FFD916;">Continuar Registro</button>
+
+                <button type="button" class="btn btn-secondary" style="background:#FFD916;" id="btnAceptarCalculo">Continuar Registro</button>
             </div>
         </div>
     </div>
@@ -265,6 +276,10 @@ $(function() {
 
 });
 $(document).ready(function () {
+
+    //iniciamos la modal de costo de VISITA
+    $('#mdlCalculadora').modal({backdrop: 'static', keyboard: false});
+
     var arrImages = [];
 
     //subir image
@@ -346,12 +361,8 @@ $(document).ready(function () {
             );
 
             if(_diasSelected && _serviceSelected){
-                if($("#calculadoraCond").is(':checked')){
-                    form.submit();
-                    console.log('form.submit()');
-                }else{
-                    swal('Cuidado','Debe aceptar el cálculo de costo por visita','warning');
-                }
+                form.submit();
+                console.log('form.submit()');
 
 
             }else{
@@ -361,8 +372,14 @@ $(document).ready(function () {
     });
 
     //funciones calculadora
-
+    $('#cboDias').on('change',function () {//input[name=daysOpen]
+        calcularVisita();
+    });
     $( "#txtCostoMensualidad" ).keyup(function() {
+        calcularVisita();
+    });
+
+    function calcularVisita(){
         var _diasOperaSemana = $("#cboDias").val();
         var _semanasAnho = 52;
         var _diasOperaMes = (_diasOperaSemana*_semanasAnho)/12;
@@ -408,32 +425,47 @@ $(document).ready(function () {
             $( "#txtGananciaGym" ).val('');
             $( "#txtGananciaLiberi" ).val('');
         }
+    }
 
+    $("#btnAceptarCalculo").on('click', function (){
+        if($("#calculadoraCond").is(':checked')){
 
-        //FUNCION PARA FORMATEAR A MONEDA
-        function number_format(value, decimals, separators) {
-            decimals = decimals >= 0 ? parseInt(decimals, 0) : 2;
-            separators = separators || [',', "'", '.'];
-            var number = (parseFloat(value) || 0).toFixed(decimals);
-            if (number.length <= (4 + decimals))
-                return number.replace('.', separators[separators.length - 1]);
-            var parts = number.split(/[-.]/);
-            value = parts[parts.length > 1 ? parts.length - 2 : 0];
-            var result = value.substr(value.length - 3, 3) + (parts.length > 1 ?
-                separators[separators.length - 1] + parts[parts.length - 1] : '');
-            var start = value.length - 6;
-            var idx = 0;
-            while (start > -3) {
-                result = (start > 0 ? value.substr(start, 3) : value.substr(0, 3 + start))
-                    + separators[idx] + result;
-                idx = (++idx) % 2;
-                start -= 3;
+            var _diasOperaSemana = $("#cboDias").val();
+            var _costoMensualidad = $( "#txtCostoMensualidad" ).val();
+
+            if(isNaN(_costoMensualidad) || _costoMensualidad == "" || _costoMensualidad<=0){
+                swal('Cuidado','Por favor ingrese una cantidad en el Costo de Mensualidad','warning');
+            }else{
+                $("#diasoperasemana").val(_diasOperaSemana);
+                $("#gym_monthly_fee").val(_costoMensualidad);
+                $('#mdlCalculadora').modal('hide');
             }
-            return (parts.length == 3 ? '-' : '') + result;
+        }else{
+            swal('Cuidado','Debe aceptar el cálculo de costo por visita','warning');
         }
-
-
     });
+
+    //FUNCION PARA FORMATEAR A MONEDA
+    function number_format(value, decimals, separators) {
+        decimals = decimals >= 0 ? parseInt(decimals, 0) : 2;
+        separators = separators || [',', "'", '.'];
+        var number = (parseFloat(value) || 0).toFixed(decimals);
+        if (number.length <= (4 + decimals))
+            return number.replace('.', separators[separators.length - 1]);
+        var parts = number.split(/[-.]/);
+        value = parts[parts.length > 1 ? parts.length - 2 : 0];
+        var result = value.substr(value.length - 3, 3) + (parts.length > 1 ?
+            separators[separators.length - 1] + parts[parts.length - 1] : '');
+        var start = value.length - 6;
+        var idx = 0;
+        while (start > -3) {
+            result = (start > 0 ? value.substr(start, 3) : value.substr(0, 3 + start))
+                + separators[idx] + result;
+            idx = (++idx) % 2;
+            start -= 3;
+        }
+        return (parts.length == 3 ? '-' : '') + result;
+    }
 
     cityEdit.init();
 

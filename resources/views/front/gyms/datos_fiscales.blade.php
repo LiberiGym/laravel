@@ -25,7 +25,13 @@
                     <li><a href="/perfil/datos-bancarios">Datos Bancarios <span><i class="fa fa-angle-right" aria-hidden="true"></i></span></a></li>
                     <li><a href="/perfil/usuarios">Usuarios <span><i class="fa fa-angle-right" aria-hidden="true"></i></span></a></li>
                     <li><a href="/perfil/clientes">Clientes <span><i class="fa fa-angle-right" aria-hidden="true"></i></span></a></li>
-                    <li><a href="/perfil/reportes">Reportes <span><i class="fa fa-angle-right" aria-hidden="true"></i></span></a></li>
+                    <li><a href="#">Reportes <span><i class="fa fa-angle-right" aria-hidden="true"></i></span></a>
+                        <ul style="margin-left: 30px;margin-top: 25px;">
+                            <li><a href="/perfil/reportes/comentarios">Comentarios <span><i class="fa fa-angle-right" aria-hidden="true"></i></span></a></li>
+                            <li><a href="/perfil/reportes/ventas">Ventas <span><i class="fa fa-angle-right" aria-hidden="true"></i></span></a></li>
+                            <li><a href="/perfil/reportes/servicio">Mal Uso de Servicio <span><i class="fa fa-angle-right" aria-hidden="true"></i></span></a></li>
+                        </ul>
+                    </li>
                 </ul>
                 <button type="button" name="button" id="btnCerrarSesion" class="cerrar-session">Cerrar Sesión</button>
 
@@ -99,6 +105,7 @@
 @section('js')
 <script src="/admin_assets/plugins/dropzone/dropzone.js"></script>
 <script src="/admin_assets/plugins/dropzone/uploader.js"></script>
+<script src="/assets/js/perfil_gym.js"></script>
 <script>
 
 $(document).ready(function () {

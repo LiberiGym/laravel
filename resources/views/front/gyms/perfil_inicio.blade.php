@@ -31,14 +31,20 @@
                     <li><a href="/perfil/datos-bancarios">Datos Bancarios <span><i class="fa fa-angle-right" aria-hidden="true"></i></span></a></li>
                     <li><a href="/perfil/usuarios">Usuarios <span><i class="fa fa-angle-right" aria-hidden="true"></i></span></a></li>
                     <li><a href="/perfil/clientes">Clientes <span><i class="fa fa-angle-right" aria-hidden="true"></i></span></a></li>
-                    <li><a href="/perfil/reportes">Reportes <span><i class="fa fa-angle-right" aria-hidden="true"></i></span></a></li>
+                    <li><a href="#">Reportes <span><i class="fa fa-angle-right" aria-hidden="true"></i></span></a>
+                        <ul style="margin-left: 30px;margin-top: 25px;">
+                            <li><a href="/perfil/reportes/comentarios">Comentarios <span><i class="fa fa-angle-right" aria-hidden="true"></i></span></a></li>
+                            <li><a href="/perfil/reportes/ventas">Ventas <span><i class="fa fa-angle-right" aria-hidden="true"></i></span></a></li>
+                            <li><a href="/perfil/reportes/servicio">Mal Uso de Servicio <span><i class="fa fa-angle-right" aria-hidden="true"></i></span></a></li>
+                        </ul>
+                    </li>
                 </ul>
                 <button type="button" name="button" id="btnCerrarSesion" class="cerrar-session">Cerrar Sesión</button>
 
             </div>
             <div class="col-lg-9">
                 <h1 style="margin-bottom: 45px;">Mi Perfil <img src="/images/barra_amarilla_banner_top.png" height="6" style="width:79px;"/></h1>
-                <form action="/perfil-inicio" class="form-registro" role="form" class="cmxform" method="post" id="frmDatos">
+                <form action="/perfil" class="form-registro" role="form" class="cmxform" method="post" id="frmDatos">
                     <input type="hidden" name="editInfo" value="1">
                     <fieldset class="col-lg-6">
                         <legend class="form-legend-registro">Datos de Encargado o Dueño</legend>
@@ -47,8 +53,8 @@
                         <input type="text" name="gym_monthly_fee"  placeholder="Costo de Mensualidad" class="form-registro-element" required="required" number="true" value="{{$gym->gym_monthly_fee}}">
                         <input type="text" name="gym_phone"  placeholder="Teléfono de Recepción" class="form-registro-element" required="required" number="true" value="{{$gym->gym_phone}}">
                         <input type="email" name="gym_email"  placeholder="Correo de Gimnasio" class="form-registro-element" required="required" value="{{$gym->gym_email}}">
-                        <input type="text" name="gym_web"  placeholder="Página Web" class="form-registro-element" required="required" value="{{$gym->gym_web}}">
-                        <input type="text" name="gym_url_video"  placeholder="URL de video" class="form-registro-element" required="required" value="{{$gym->gym_url_video}}">
+                        <input type="text" name="gym_web"  placeholder="Página Web" class="form-registro-element" value="{{$gym->gym_web}}">
+                        <input type="text" name="gym_url_video"  placeholder="URL de video" class="form-registro-element" value="{{$gym->gym_url_video}}">
                         <p style="margin-bottom: 0;">Ingresa una breve descripción de tu negocio</p>
                         <textarea id="txtDescripcion" name="gym_description" placeholder="Descripción Máximo 500 caractéres"  class="form-registro-element" style="height: 111px;" required="required">{{$gym->gym_description}}</textarea>
                         <p><span id="lblCharCounter" style="font-size: 16px; color: #1d4289;">500</span> caractéres restantes</p>
@@ -155,6 +161,7 @@
 <script type="text/javascript" src="js/jquery.timepicker.js"></script>
 <script src="/admin_assets/plugins/dropzone/dropzone.js"></script>
 <script src="/admin_assets/plugins/dropzone/uploader.js"></script>
+<script src="/assets/js/perfil_gym.js"></script>
 
 <script>
 $(function() {
@@ -365,23 +372,6 @@ $(document).ready(function () {
             }
         }
     });
-
-    $("#btnCerrarSesion").on('click', function(){
-        swal({
-            title: 'Cerrar Sesión',
-            text: "¿Deseas cerrar tu sesión?",
-            type: 'warning',
-            showCancelButton: true,
-            confirmButtonText: 'Si',
-            cancelButtonText: 'No'
-            }).then((result) => {
-                if (result.value) {
-                    window.location.href="/logout";
-                }
-            });
-    });
-
-
 
 });
 

@@ -35,11 +35,23 @@ var formslayout = {
                 if(response.result === "ok"){
                     $('#form-login')[0].reset();
 
-                    window.location.href="/perfil";
+                    if(response.type==2){
+                        window.location.href="/perfil";
 
+                    }else if(response.type==5){
+                        window.location.href="/perfil";
+
+                    }else if(response.type==3){
+                        window.location.href="/administracion";
+                    }
                 }
                 else{
-                    swal('Error',response.message,'warning');
+                    if(response.type==1){
+                        window.location.href="/logout";
+
+                    }else{
+                        swal('Error',response.message,'warning');
+                    }
                 }
 
             }

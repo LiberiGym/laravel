@@ -1,7 +1,7 @@
 <?php
-/*\Artisan::call('config:cache');
+\Artisan::call('config:cache');
 \Artisan::call('cache:clear');
-\Artisan::call('config:clear');*/
+\Artisan::call('config:clear');
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -51,7 +51,7 @@
                     <li><a href="#howWorks" class="scroll"><span data-hover="Cómo Funciona">Cómo Funciona</span></a></li>
                     <li><a href="#contact" class="scroll"><span data-hover="Contáctanos">Contáctanos</span></a></li>
                     <li><a href="https://Facebook.com/liberiapp/" target="_blank"><span data-hover="Facebook"><i class="fa fa-facebook" aria-hidden="true"></i></span></a></li>
-                    <li><a href="#contact" class="scroll"><span data-hover="Twitter"><i class="fa fa-twitter" aria-hidden="true"></i></span></a></li>
+
                     <li><a href="https://www.instagram.com/liberiapp/" target="_blank"><span data-hover="Instagram"><i class="fa fa-instagram" aria-hidden="true"></i></span></a></li>
                     <li id="frmLogin">
                         <form class="nav-form" action="javascript:formslayout.loginUser();" method="post" role="form" class="cmxform" id="form-login">

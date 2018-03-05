@@ -69,8 +69,6 @@ class RegisterController extends Controller
             'msj' => ''
         ];
 
-
-
         $recoverUser = User::getByEmail($request->email);
         if(is_null($recoverUser))
         {
@@ -82,6 +80,7 @@ class RegisterController extends Controller
                 'location_id'      => $request->get('location'),
                 'state_id'      => $request->get('state'),
                 'registration_mode'      => 'gym',
+                'role_id'      => 2,
                 'registration_status'      => 'Pendiente',
                 'password'  => \Hash::make($request->get('password')),
                 'terminos_condiciones'  => ($request->has('terminos_condiciones'))?1:0
@@ -139,9 +138,6 @@ class RegisterController extends Controller
             //existe, validamos si el registro esta completo o falta
             if($recoverUser->registration_status=='Pendiente'){
                 //registro incompleto, recuperamos los datos y los dirigimos a la segunda pantalla de registro
-
-
-
                 $userdata = array(
                     'email' => $request->get('email'),
                     'password'=> $request->get('password')
@@ -309,6 +305,7 @@ class RegisterController extends Controller
             $gym->gym_zipcode = $request->get('gym_zipcode');
             $gym->lat = $request->get('lat');
             $gym->lng = $request->get('lng');
+            $gym->diasopera = $request->get('diasoperasemana');
             $gym->save();
 
             //eliminamos registros existentes de horarios y servicios
@@ -491,7 +488,7 @@ class RegisterController extends Controller
             //recuperamos el registro
             $gym = Gym::where('user_id', $user->id)->first();
 
-            
+
 
             $gym->terminos_condiciones = ( $request->has('terminos_condiciones') ) ? 1 : 0;
             $gym->cta_titular = $request->get('cta_titular');

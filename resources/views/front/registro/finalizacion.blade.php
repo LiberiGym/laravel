@@ -40,7 +40,7 @@
                 <h1 class="form-registro-final" style="margin-bottom:20px;">Registro Exitoso</h1>
                 <p>¡Ya eres parte de la mejor red<br>de gimnasios, <span class="brand-text">LIBERI</span>!</p>
                 <img src="images/registro_button_finalizar.png" alt="" style="width:173px; margin-bottom:40px;">
-                <p>Un representante de LIBERI te visitará en un lapso<br>de 15 días hábiles para firmar tu contrato.</p>
+                <p>Un representante de LIBERI te visitará en <br>los próximos días para firmar tu contrato</p>
                 <a href="/perfil"><button type="button" name="button" class="form-button-finalizar">Ir a mi Perfil</button></a>
 
             </div>

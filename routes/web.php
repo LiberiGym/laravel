@@ -145,8 +145,8 @@ Route::any('/perfil/reportes/ventas','PerfilController@perfilReportesVentas');
 Route::any('/perfil/reportes/servicio','PerfilController@perfilReportesServicio');
 Route::post('/perfil/reportes/servicio/reportar','PerfilController@perfilReportesServicioReportar');
 
-Route::any('/perfil/clientes','PerfilController@perfilClientes');
-Route::any('/perfil/reportes','PerfilController@perfilReportes');
+/*Route::any('/perfil/clientes','PerfilController@perfilClientes');
+Route::any('/perfil/reportes','PerfilController@perfilReportes');*/
 
 /*!--PERFIL GYM--*/
 
@@ -164,8 +164,9 @@ Route::any('/administracion/promociones','PerfilController@adminPromociones');
 Route::post('/administracion/promociones/delete','PerfilController@adminPromocionesDelete');
 Route::post('/administracion/promociones/select','PerfilController@adminPromocionesSelect');
 Route::post('/administracion/promociones/create','PerfilController@adminPromocionesCreate');
-
-
+Route::any('/administracion/clientes/gym/{id}','PerfilController@adminClientesGym');
+Route::any('/administracion/clientes/gym/datos-fiscales/{id}','PerfilController@adminClientesGymDFis');
+Route::any('/administracion/clientes/gym/datos-bancarios/{id}','PerfilController@adminClientesGymDBan');
 
 /*!--PERFIL ADMINISTRACION--*/
 

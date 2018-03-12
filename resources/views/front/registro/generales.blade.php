@@ -66,6 +66,9 @@
                         <textarea id="txtDescripcion" name="gym_description" placeholder="Descripción Máximo 500 caractéres"  class="form-registro-element" style="height: 111px;" required="required"></textarea>
                         <p><span id="lblCharCounter" style="font-size: 16px; color: #1d4289;">500</span> caractéres restantes</p>
 
+                        <p style="margin-bottom: 0;">Ingresa la leyenda de horario para mostrar</p>
+                        <input type="text" name="gym_schedule"  placeholder="Ejemplo: Lunes a Viernes de 6:00 am a 10:00 pm" class="form-registro-element" required="required">
+
                         <legend class="form-legend-registro">Selecciona los días que opera:</legend>
                         <input id="lunes" name="daysOpen[]" type="checkbox" value="lunes" class="diasSemana" > <label for="lunes" class="form-label-time">Lunes</label>
                         <input id="lunesDe" name="lunesDe" type="text" class="form-registro-time" placeholder="De:" required="required"/>

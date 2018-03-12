@@ -17,7 +17,8 @@ class HomeController extends BaseController
         \Artisan::call('config:clear');
 
         return view('front.web.inicio', [
-            'states' => \App\Models\States\State::getAll()
+            'states' => \App\Models\States\State::getAll(),
+            'terminos' => \App\Models\Terminoscondiciones\Terminocondicion::get()->first()
         ]);
     }
 

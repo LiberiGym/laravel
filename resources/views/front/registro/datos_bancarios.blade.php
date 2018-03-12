@@ -52,7 +52,7 @@
                         <input type="text" name="cta_banco" value="{{$gym->cta_banco}}" placeholder="Banco" class="form-registro-element" required="required">
                         <input type="text" name="cta_pais" value="{{$gym->cta_pais}}" placeholder="País" class="form-registro-element" required="required">
 
-                        <input id="terminosCond" name="terminos_condiciones" type="checkbox" > <label for="terminosCond" class="form-label-servicios">Acepto los <a href="#">Términos y Condiciones</a></label>
+                        <input id="terminosCond" name="terminos_condiciones" type="checkbox" > <label for="terminosCond" class="form-label-servicios">Acepto los <a href="#" data-toggle="modal" data-target="#mdlTerminosBancarios">Términos y Condiciones</a></label>
                         <button type="button" name="button"  id="btnGuardar">Finalizar</button>
                     </fieldset>
                 </form>
@@ -63,6 +63,24 @@
     </div>
 </div>
 <!-- //about -->
+
+<!-- modal terminos y condiciones -->
+<div class="modal fade" id="mdlTerminosBancarios" tabindex="-1" role="dialog" aria-labelledby="mdlTerminosBancarios" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Términos y Condiciones de Liberi</h5>
+            </div>
+            <div class="modal-body">
+                <p>{{$terminos->terminos_web_bancarios}}</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- //modal terminos y condiciones -->
 @endsection
 @section('js')
 <script>

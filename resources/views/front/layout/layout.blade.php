@@ -167,7 +167,7 @@
                 <h5 class="modal-title">Términos y Condiciones de Liberi</h5>
             </div>
             <div class="modal-body">
-                <p>Términos y Condiciones de Liberi</p>
+                <p>{{$terminos->terminos_web_inicio}}</p>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>

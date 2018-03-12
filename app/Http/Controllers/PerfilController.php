@@ -258,6 +258,8 @@ class PerfilController extends Controller
                         $gym->gym_zipcode = $request->get('gym_zipcode');
                     }
 
+                    $gym->gym_schedule = $request->get('gym_schedule');
+
                     $gym->manager = $request->get('manager');
                     $gym->manager_cel = $request->get('manager_cel');
 
@@ -739,15 +741,17 @@ class PerfilController extends Controller
         $user = Auth::user();
 
         if(!is_null($user)){
+
             if(!$user->registration_mode=='gym'){
                 return redirect('/logout');
             }else{
-
+                //dd($request->session()->get('gym_id'));
                 $gym = Gym::find($request->session()->get('gym_id'));
             }
         }else{
             return redirect('/');
         }
+
 
         return view('front.gyms.perfil_reporte_servicio', [
             'user' => $user,
@@ -1264,6 +1268,121 @@ class PerfilController extends Controller
         }
 
         return $response;
+    }
+
+    /*Admin - clientes - gym*/
+    public function adminClientesGym(Request $request, $id){
+
+        $user = Auth::user();
+
+        $gym = Gym::where('id', $id)->first();
+        if(!is_null($gym)){
+            //cargamos la informacion de inicio
+            $schedules = GymSchedule::where('gym_id',$gym->id)->orderBy('day', 'asc')->get();
+            $services = GymService::where('gym_id',$gym->id)->get();
+            $categories = Category::orderBy('title', 'asc')->get();
+            $imagesGym = GymImage::where('gym_id', $gym->id)->get();
+
+            $servicesSelected = [];
+            foreach($services as $service){
+                array_push($servicesSelected,$service->category_id);
+            }
+
+            $schedulesSelected = [
+                ['day'=>1, 'inicia'=>'', 'termina'=>'', 'checked'=>'false'],
+                ['day'=>2, 'inicia'=>'', 'termina'=>'', 'checked'=>'false'],
+                ['day'=>3, 'inicia'=>'', 'termina'=>'', 'checked'=>'false'],
+                ['day'=>4, 'inicia'=>'', 'termina'=>'', 'checked'=>'false'],
+                ['day'=>5, 'inicia'=>'', 'termina'=>'', 'checked'=>'false'],
+                ['day'=>6, 'inicia'=>'', 'termina'=>'', 'checked'=>'false'],
+                ['day'=>7, 'inicia'=>'', 'termina'=>'', 'checked'=>'false']
+            ];
+            foreach($schedules as $schedule){
+                if($schedule->day=='1'){
+                    $schedulesSelected[0]['inicia']=$schedule->start_time;
+                    $schedulesSelected[0]['termina']=$schedule->end_time;
+                    $schedulesSelected[0]['checked']='checked';
+                }
+                if($schedule->day=='2'){
+                    $schedulesSelected[1]['inicia']=$schedule->start_time;
+                    $schedulesSelected[1]['termina']=$schedule->end_time;
+                    $schedulesSelected[1]['checked']='checked';
+                }
+                if($schedule->day=='3'){
+                    $schedulesSelected[2]['inicia']=$schedule->start_time;
+                    $schedulesSelected[2]['termina']=$schedule->end_time;
+                    $schedulesSelected[2]['checked']='checked';
+                }
+                if($schedule->day=='4'){
+                    $schedulesSelected[3]['inicia']=$schedule->start_time;
+                    $schedulesSelected[3]['termina']=$schedule->end_time;
+                    $schedulesSelected[3]['checked']='checked';
+                }
+                if($schedule->day=='5'){
+                    $schedulesSelected[4]['inicia']=$schedule->start_time;
+                    $schedulesSelected[4]['termina']=$schedule->end_time;
+                    $schedulesSelected[4]['checked']='checked';
+                }
+                if($schedule->day=='6'){
+                    $schedulesSelected[5]['inicia']=$schedule->start_time;
+                    $schedulesSelected[5]['termina']=$schedule->end_time;
+                    $schedulesSelected[5]['checked']='checked';
+                }
+                if($schedule->day=='7'){
+                    $schedulesSelected[6]['inicia']=$schedule->start_time;
+                    $schedulesSelected[6]['termina']=$schedule->end_time;
+                    $schedulesSelected[6]['checked']='checked';
+                }
+            }
+        }else{
+            return redirect('/');
+        }
+
+        return view('front.admin.perfil_gym_generales', [
+            'user' => $user,
+            'gym' => $gym,
+            'categories' => $categories,
+            'schedulesSelected' => $schedulesSelected,
+            'servicesSelected' => $servicesSelected,
+            'imagesGym' => (is_null($imagesGym))? [] : $imagesGym
+        ]);
+
+    }
+
+    /*Admin - clientes - gym - Datos Fiscales*/
+    public function adminClientesGymDFis(Request $request, $id){
+
+        $user = Auth::user();
+
+        $gym = Gym::where('id', $id)->first();
+
+        if(is_null($gym)){
+            return redirect('/');
+        }
+
+        return view('front.admin.perfil_gym_datos_fiscales', [
+            'user' => $user,
+            'gym' => $gym
+        ]);
+
+    }
+
+    /*Admin - clientes - gym - Datos Bancarios*/
+    public function adminClientesGymDBan(Request $request, $id){
+
+        $user = Auth::user();
+        $gym = Gym::where('id', $id)->get()->first();
+
+        if(is_null($gym)){
+
+            return redirect('/');
+        }
+
+        return view('front.admin.perfil_gym_datos_bancarios', [
+            'user' => $user,
+            'gym' => $gym
+        ]);
+
     }
 
 

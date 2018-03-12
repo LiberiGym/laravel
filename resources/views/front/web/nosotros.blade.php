@@ -72,8 +72,8 @@
         </div>
         <div class="contact-form">
             <form action="javascript:formslayout.contacto();" method="post" class="form-contacto" role="form" class="cmxform" id="form-contacto">
-                <input type="text" placeholder="Nombre" name="contact_name" required="required" class="form-contacto-element" style="width:47%; margin-right:10px;">
-                <input type="text" placeholder="Teléfono" name="contact_phone" required="required" class="form-contacto-element" style="width:47%;">
+                <input type="text" placeholder="Nombre" name="contact_name" required="required" class="form-contacto-element" style="width:48%; margin-right:10px;">
+                <input type="text" placeholder="Teléfono" name="contact_phone" required="required" class="form-contacto-element" style="width:48%;">
                 <input type="email" placeholder="Correo Electrónico" name="contact_email" required="required" class="form-contacto-element">
                 <textarea placeholder="Mensaje" name="contact_message" required="required" class="form-contacto-texarea"></textarea>
                 <div class="" align="center">

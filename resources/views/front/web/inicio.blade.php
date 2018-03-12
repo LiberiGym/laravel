@@ -22,7 +22,7 @@
                             <option value="{{$state->id}}">{{$state->title}}</option>
                             @endforeach
                         </select>
-                        <select class="" name="location" id="cboLocation" class="form-registro-element" style="width:47%;" required="required">
+                        <select class="" name="location" id="cboLocation" class="form-registro-element" style="width:50%;" required="required">
                             <option value="">Ciudad</option>
                         </select>
                         <input type="password" name="password" id="password" placeholder="Crear Contraseña" class="form-registro-element" required="required">
@@ -50,7 +50,7 @@
 
             </div>
             <div class="col-md-6 col-sm-6 col-xs-6 w3_agileits-about-right">
-                <h3 class="agileits-title text-center"><img src="images/logo_blue.png" class="imgLogo"/></h3>
+                <h3 class="agileits-title text-center"><img src="images/logo_blue.png" style="width:374px;"/></h3>
                 <h1>Sobre Nosotros <img src="images/barra_amarilla_banner_top.png" height="6" style="width:79px;"/></h1>
                 <p style="font-style: italic;">¡Ejercítate a tu ritmo, haciendo lo que te gusta, cuando tú quieras!</p>
                 <p style="width:80%; margin-bottom: 14px;">En Liberi creamos la aplicación perfecta para que no haya pretextos a la hora de hacer ejercicio. Nuestra aplicación te permite elegir entre múltiples establecimientos de acondicionamiento deportivo a un precio accesible, sin plazos forzosos.</p>
@@ -103,8 +103,8 @@
         </div>
         <div class="contact-form">
             <form action="javascript:formslayout.contacto();" method="post" class="form-contacto" role="form" class="cmxform" id="form-contacto">
-                <input type="text" placeholder="Nombre" name="contact_name" required="required" class="form-contacto-element" style="width:47%; margin-right:10px;">
-                <input type="text" placeholder="Teléfono" name="contact_phone" required="required" class="form-contacto-element" style="width:47%;">
+                <input type="text" placeholder="Nombre" name="contact_name" required="required" class="form-contacto-element" style="width:48%; margin-right:10px;">
+                <input type="text" placeholder="Teléfono" name="contact_phone" required="required" class="form-contacto-element" style="width:48%;">
                 <input type="email" placeholder="Correo Electrónico" name="contact_email" required="required" class="form-contacto-element">
                 <textarea placeholder="Mensaje" name="contact_message" required="required" class="form-contacto-texarea"></textarea>
                 <div class="" align="center">

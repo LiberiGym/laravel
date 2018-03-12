@@ -116,6 +116,7 @@ class RegisterController extends Controller
                 $newGym->save();
 
                 $request->session()->put('user_id', $user->id);
+                $request->session()->put('gym_id', $newGym->id);
 
                 //recuperamos el registro
                 /*$gym = Gym::where('user_id', $user->id)->first();
@@ -318,6 +319,7 @@ class RegisterController extends Controller
             $gym->lat = $request->get('lat');
             $gym->lng = $request->get('lng');
             $gym->diasopera = $request->get('diasoperasemana');
+            $gym->gym_schedule = $request->get('gym_schedule');
             $gym->save();
 
             //eliminamos registros existentes de horarios y servicios
@@ -473,7 +475,8 @@ class RegisterController extends Controller
 
             return view('front.registro.datos_bancarios', [
                 'user' => $user,
-                'gym' => $gym
+                'gym' => $gym,
+                'terminos' => \App\Models\Terminoscondiciones\Terminocondicion::get()->first()
             ]);
 
         }else{

@@ -81,7 +81,7 @@
                                     <td>{{$gym->manager}}</td>
                                     <td>{{$gym->manager_cel}}</td>
                                     <td>{{$gym->usuario->email}}</td>
-                                    <td><button type="button" class="btn btn-success btn-icon btn-sm btn-editar" data-id="{{  $gym->id }}" style="width: 44px;background: #fdb429; margin-right:10px;">Ver</button></td>
+                                    <td><a href="/administracion/clientes/gym/{{  $gym->id }}"><button type="button" class="btn btn-success btn-icon btn-sm btn-editar" data-id="{{  $gym->id }}" style="width: 44px;background: #fdb429; margin-right:10px;">Ver</button></a></td>
 
                                 </tr>
                                 @endforeach

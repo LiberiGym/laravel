@@ -38,6 +38,9 @@ var formslayout = {
                     if(response.type==2){
                         window.location.href="/perfil";
 
+                    }else if(response.type==5){
+                        window.location.href="/perfil";
+
                     }else if(response.type==3){
                         window.location.href="/administracion";
                     }

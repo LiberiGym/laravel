@@ -453,10 +453,6 @@ nav.navbar.navbar-default {
 
 
 /*-- about --*/
-
-.imgLogo{
-    width:374px;
-}
 .agileits-about {
     background:url(../images/banner_sobre_nosotros.png) no-repeat center;
     position: relative;
@@ -940,7 +936,7 @@ h4.modal-title {
 	.container {
 		width: 94%;
 	}
-	.navbar-nav > li:nth-child(5) a {
+	.navbar-nav > li:nth-child(4) a {
 		margin-right: 2em !important;
 		margin-left: 12em;
 	}
@@ -1092,7 +1088,7 @@ h4.modal-title {
 	.banner-bottom {
 		margin: 1em 0 0;
 	}
-	.navbar-nav > li:nth-child(5) a {
+	.navbar-nav > li:nth-child(4) a {
        margin-left: 10em;
 	}
 	.agile-banner-bottom-grid1 {
@@ -1128,7 +1124,7 @@ h4.modal-title {
 	}
 }
 @media screen and (max-width: 991px){
-	.navbar-nav > li:nth-child(5) a {
+	.navbar-nav > li:nth-child(4) a {
 		margin-left: 8em;
 	}
 	.w3ls-text h3 {
@@ -1218,7 +1214,7 @@ h4.modal-title {
 	.navbar-nav > li > a {
 		margin: 0em 1.75em;
 	}
-	.navbar-nav > li:nth-child(5) a {
+	.navbar-nav > li:nth-child(4) a {
 		margin-left: 12em;
 	}
 	.agile-banner-bottom-grid1 {
@@ -1249,7 +1245,7 @@ h4.modal-title {
 		margin: 0 0 2% 64%;
 	}
 	.w3_agileits-about-right {
-		/*padding: 0 0 0 3em;*/
+		padding: 0 0 0 3em;
 	}
 	.wthreelocationsaits .grid figure {
 		width: 32.1%;
@@ -1312,14 +1308,9 @@ h4.modal-title {
 	}
 }
 @media screen and (max-width: 800px){
-
-    .imgLogo{
-        width:100%;
-    }
-
-	.navbar-nav > li:nth-child(5) a {
-		margin-right: 0 !important;
-		margin-left: 0 !important;
+	.navbar-nav > li:nth-child(4) a {
+		margin-right: 0.6em !important;
+		margin-left: 5em !important;
 	}
 	.w3_navigation_pos h1 a span {
 		padding: .1em .4em;
@@ -1365,7 +1356,7 @@ h4.modal-title {
 		left: 53%;
 	}
 	.w3_agileits-about-right {
-		width: 100%;
+		width: 57%;
 	}
 	.w3_agileits-about-left{
 		width:43%;
@@ -1500,14 +1491,8 @@ h4.modal-title {
 	.navbar-nav > li > a {
 		margin: 0em 1.85em;
 	}
-    .contact-form {
-        width: 100%;
-    }
 }
 @media screen and (max-width: 768px){
-    .imgLogo{
-        width:100%;
-    }
 	.agile-section {
 		padding: 3em 0;
 	}
@@ -1520,8 +1505,8 @@ h4.modal-title {
 	.navbar-nav > li > a {
 		font-size: 0.9em;
 	}
-	.navbar-nav > li:nth-child(5) a {
-     	margin-left: 0 !important;
+	.navbar-nav > li:nth-child(4) a {
+     	margin-left: 9em !important;
 	}
 	.agileits-about span.wthree-line {
 		top: 15%;
@@ -1617,21 +1602,15 @@ h4.modal-title {
 	.agileits-team i.fa.fa-ellipsis-h {
 		top: 14%;
 	}
-    .contact-form {
-        width: 100%;
-    }
 }
 @media screen and (max-width: 767px){
-    .imgLogo{
-        width:100%;
-    }
 	.navbar-nav {
 		margin: 0;
 		text-align: center;
-		padding: 1em 0 0;
+		padding: 1.5em 0 0;
 	}
 	nav.navbar.navbar-default {
-		/*background: rgba(0, 0, 0, 0.41);*/
+		background: rgba(0, 0, 0, 0.41);
 		padding: 1em 0;
 	}
 	.navbar-default .navbar-collapse, .navbar-default .navbar-form {
@@ -1641,10 +1620,6 @@ h4.modal-title {
 	.navbar-nav > li > a {
 		margin: 1.85em 0;
 	}
-
-    .navbar-nav > li > a > img {
-		width: auto;
-	}
 	.w3_navigation_pos {
 		left: 5%;
 		top:7%;
@@ -1653,39 +1628,30 @@ h4.modal-title {
 	.w3_navigation_pos h1 a{
 		display:inline-block;
 	}
-    .w3_navigation_pos h1 a img{
-    	height: 50px;
-	}
-	.navbar-nav > li:nth-child(5) a {
+	.navbar-nav > li:nth-child(4) a {
 		margin-left: 0 !important;
 		margin-right: 0 !important;
 	}
 	.navbar-default .navbar-toggle {
-		border-color: #ffb500;
-		background: #ffb500;
+		border-color: #046d32;
+		background: #046d32;
 	}
 	.navbar-default .navbar-toggle .icon-bar {
-		background-color: #1d4289;
+		background-color: #ffb500;
 	}
 	.navbar-default .navbar-toggle:hover, .navbar-default .navbar-toggle:focus {
-		background-color: #ffb500;
+		background-color: #046d32;
 	}
 	div#bs-example-navbar-collapse-1 {
 		position: absolute;
-		width: 100%;
+		width: 95%;
 		background: rgba(0, 0, 0, 0.85);
 		z-index: 999;
 		padding-bottom: .5em;
 		margin-top:1.2em;
 	}
-    .contact-form {
-        width: 100%;
-    }
 }
 @media screen and (max-width: 736px){
-    .imgLogo{
-        width:100%;
-    }
 	.agileits-about span.wthree-line {
 		top: 14%;
 	}
@@ -1779,14 +1745,8 @@ h4.modal-title {
 	.blog i.fa.fa-ellipsis-h {
 		left: 49%;
 	}
-    .contact-form {
-        width: 100%;
-    }
 }
 @media screen and (max-width: 667px){
-    .imgLogo{
-        width:100%;
-    }
 	.agile-section {
 		padding: 2.5em 0 4em;
 	}
@@ -1980,14 +1940,8 @@ h4.modal-title {
 	.w3-agile-post-info h5, .w3-agile-post-info h4 {
 		font-size: 1.1em;
 	}
-    .contact-form {
-        width: 100%;
-    }
 }
 @media screen and (max-width: 640px){
-    .imgLogo{
-        width:100%;
-    }
 	.w3ls-text h3 {
 		font-size: 1.3em;
 	}
@@ -2057,14 +2011,8 @@ h4.modal-title {
 	.w3_agileits-contact-grid {
 		width: 48.5%;
 	}
-    .contact-form {
-        width: 100%;
-    }
 }
 @media screen and (max-width: 600px){
-    .imgLogo{
-        width:100%;
-    }
 	.w3ls-text {
 		width: 79%;
 	}
@@ -2116,14 +2064,8 @@ h4.modal-title {
 	.agileits-team span.wthree-left {
 		left: 42%;
 	}
-    .contact-form {
-        width: 100%;
-    }
 }
 @media screen and (max-width: 568px){
-    .imgLogo{
-        width:100%;
-    }
 	.w3ls-text h3 {
 		font-size: 1.1em;
 	}
@@ -2251,14 +2193,8 @@ h4.modal-title {
 	.contact-form input.phone {
 		width: 100%;
 	}
-    .contact-form {
-        width: 100%;
-    }
 }
 @media screen and (max-width: 480px){
-    .imgLogo{
-        width:100%;
-    }
 	.w3ls-text h5:after {
 		left: 175px;
 		top:19px;
@@ -2397,14 +2333,8 @@ h4.modal-title {
 	.agile-banner-bottom-grid1.b2 {
 		margin: 6px 0 0;
 	}
-    .contact-form {
-        width: 100%;
-    }
 }
 @media screen and (max-width: 414px){
-    .imgLogo{
-        width:100%;
-    }
 	.w3ls-text {
 		padding: 1em 1em 2em;
 	}
@@ -2531,14 +2461,8 @@ h4.modal-title {
 	.agileits_w3layouts-map iframe {
 		min-height: 200px;
 	}
-    .contact-form {
-        width: 100%;
-    }
 }
 @media screen and (max-width: 384px){
-    .imgLogo{
-        width:100%;
-    }
 	.w3ls-text h5:after {
 		left: 138px;
 	}
@@ -2584,14 +2508,8 @@ h4.modal-title {
 		top: 4.7%;
 		left: 47%;
 	}
-    .contact-form {
-        width: 100%;
-    }
 }
 @media screen and (max-width: 375px){
-    .imgLogo{
-        width:100%;
-    }
 	.w3ls-text h5:after {
 		left: 133px;
 	}
@@ -2608,14 +2526,8 @@ h4.modal-title {
 	.w3_agileits-service-grid h4, .w3_agileits-contact-grid h4 {
 		font-size: 1.4em;
 	}
-    .contact-form {
-        width: 100%;
-    }
 }
 @media screen and (max-width: 320px){
-    .imgLogo{
-        width:100%;
-    }
 	.w3ls-text h5:after {
 		left: 123px;
 	}
@@ -2724,8 +2636,5 @@ h4.modal-title {
 	.contact-form .container {
 		width: 100%;
 	}
-    .contact-form {
-        width: 100%;
-    }
 }
 /* -- //Responsive code -- */

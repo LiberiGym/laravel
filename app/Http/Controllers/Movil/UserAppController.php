@@ -1191,7 +1191,7 @@ class UserAppController extends BaseController
 
             try {
 
-                $notifications = UserNotifications::where('user_id',$request->get('IdUser'))->orderBy('notification_date','desc')->get();
+                $notifications = UserNotifications::where('user_id',$request->get('IdUser'))->where('status','Activo')->orderBy('notification_date','desc')->get();
 
                 foreach ($notifications as $notification) {
                     $notification->viewed = 1;
@@ -1218,6 +1218,71 @@ class UserAppController extends BaseController
         }
 
         return $response;
+    }
+
+    public function getUserNotificationsDetalle(Request $request){
+        $response = [
+            'Result'=>'error',
+            'Msj'=>'',
+            'Notificacion'=>[]
+        ];
+
+        if($request->has('IdNotificacion')){
+
+            try {
+
+                $notification = UserNotifications::find($request->get('IdNotificacion'));
+
+                if(!is_null($notification)){
+                    $response['Notificacion']=[
+                        'Id'=>$notification->id,
+                        'Title'=>$notification->title,
+                        'Message'=>$notification->message,
+                        'IsVisible'=>true
+                        ] ;
+                    $response['Result']= 'ok';
+
+                }else{
+                    $response['Msj']= "No hay notificaciones";
+                }
+
+            } catch (\Exception $e) {
+                $response['Msj']= $e->getMessage();
+            }
+        }
+
+        return $response;
+    }
+
+    public function getUserNotificationsConfirm(Request $request){
+        $response = [
+            'Result'=>'error',
+            'Msj'=>''
+        ];
+
+        if($request->has('IdNotificacion')){
+
+            try {
+
+                $notification = UserNotifications::find($request->get('IdNotificacion'));
+
+                if(!is_null($notification)){
+                    $notification->iagree = $request->get('StatusNotificacion');
+                    $notification->status = "Procesada";
+                    $notification->save();
+                    $response['Result']= 'ok';
+
+                }else{
+                    $response['Msj']= "No se pudo procesar la solicitud, vuelva a intentarlo";
+                }
+
+            } catch (\Exception $e) {
+                $response['Msj']= $e->getMessage();
+            }
+        }
+
+        return $response;
+
     }
 
     /***************************/

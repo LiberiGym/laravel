@@ -62,6 +62,8 @@ Route::group(['prefix' => 'api'], function()
 
     /*NotificacionesPage*/
     Route::post('/get-user-notifications', 'Movil\UserAppController@getUserNotifications');
+    Route::post('/get-user-notifications-detalle', 'Movil\UserAppController@getUserNotificationsDetalle');
+    Route::post('/get-user-notifications-confirm', 'Movil\UserAppController@getUserNotificationsConfirm');
 
     /*HistorialComprasPage*/
     Route::post('/get-user-purchases', 'Movil\UserAppController@getUserPurchases');

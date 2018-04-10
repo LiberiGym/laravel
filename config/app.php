@@ -177,13 +177,6 @@ return [
         // App\Providers\BroadcastServiceProvider::class,
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
-        Tejuino\Admincategories\AdmincategoriesServiceProvider::class,
-        Tejuino\Adminstates\AdminstatesServiceProvider::class,
-        Tejuino\Adminlocations\AdminlocationsServiceProvider::class,
-        Tejuino\Admingyms\AdmingymsServiceProvider::class,
-        Tejuino\Adminterminoscondiciones\AdminterminoscondicionesServiceProvider::class,
-        Tejuino\Adminpromociones\AdminpromocionesServiceProvider::class,
-        Tejuino\Adminbitacoras\AdminbitacorasServiceProvider::class,
     ],
 
     /*

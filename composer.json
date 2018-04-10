@@ -11,9 +11,7 @@
         "intervention/image": "^2.4",
         "laravel/framework": "5.5.*",
         "laravel/tinker": "~1.0",
-        "milon/barcode": "^5.3",
-        "tejuino/adminbase": "^1.0",
-        "tejuino/adminprojects": "^1.0"
+        "milon/barcode": "^5.3"
     },
     "require-dev": {
         "filp/whoops": "~2.0",
@@ -32,14 +30,7 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "Tests\\": "tests/",
-            "Tejuino\\Admincategories\\": "packages/tejuino/admincategories/src",
-            "Tejuino\\Adminstates\\": "packages/tejuino/adminstates/src",
-            "Tejuino\\Adminlocations\\": "packages/tejuino/adminlocations/src",
-            "Tejuino\\Admingyms\\": "packages/tejuino/admingyms/src",
-            "Tejuino\\Adminterminoscondiciones\\": "packages/tejuino/adminterminoscondiciones/src",
-            "Tejuino\\Adminpromociones\\": "packages/tejuino/adminpromociones/src",
-            "Tejuino\\Adminbitacoras\\": "packages/tejuino/adminbitacoras/src"
+            "Tests\\": "tests/"
         }
     },
     "extra": {
@@ -66,16 +57,6 @@
         "optimize-autoloader": true
     },
     "repositories": [
-        {
-            "url": "git@gitlab.com:tejuinomx/adminbasetest.git",
-            "type": "git"
-        },
-        {
-            "url": "git@gitlab.com:tejuinomx/adminprojectstest.git",
-            "type": "git"
-        }
-
-
     ]
 
 }

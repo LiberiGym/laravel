@@ -9,7 +9,6 @@ use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Tejuino\Adminbase\Controllers\AdminController;
-use Tejuino\Adminbase\Files;
 use Illuminate\View;
 use Mail;
 use Carbon\Carbon;
@@ -24,7 +23,9 @@ use App\Models\Gyms\GymService;
 use App\Models\Locations\Location;
 use App\Models\States\State;
 use App\Models\Categories\Category;
-
+use Kreait\Firebase\Factory;
+use Kreait\Firebase\ServiceAccount;
+use Kreait\Firebase\Database;
 
 class RegisterController extends Controller
 {
@@ -179,7 +180,15 @@ class RegisterController extends Controller
 
     /*registro generales*/
     public function registerGrales(Request $request){
-
+        $serviceAccount = ServiceAccount::fromJsonFile(__DIR__.'/liberi-4e329-firebase-adminsdk-e50il-40cdf113f1.json');
+        $firebase = (new Factory)
+            ->withServiceAccount($serviceAccount)
+            ->create();
+        $db = $firebase->getDatabase();
+        $db->getReference('users/5')->set([
+            'id'=>5,
+            'name'=>'Eduardo'
+        ]);
         if($request->session()->has('user_id'))
         {
             $user=User::find($request->session()->get('user_id'));

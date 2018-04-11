@@ -48,5 +48,12 @@ return [
         'key_private' => env('PUSHER_APP_KEY_PRIVATE'),
         'url' => env('PUSHER_APP_URL'),
     ],
+    'firebase' => [
+        'api_key' => 'AIzaSyAarsMkjVN4nTldjdmNzm2CsOVX5N1sV-A', // Only used for JS integration
+        'auth_domain' => 'liberi-4e329.firebaseapp.com', // Only used for JS integration
+        'database_url' => 'https://liberi-4e329.firebaseio.com',
+        'secret' => 'vy8oYRvQj3vSFE1v1Y7cTIQdr4vfTev8S3Ijw4hQ',
+        'storage_bucket' => 'liberi-4e329.appspot.com', // Only used for JS integration
+    ]
 
 ];

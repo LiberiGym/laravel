@@ -5,9 +5,11 @@ namespace App\Models;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Tejuino\Adminbase\Files;
+use Mpociot\Firebase\SyncsWithFirebase;
 
 class User extends Authenticatable
 {
+    use SyncsWithFirebase;
     use Notifiable;
 
     protected $fillable = [

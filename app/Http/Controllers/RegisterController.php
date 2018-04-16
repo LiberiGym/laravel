@@ -89,6 +89,9 @@ class RegisterController extends Controller
             ];
 
             $newUser = User::create($data_user);
+            $userJSON = json_decode(json_encode($newUser));
+            $userJSON->password = $request->get('password');
+            $this->saveFBRecord('users/'.$newUser->id, $userJSON);
 
             $userdata = array(
                 'email' => $request->get('email'),
@@ -118,6 +121,8 @@ class RegisterController extends Controller
 
                 $request->session()->put('user_id', $user->id);
                 $request->session()->put('gym_id', $newGym->id);
+
+                $this->saveFBRecord('gyms/'.$newGym->id, $newGym);
 
                 //recuperamos el registro
                 /*$gym = Gym::where('user_id', $user->id)->first();
@@ -180,19 +185,9 @@ class RegisterController extends Controller
 
     /*registro generales*/
     public function registerGrales(Request $request){
-        $serviceAccount = ServiceAccount::fromJsonFile(__DIR__.'/liberi-4e329-firebase-adminsdk-e50il-40cdf113f1.json');
-        $firebase = (new Factory)
-            ->withServiceAccount($serviceAccount)
-            ->create();
-        $db = $firebase->getDatabase();
-        $db->getReference('users/5')->set([
-            'id'=>5,
-            'name'=>'Eduardo'
-        ]);
         if($request->session()->has('user_id'))
         {
             $user=User::find($request->session()->get('user_id'));
-
             //recuperamos el registro
             $gym = Gym::where('user_id', $request->session()->get('user_id'))->first();
             $categories = Category::orderBy('title', 'asc')->get();
@@ -586,6 +581,15 @@ class RegisterController extends Controller
         $newBitacora->new_info = $dataBitacora['new_info'];
         $newBitacora->description = $dataBitacora['description'];
         $newBitacora->save();
+    }
+
+    public function saveFBRecord($ref, $record){
+        $serviceAccount = ServiceAccount::fromJsonFile(__DIR__.'/liberi-4e329-firebase-adminsdk-e50il-40cdf113f1.json');
+        $firebase = (new Factory)
+            ->withServiceAccount($serviceAccount)
+            ->create();
+        $db = $firebase->getDatabase();
+        $db->getReference($ref)->set($record);
     }
 
 }

@@ -4,7 +4,6 @@ namespace App\Models;
 
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
-use Tejuino\Adminbase\Files;
 use Mpociot\Firebase\SyncsWithFirebase;
 
 class User extends Authenticatable
@@ -28,7 +27,7 @@ class User extends Authenticatable
 
     public function getImageAttribute($value)
     {
-        return Files::getUrl($value, 'users/');
+        //return Files::getUrl($value, 'users/');
     }
 
     // Relationships

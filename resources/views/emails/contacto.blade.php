@@ -130,7 +130,7 @@
 	                					<table border="0" align="center" cellpadding="0" cellspacing="0" style="border-collapse:collapse; mso-table-lspace:0pt; mso-table-rspace:0pt;" class="logo">
 				                			<tr>
 				                				<td align="center">
-													<a href="http://liberi.com.mx/" style="text-decoration:none"><img src="https://liberi.com.mx/images/logo_liberi_web_letters.png" alt="LIBERI" width="150" border="0"></a>
+													<a href="http://liberi.com.mx/" style="text-decoration:none"><img src="http://liberi-landing.eduardoibarra.com/images/logo_liberi_web_letters.png" alt="LIBERI" width="150" border="0"></a>
 												</td>
 				                			</tr>
 				                		</table>

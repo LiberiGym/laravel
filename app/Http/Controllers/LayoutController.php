@@ -47,7 +47,7 @@ class LayoutController extends Controller
 
                 /*foreach(config('mail.to.addresses') as $email)
                 {*/
-                $message->to('taquion3x109@gmail.com', 'LIBERI WEB');
+                $message->to('eduardoibarra904@gmail.com', 'LIBERI WEB');
                     //$message->to($email, config('mail.to.name'));
                 //}
             });

@@ -177,6 +177,7 @@ return [
         // App\Providers\BroadcastServiceProvider::class,
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
+        Intagono\Openpay\OpenpayServiceProvider::class,
     ],
 
     /*
@@ -228,6 +229,7 @@ return [
         'DNS1D' => Milon\Barcode\Facades\DNS1DFacade::class,
         'DNS2D' => Milon\Barcode\Facades\DNS2DFacade::class,
         'Image' => Intervention\Image\Facades\Image::class,
+        'IntagonoOpenpay' => Intagono\Openpay\OpenpayFacade::class,
     ],
 
 ];

@@ -89,6 +89,7 @@ Route::get('/', function () {
 });
 
 Route::get('/inicio', 'HomeController@index');
+Route::get('/open', 'OpenPayController@index');
 
 Route::get('/nosotros', function () {
     return view('front.web.nosotros');

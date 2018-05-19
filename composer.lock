@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "b16d0b70263c3e80c8dca31f03021110",
+    "content-hash": "3fe5f0dd53ccf26e45c4d37d0f09c41a",
     "packages": [
         {
             "name": "dnoegel/php-xdg-base-dir",
@@ -1220,6 +1220,50 @@
             "time": "2017-03-20T17:10:46+00:00"
         },
         {
+            "name": "intagono/openpay",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/intagono/openpay.git",
+                "reference": "51af2644ebd9bad59b8ee8e14324198410192964"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/intagono/openpay/zipball/51af2644ebd9bad59b8ee8e14324198410192964",
+                "reference": "51af2644ebd9bad59b8ee8e14324198410192964",
+                "shasum": ""
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Intagono\\Openpay\\": "src/"
+                },
+                "files": [
+                    "src/openpay/Openpay.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Annalicia Ostos Sánchez",
+                    "email": "nanita.ostos@gmail.com"
+                },
+                {
+                    "name": "Ramiro Alonso Vera Contreras",
+                    "email": "raalveco@gmail.com"
+                },
+                {
+                    "name": "Adrian Gutiérrez Márquez",
+                    "email": "adrianyg7@gmail.com"
+                }
+            ],
+            "description": "Library that will be used to connect to OpenPay Payment Gateway",
+            "time": "2017-08-09T20:44:38+00:00"
+        },
+        {
             "name": "intervention/image",
             "version": "2.4.1",
             "source": {
@@ -2255,6 +2299,53 @@
                 "php"
             ],
             "time": "2018-02-28T20:30:58+00:00"
+        },
+        {
+            "name": "openpay/sdk",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/open-pay/openpay-php.git",
+                "reference": "fa75e7f3b9555baceb59b53e253512c2f02a45d2"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/open-pay/openpay-php/zipball/fa75e7f3b9555baceb59b53e253512c2f02a45d2",
+                "reference": "fa75e7f3b9555baceb59b53e253512c2f02a45d2",
+                "shasum": ""
+            },
+            "require": {
+                "ext-curl": "*",
+                "ext-hash": "*",
+                "php": ">=5.2.1"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "4.8.*"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "Openpay": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "Apache-2.0"
+            ],
+            "authors": [
+                {
+                    "name": "Openpay",
+                    "email": "soporte@openpay.mx",
+                    "homepage": "http://www.openpay.mx/docs/libraries.html"
+                },
+                {
+                    "name": "Federico Balderas",
+                    "email": "federico.balderas@foograde.com",
+                    "homepage": "http://foograde.com"
+                }
+            ],
+            "description": "This is a client implementing the payment services for Openpay at openpay.mx",
+            "time": "2018-03-16T01:49:45+00:00"
         },
         {
             "name": "paragonie/random_compat",
@@ -5436,7 +5527,10 @@
     ],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": [],
+    "stability-flags": {
+        "intagono/openpay": 20,
+        "openpay/sdk": 20
+    },
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
